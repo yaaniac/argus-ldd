@@ -63,7 +63,7 @@
         <div class="land-stat-div"></div>
         <div class="land-stat"><strong>Externo</strong><span>Operador independiente</span></div>
         <div class="land-stat-div"></div>
-        <div class="land-stat"><strong>OCDE · GAFI</strong><span>Marco internacional</span></div>
+        <div class="land-stat"><strong>Confidencial</strong><span>Marco internacional</span></div>
       </div>
     </div>
     <div class="land-hero-visual">
@@ -515,7 +515,7 @@
       </div>
       <div class="footer-bottom">
         <p>© 2025 Argus · Línea de denuncias. Todos los derechos reservados.</p>
-        <p>Los formularios, preguntas e idioma son personalizables por organización · OCDE · GAFI · ISO 37001</p>
+        <p>Los formularios, preguntas e idioma son personalizables por organización</p>
       </div>
     </div>
   </footer>
@@ -567,7 +567,7 @@
             <div class="guarantee"><span class="guarantee-dot"></span>100% anónimo si querés</div>
             <div class="guarantee"><span class="guarantee-dot"></span>Sin registro de IP</div>
             <div class="guarantee"><span class="guarantee-dot"></span>Operador externo</div>
-            <div class="guarantee"><span class="guarantee-dot"></span>OCDE · GAFI</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Confidencial</div>
           </div>
           <button class="wizard-next" onclick="goToStep(1)" style="margin:0 auto;display:flex">
             Comenzar
@@ -942,8 +942,11 @@
             <button onclick="window.print()" class="btn btn-outline btn-lg" style="justify-content:center;width:100%">
               🖨️ Guardar comprobante
             </button>
+            <a id="seguimientoLink" href="empresas.html?tab=seguimiento" class="btn btn-primary btn-lg" style="justify-content:center;width:100%">
+              Consultar estado →
+            </a>
             <a href="index.html" class="btn btn-ghost" style="justify-content:center;font-size:14px;width:100%">
-              Volver al inicio →
+              Volver al inicio
             </a>
           </div>
         </div>
@@ -1126,6 +1129,8 @@
       document.getElementById('trackingCodeDisplay').textContent = code;
       document.getElementById('progressFill').style.width = '100%';
       document.getElementById('stepLabel').textContent = '¡Listo!';
+      // Update seguimiento link with the generated code
+      document.getElementById('seguimientoLink').href = 'empresas.html?tab=seguimiento&code=' + code;
       goToStep('success');
     }, 1800);
   }
