@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto y Demo · LDD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">LDD<span class="logo-dot">.</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#beneficios">Beneficios</a>
+        <a href="index.html#canales">Canales</a>
+        <a href="index.html#como-funciona">Cómo funciona</a>
+        <a href="empresas.html">Empresas</a>
+        <a href="contacto.html" style="color:var(--red-600)">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="empresas.html" class="btn btn-ghost">Ingresar denuncia</a>
+        <a href="contacto.html" class="btn btn-primary">Solicitar demo</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html#beneficios">Beneficios</a>
+      <a href="index.html#canales">Canales</a>
+      <a href="index.html#como-funciona">Cómo funciona</a>
+      <a href="empresas.html">Empresas</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </header>
+
+  <!-- HERO CONTACT -->
+  <section style="background:var(--gray-900);padding:120px 24px 80px">
+    <div style="max-width:var(--container);margin:0 auto;text-align:center">
+      <div class="section-tag" style="color:var(--red-600);background:rgba(200,16,46,.12);border-color:rgba(200,16,46,.2);margin-bottom:20px">Contacto comercial</div>
+      <h1 style="font-family:var(--font-heading);font-size:clamp(28px,4vw,52px);font-weight:900;color:var(--white);margin-bottom:16px;letter-spacing:-.03em;line-height:1.05">Hablemos de tu<br/>programa de compliance</h1>
+      <p style="font-size:18px;color:var(--gray-400);max-width:500px;margin:0 auto;line-height:1.7">Agendá una demo gratuita. Te mostramos la plataforma en vivo y diseñamos juntos la solución para tu organización.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT CONTENT -->
+  <div class="contact-page" style="padding-top:0">
+    <div class="contact-layout" style="padding-top:64px">
+
+      <!-- Left: Info -->
+      <div class="contact-info">
+        <h1 style="font-size:clamp(24px,3vw,36px)">Estamos para ayudarte</h1>
+        <p>Nuestro equipo de especialistas en compliance corporativo responde en menos de 24 horas hábiles.</p>
+
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="cm-icon">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M2 8l9 5 9-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <div class="cm-content">
+              <strong>Email</strong>
+              <span>hola@ldd.com.ar</span>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="cm-icon">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 4h5l2 4.5-2.5 1.5A9 9 0 0012 14l1.5-2.5L18 14v5a2 2 0 01-2 2C7.2 21 1 14.8 1 6a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="cm-content">
+              <strong>Teléfono</strong>
+              <span>+54 11 5555-0000</span>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="cm-icon" style="background:#F0FDF4;color:#16A34A">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 15l1.2-3.5A5 5 0 1016 11a5 5 0 01-5 5 4.8 4.8 0 01-2.5-.7L7.5 15z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="cm-content">
+              <strong>WhatsApp</strong>
+              <span>+54 9 11 5555-0000</span>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="cm-icon" style="background:#EFF6FF;color:#2563EB">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h8M7 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <div class="cm-content">
+              <strong>LinkedIn</strong>
+              <span>linkedin.com/company/ldd-ar</span>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="cm-icon" style="background:#F5F3FF;color:#7C3AED">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2C6 2 2 6 2 11v7a2 2 0 002 2h2v-8H4v-1c0-3.9 3.1-7 7-7s7 3.1 7 7v1h-2v8h2a2 2 0 002-2v-7c0-5-4-9-9-9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="cm-content">
+              <strong>Dirección</strong>
+              <span>Av. Corrientes 1234, Piso 8 — CABA, Argentina</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plans teaser -->
+        <div style="margin-top:48px">
+          <h3 style="font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--black);margin-bottom:24px">Planes para cada organización</h3>
+          <div style="display:flex;flex-direction:column;gap:16px">
+
+            <div style="background:var(--gray-100);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+              <div>
+                <strong style="font-size:15px;color:var(--black)">Starter</strong>
+                <p style="font-size:13px;color:var(--gray-500);margin-top:2px">Hasta 200 empleados · Canal web + email</p>
+              </div>
+              <a href="#contactForm" class="btn btn-outline" style="font-size:13px;flex-shrink:0">Consultar precio</a>
+            </div>
+
+            <div style="background:var(--gray-900);border:1px solid var(--red-700);border-radius:var(--radius-md);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;overflow:hidden">
+              <div style="position:absolute;top:10px;right:12px;font-size:10px;font-weight:700;background:var(--red-600);color:var(--white);padding:3px 8px;border-radius:100px;letter-spacing:.06em">MÁS POPULAR</div>
+              <div>
+                <strong style="font-size:15px;color:var(--white)">Professional</strong>
+                <p style="font-size:13px;color:var(--gray-400);margin-top:2px">Hasta 1.000 empleados · 4 canales + dashboard</p>
+              </div>
+              <a href="#contactForm" class="btn btn-primary" style="font-size:13px;flex-shrink:0">Consultar precio</a>
+            </div>
+
+            <div style="background:var(--gray-100);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+              <div>
+                <strong style="font-size:15px;color:var(--black)">Enterprise</strong>
+                <p style="font-size:13px;color:var(--gray-500);margin-top:2px">Sin límite · Multi-empresa · SLA garantizado</p>
+              </div>
+              <a href="#contactForm" class="btn btn-outline" style="font-size:13px;flex-shrink:0">Hablar con ventas</a>
+            </div>
+
+          </div>
+          <p style="font-size:12px;color:var(--gray-400);margin-top:12px">* Todos los planes incluyen implementación, capacitación y soporte técnico.</p>
+        </div>
+
+      </div>
+
+      <!-- Right: Contact Form -->
+      <div id="contactForm">
+        <div class="contact-form-card">
+          <h3>Solicitar demo gratuita</h3>
+          <p>Completá el formulario y un especialista se contacta con vos en menos de 24 horas hábiles.</p>
+
+          <form id="contactFormEl" novalidate>
+            <div class="form-row" style="margin-bottom:0">
+              <div class="form-group">
+                <label>Nombre *</label>
+                <input type="text" required placeholder="Tu nombre" />
+              </div>
+              <div class="form-group">
+                <label>Apellido *</label>
+                <input type="text" required placeholder="Tu apellido" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Email corporativo *</label>
+              <input type="email" required placeholder="nombre@empresa.com" />
+            </div>
+
+            <div class="form-group">
+              <label>Empresa *</label>
+              <input type="text" required placeholder="Nombre de tu organización" />
+            </div>
+
+            <div class="form-row" style="margin-bottom:0">
+              <div class="form-group">
+                <label>Cargo</label>
+                <select>
+                  <option value="">— Seleccioná —</option>
+                  <option>Director / CEO</option>
+                  <option>Compliance Officer</option>
+                  <option>Director Legal</option>
+                  <option>Gerente de RRHH</option>
+                  <option>Auditor Interno</option>
+                  <option>Gerente General</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Cantidad de empleados</label>
+                <select>
+                  <option value="">— Seleccioná —</option>
+                  <option>Menos de 50</option>
+                  <option>50 - 200</option>
+                  <option>200 - 500</option>
+                  <option>500 - 1.000</option>
+                  <option>Más de 1.000</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Industria</label>
+              <select>
+                <option value="">— Seleccioná —</option>
+                <option>Banca y finanzas</option>
+                <option>Salud y farmacéutica</option>
+                <option>Energía y utilities</option>
+                <option>Retail y consumo masivo</option>
+                <option>Construcción e inmobiliario</option>
+                <option>Tecnología</option>
+                <option>Manufactura</option>
+                <option>Sector público</option>
+                <option>Otra</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>¿Qué te motivó a buscar una solución?</label>
+              <textarea rows="3" placeholder="Contanos brevemente tu situación o necesidad..."></textarea>
+            </div>
+
+            <div class="form-checkbox" style="margin-bottom:20px">
+              <input type="checkbox" id="contactTerms" required />
+              <label for="contactTerms">Acepto recibir comunicaciones comerciales de LDD y he leído la <a href="#" style="color:var(--red-600)">Política de Privacidad</a>.</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center" id="contactSubmitBtn">
+              Solicitar demo gratuita
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </form>
+
+          <!-- Success state -->
+          <div id="contactSuccess" style="display:none;text-align:center;padding:32px 0">
+            <div style="width:64px;height:64px;background:var(--green-100);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px">✓</div>
+            <h3 style="font-family:var(--font-heading);font-size:22px;font-weight:800;color:var(--black);margin-bottom:8px">¡Mensaje enviado!</h3>
+            <p style="font-size:15px;color:var(--gray-500);line-height:1.7">Un especialista se contactará con vos en menos de 24 horas hábiles. Chequeá tu inbox.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FAQ SECTION -->
+  <section class="section" style="background:var(--white)">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Preguntas frecuentes</div>
+        <h2 class="section-title">Respondemos tus dudas</h2>
+      </div>
+      <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cuánto tiempo lleva implementar LDD en mi empresa?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>La implementación estándar toma 72 horas hábiles desde la firma del contrato. En ese tiempo configuramos todos los canales, personalizamos la plataforma con la identidad de tu empresa y capacitamos al equipo de compliance.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cumple con la Ley 27.401 de responsabilidad penal de personas jurídicas?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sí. LDD fue diseñada desde el inicio para cumplir con la Ley 27.401 y sus disposiciones sobre canales de denuncia. También satisface los requisitos de la CNV, BCRA y estándares internacionales ISO 37001.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cómo se garantiza el anonimato del denunciante?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>La plataforma no registra direcciones IP, no usa cookies de rastreo, y el canal de comunicación usa cifrado end-to-end. Ni el administrador de la empresa ni LDD pueden identificar al denunciante si este elige el anonimato total.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Qué pasa si alguien hace una denuncia de mala fe?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Nuestro equipo de compliance officers evalúa cada denuncia antes de escalarla. Las denuncias infundadas son documentadas y archivadas. El protocolo incluye medidas para proteger a los denunciados de acusaciones falsas, mientras se mantiene la protección del denunciante.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Puedo integrar LDD con mi sistema de gestión o HRMS?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sí. LDD ofrece API REST y webhooks para integrarse con sistemas de RRHH (SAP, Oracle, Workday), plataformas GRC y herramientas de ticketing. Consultá por las integraciones disponibles según tu plan.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Dónde están alojados los datos?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Los datos se alojan en servidores en Argentina con redundancia en la región. Cumplimos con la Ley 25.326 de Protección de Datos Personales y GDPR para empresas con operaciones en Europa. Podés solicitar residencia exclusiva de datos en tu país.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <span class="logo-icon">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+                <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="24" cy="22" r="4" fill="#fff"/>
+                <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="logo-text" style="color:#fff">LDD<span class="logo-dot">.</span></span>
+          </a>
+          <p>Plataforma multicanal de denuncias corporativas. Segura, confidencial y legalmente robusta.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="#" aria-label="Twitter">𝕏</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Plataforma</h4>
+            <a href="index.html#beneficios">Beneficios</a>
+            <a href="index.html#canales">Canales</a>
+            <a href="index.html#como-funciona">Cómo funciona</a>
+            <a href="empresas.html">Directorio de empresas</a>
+          </div>
+          <div class="footer-col">
+            <h4>Empresa</h4>
+            <a href="contacto.html">Contacto</a>
+            <a href="#">Sobre LDD</a>
+            <a href="#">Nuestro equipo</a>
+            <a href="#">Blog de compliance</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#">Política de privacidad</a>
+            <a href="#">Términos de uso</a>
+            <a href="#">Seguridad de datos</a>
+            <a href="#">GDPR / PDPA</a>
+          </div>
+          <div class="footer-col">
+            <h4>Contacto</h4>
+            <a href="mailto:hola@ldd.com.ar">hola@ldd.com.ar</a>
+            <a href="tel:+541155550000">+54 11 5555-0000</a>
+            <span>Buenos Aires, Argentina</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 LDD · Línea De Denuncias. Todos los derechos reservados.</p>
+        <p>Desarrollado con cumplimiento legal · Datos protegidos</p>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    .faq-item {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 20px 24px;
+      background: var(--white);
+      border: none;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--black);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: background .2s;
+    }
+
+    .faq-question:hover { background: var(--gray-100); }
+    .faq-question.open { background: var(--red-100); color: var(--red-700); }
+
+    .faq-icon {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--red-600);
+      transition: transform .3s;
+      flex-shrink: 0;
+    }
+
+    .faq-question.open .faq-icon { transform: rotate(45deg); }
+
+    .faq-answer {
+      display: none;
+      padding: 0 24px 20px;
+      background: var(--gray-100);
+    }
+
+    .faq-answer p {
+      font-size: 15px;
+      color: var(--gray-600);
+      line-height: 1.75;
+    }
+
+    .faq-answer.open { display: block; }
+  </style>
+
+  <script src="main.js"></script>
+  <script>
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('open');
+      document.querySelectorAll('.faq-question.open').forEach(q => {
+        q.classList.remove('open');
+        q.nextElementSibling.classList.remove('open');
+      });
+      if (!isOpen) {
+        btn.classList.add('open');
+        answer.classList.add('open');
+      }
+    }
+
+    // Contact form
+    document.getElementById('contactFormEl').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      setTimeout(() => {
+        this.style.display = 'none';
+        document.getElementById('contactSuccess').style.display = 'block';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ingresar Denuncia · LDD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="wizard-page" id="wizardPage">
+
+  <!-- TOP BAR -->
+  <div class="wizard-topbar">
+    <a href="index.html" class="wizard-logo">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+        <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="24" cy="22" r="4" fill="#fff"/>
+        <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="wizard-logo-text">LDD<span class="wizard-logo-dot">.</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="wizard-secure">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l5 2.5v4c0 2.8-2.2 5.4-5 6-2.8-.6-5-3.2-5-6v-4L7 1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Conexión cifrada
+      </div>
+      <a href="empresas.html" style="font-size:13px;color:rgba(255,255,255,.4);font-weight:500;text-decoration:none">← Cambiar empresa</a>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="wizard-progress-track">
+    <div class="wizard-progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+  <div class="wizard-step-label" id="stepLabel">Paso 1 de 10</div>
+
+  <!-- BODY -->
+  <div class="wizard-body">
+    <div class="wizard-card" id="wizardCard">
+
+      <!-- ===== STEP 0: INTRO ===== -->
+      <div class="wizard-step active" id="step-0">
+        <div class="wizard-intro">
+          <div class="company-chip" id="companyChip">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h4M5 9.5h2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span id="companyChipName">Tu empresa</span>
+          </div>
+          <h1>Hacé tu denuncia</h1>
+          <p>El proceso es confidencial, guiado y toma menos de 5 minutos. Podés elegir el anonimato total.</p>
+          <div class="wizard-guarantees">
+            <div class="guarantee"><span class="guarantee-dot"></span>100% anónimo</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Cifrado end-to-end</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Sin registro de IP</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Cumplimiento OCDE / GAFI</div>
+          </div>
+          <button class="wizard-next" onclick="goToStep(1)" style="margin:0 auto;display:flex">
+            Comenzar
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <p style="margin-top:20px;font-size:12px;color:rgba(0,0,0,.3);font-style:italic">
+            Los formularios, preguntas e idioma son personalizables según cada organización.
+          </p>
+        </div>
+      </div>
+
+      <!-- ===== STEP 1: ¿ES DENUNCIA COMPLEMENTARIA? ===== -->
+      <div class="wizard-step" id="step-1">
+        <span class="wizard-step-num">Paso 1 · Identificación</span>
+        <h2>¿Es una denuncia complementaria?</h2>
+        <p class="step-hint">Indicá si esta denuncia está relacionada con una anterior ya registrada en el sistema.</p>
+        <div class="freq-grid">
+          <button class="freq-option" data-step="1" data-val="no" onclick="selectFreq(this,1)">
+            <div class="freq-dot"></div>
+            <div class="freq-text">
+              <strong>No, es una denuncia nueva</strong>
+              <span>Nunca presenté esta situación antes</span>
+            </div>
+          </button>
+          <button class="freq-option" data-step="1" data-val="si" onclick="selectFreq(this,1)">
+            <div class="freq-dot"></div>
+            <div class="freq-text">
+              <strong>Sí, complementa una denuncia anterior</strong>
+              <span>Tengo un código o referencia previa</span>
+            </div>
+          </button>
+        </div>
+        <div id="complementRef" style="display:none">
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">Código o referencia de la denuncia anterior (opcional)</label>
+          <input class="wizard-input" type="text" placeholder="Ej: LDD-2024-8821 o fecha aproximada..." />
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(0)">← Anterior</button>
+          <button class="wizard-next" id="next-1" onclick="goToStep(2)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: TIPO DE IRREGULARIDAD ===== -->
+      <div class="wizard-step" id="step-2">
+        <span class="wizard-step-num">Paso 2 · Tipo de hecho</span>
+        <h2>¿Qué tipo de irregularidad querés denunciar?</h2>
+        <p class="step-hint">Seleccioná la categoría que mejor describe la situación. Podés elegir más de una.</p>
+        <div class="category-grid">
+          <button class="cat-option" onclick="toggleCat(this)" data-val="corrupcion">
+            <span class="cat-icon">⚖️</span>
+            <span class="cat-label">Corrupción / Soborno</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="fraude">
+            <span class="cat-icon">🧾</span>
+            <span class="cat-label">Fraude o malversación</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="conflicto">
+            <span class="cat-icon">🤝</span>
+            <span class="cat-label">Conflicto de intereses</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="lavado">
+            <span class="cat-icon">💸</span>
+            <span class="cat-label">Lavado de activos</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="acoso_laboral">
+            <span class="cat-icon">🚫</span>
+            <span class="cat-label">Acoso laboral</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="acoso_sexual">
+            <span class="cat-icon">🛑</span>
+            <span class="cat-label">Acoso / violencia sexual</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="discriminacion">
+            <span class="cat-icon">🏳️</span>
+            <span class="cat-label">Discriminación</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="seguridad">
+            <span class="cat-icon">⛑️</span>
+            <span class="cat-label">Seguridad laboral / ambiental</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="datos">
+            <span class="cat-icon">🔒</span>
+            <span class="cat-label">Violación de datos / privacidad</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="otro">
+            <span class="cat-icon">📋</span>
+            <span class="cat-label">Otro / No especificado</span>
+          </button>
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(1)">← Anterior</button>
+          <button class="wizard-next" id="next-2" onclick="goToStep(3)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 3: DESCRIPCIÓN ===== -->
+      <div class="wizard-step" id="step-3">
+        <span class="wizard-step-num">Paso 3 · Descripción del hecho</span>
+        <h2>¿En qué consistió el hecho?</h2>
+        <p class="step-hint">Describí con detalle el hecho y/o incumplimiento denunciado. Mientras más específico, mejor podemos actuar.</p>
+        <textarea class="wizard-textarea" id="descriptionText" maxlength="4000" placeholder="Describí qué ocurrió, cuándo, dónde y en qué contexto..." oninput="updateCounter()"></textarea>
+        <div class="char-counter"><span id="charCount">0</span> / 4000 caracteres</div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(2)">← Anterior</button>
+          <button class="wizard-next" id="next-3" onclick="goToStep(4)" disabled>Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 4: ÁREA ===== -->
+      <div class="wizard-step" id="step-4">
+        <span class="wizard-step-num">Paso 4 · Área involucrada</span>
+        <h2>¿En qué área ocurrieron los hechos?</h2>
+        <p class="step-hint">Seleccioná el sector o departamento relacionado con la denuncia.</p>
+        <div class="pills-grid" id="areaPills">
+          <button class="pill" onclick="selectPill(this,'area')" data-val="direccion">Dirección General</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="rrhh">Recursos Humanos</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="finanzas">Finanzas / Contabilidad</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="compras">Compras / Proveedores</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="ventas">Ventas / Comercial</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="operaciones">Operaciones</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="it">IT / Sistemas</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="legal">Legal / Compliance</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="produccion">Producción</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="logistica">Logística / Distribución</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="marketing">Marketing / Comunicación</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="no_sé">No lo sé / Prefiero no decir</button>
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(3)">← Anterior</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="wizard-skip" onclick="goToStep(5)">Omitir</button>
+            <button class="wizard-next" id="next-4" onclick="goToStep(5)">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 5: PERÍODO ===== -->
+      <div class="wizard-step" id="step-5">
+        <span class="wizard-step-num">Paso 5 · Período</span>
+        <h2>¿En qué período ocurrieron los hechos?</h2>
+        <p class="step-hint">Indicá la fecha o rango aproximado. No es necesario ser exacto.</p>
+        <div class="freq-grid">
+          <button class="freq-option" data-step="5" data-val="actualmente" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Está ocurriendo ahora</strong><span>La situación es actual y en curso</span></div>
+          </button>
+          <button class="freq-option" data-step="5" data-val="reciente" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Hace menos de 6 meses</strong><span>Situación reciente</span></div>
+          </button>
+          <button class="freq-option" data-step="5" data-val="hace_tiempo" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Hace más de 6 meses</strong><span>Situación pasada</span></div>
+          </button>
+          <button class="freq-option" data-step="5" data-val="no_se" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No lo sé con exactitud</strong><span>No recuerdo la fecha</span></div>
+          </button>
+        </div>
+        <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">Fecha aproximada (dd/mm/aaaa) — opcional</label>
+        <input class="wizard-input" type="text" placeholder="Ej: 15/03/2024 o marzo 2024" />
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(4)">← Anterior</button>
+          <button class="wizard-next" onclick="goToStep(6)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 6: CONOCIMIENTO DE LA DIRECCIÓN ===== -->
+      <div class="wizard-step" id="step-6">
+        <span class="wizard-step-num">Paso 6 · Conocimiento interno</span>
+        <h2>¿La Dirección y/o Gerencia está al tanto de este problema?</h2>
+        <p class="step-hint">Esta información es importante para determinar el nivel de escalamiento de la investigación.</p>
+        <div class="freq-grid">
+          <button class="freq-option" data-step="6" data-val="si" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Sí, está al tanto</strong><span>La dirección o gerencia conoce la situación</span></div>
+          </button>
+          <button class="freq-option" data-step="6" data-val="no" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No, no lo saben</strong><span>La situación no fue reportada internamente</span></div>
+          </button>
+          <button class="freq-option" data-step="6" data-val="involucrada" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Están involucrados</strong><span>La dirección o gerencia forma parte del problema</span></div>
+          </button>
+          <button class="freq-option" data-step="6" data-val="no_sé" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No lo sé</strong><span>No tengo información sobre esto</span></div>
+          </button>
+        </div>
+        <div style="margin-top:8px">
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">¿Cómo te enteraste? (opcional)</label>
+          <input class="wizard-input" type="text" placeholder="Ej: lo presencié, me lo contaron, encontré documentos..." />
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(5)">← Anterior</button>
+          <button class="wizard-next" onclick="goToStep(7)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 7: INVOLUCRADOS ===== -->
+      <div class="wizard-step" id="step-7">
+        <span class="wizard-step-num">Paso 7 · Personas involucradas</span>
+        <h2>¿Quiénes son los involucrados?</h2>
+        <p class="step-hint">Podés agregar más de un involucrado. Usá términos generales si preferís no nombrar personas específicas (ej: "el gerente de compras").</p>
+
+        <div id="involvedList">
+          <div class="involved-row">
+            <input class="wizard-input" type="text" placeholder="Nombre y apellido o descripción del rol" style="margin-bottom:8px" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+              <input class="wizard-input" type="text" placeholder="Relación con la organización" style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />
+            </div>
+          </div>
+        </div>
+
+        <button onclick="addInvolvedRow()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body);margin-bottom:24px">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M9 6v6M6 9h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Agregar otro involucrado
+        </button>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(6)">← Anterior</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="wizard-skip" onclick="goToStep(8)">Omitir</button>
+            <button class="wizard-next" onclick="goToStep(8)">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 8: TESTIGOS + EVIDENCIAS ===== -->
+      <div class="wizard-step" id="step-8">
+        <span class="wizard-step-num">Paso 8 · Testigos y evidencias</span>
+        <h2>¿Hay testigos o pruebas del hecho?</h2>
+        <p class="step-hint">Esta información fortalece la investigación. Todo es opcional.</p>
+
+        <!-- Testigos -->
+        <div style="margin-bottom:24px">
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="var(--primary)" stroke-width="1.4"/><path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="var(--primary)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Testigos (opcional)
+          </label>
+          <div id="witnessList">
+            <div class="involved-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+              <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Relación con la org." style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />
+            </div>
+          </div>
+          <button onclick="addWitnessRow()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body)">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Agregar testigo
+          </button>
+        </div>
+
+        <!-- Evidencias -->
+        <div>
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="var(--primary)" stroke-width="1.4"/><path d="M5 8h6M5 11h3" stroke="var(--primary)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Adjuntar documentación (opcional)
+          </label>
+          <div class="wizard-upload" id="uploadZone8" onclick="document.getElementById('fileInput8').click()">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="color:var(--gray-400)"><path d="M14 18V10m0 0l-4 4m4-4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="19" width="22" height="6" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
+            <p>Arrastrá archivos o <span style="color:var(--primary);font-weight:600">hacé clic para subir</span></p>
+            <span>PDF, imágenes, audio, video · Máx. 25 MB</span>
+            <input type="file" id="fileInput8" multiple style="display:none" accept=".pdf,.jpg,.jpeg,.png,.mp3,.mp4,.doc,.docx" />
+          </div>
+          <div id="fileList8"></div>
+        </div>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(7)">← Anterior</button>
+          <button class="wizard-next" onclick="goToStep(9)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 9: OTRAS PERSONAS INVOLUCRADAS ===== -->
+      <div class="wizard-step" id="step-9">
+        <span class="wizard-step-num">Paso 9 · Otras personas</span>
+        <h2>¿Hay otras personas relacionadas con los hechos?</h2>
+        <p class="step-hint">Además de los directamente denunciados, ¿hay otros individuos relacionados que debería conocer el equipo de investigación?</p>
+
+        <div class="freq-grid" style="margin-bottom:16px">
+          <button class="freq-option" data-step="9" data-val="si" onclick="selectFreq(this,9); document.getElementById('otherPersonsField').style.display='block'">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Sí, hay otras personas</strong><span>Quiero indicar quiénes y cómo están involucradas</span></div>
+          </button>
+          <button class="freq-option" data-step="9" data-val="no" onclick="selectFreq(this,9); document.getElementById('otherPersonsField').style.display='none'">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No</strong><span>Solo son las personas ya mencionadas</span></div>
+          </button>
+        </div>
+
+        <div id="otherPersonsField" style="display:none">
+          <div id="otherPersonsList">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+              <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Vinculación con el hecho" style="margin-bottom:0" />
+            </div>
+          </div>
+          <button onclick="addOtherRow()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body);margin-bottom:8px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Agregar otra persona
+          </button>
+        </div>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(8)">← Anterior</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="wizard-skip" onclick="goToStep(10)">Omitir</button>
+            <button class="wizard-next" onclick="goToStep(10)">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 10: IDENTIDAD + SUBMIT ===== -->
+      <div class="wizard-step" id="step-10">
+        <span class="wizard-step-num">Paso 10 · Tu identidad</span>
+        <h2>¿Deseás realizar la denuncia de forma anónima?</h2>
+        <p class="step-hint">Podés elegir el anonimato total. Si dejás tus datos, podemos contactarte si necesitamos más información — siempre de forma confidencial.</p>
+
+        <div class="anon-toggle">
+          <button class="anon-btn active" id="anonBtn" onclick="setAnon(true)">
+            🛡️ Sí, permanecer anónimo
+          </button>
+          <button class="anon-btn" id="identBtn" onclick="setAnon(false)">
+            👤 No, dejar mis datos
+          </button>
+        </div>
+
+        <div class="identity-fields" id="identityFields">
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;line-height:1.6">
+            Tus datos son tratados con estricta confidencialidad y solo serán utilizados para el seguimiento de tu denuncia.
+          </p>
+          <div class="identity-row">
+            <input class="wizard-input" type="text" placeholder="Nombre y apellido" />
+            <input class="wizard-input" type="email" placeholder="Email de contacto" />
+          </div>
+          <input class="wizard-input" type="tel" placeholder="Teléfono (opcional)" />
+        </div>
+
+        <div class="form-checkbox" style="margin-top:16px">
+          <input type="checkbox" id="termsCheck" />
+          <label for="termsCheck" style="font-size:13px;color:var(--gray-500);line-height:1.6;font-weight:400">
+            Confirmo que la información provista es verídica y completa según mi conocimiento. He leído la
+            <a href="#" style="color:var(--primary)">Política de Privacidad</a>
+            y acepto que mi denuncia sea procesada por el equipo de compliance.
+          </label>
+        </div>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(9)">← Anterior</button>
+          <button class="wizard-next" id="submitBtn" onclick="submitForm()">
+            Enviar denuncia
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== SUCCESS ===== -->
+      <div class="wizard-step" id="step-success">
+        <div class="wizard-success">
+          <div class="success-check">✓</div>
+          <h2>Denuncia recibida</h2>
+          <p>Tu denuncia fue enviada de forma segura al equipo de compliance de <strong id="successCompanyName"></strong>. Guardá tu código de seguimiento.</p>
+          <div class="tracking-box">
+            <p>Código de seguimiento</p>
+            <div class="tracking-code" id="trackingCodeDisplay"></div>
+          </div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:28px;line-height:1.6">
+            Con este código podés consultar el estado de tu denuncia en cualquier momento, sin revelar tu identidad.
+          </p>
+          <div class="success-actions">
+            <button onclick="window.print()" class="btn btn-outline btn-lg" style="justify-content:center;width:100%">
+              🖨️ Guardar comprobante
+            </button>
+            <a href="index.html" class="btn btn-ghost" style="justify-content:center;font-size:14px;width:100%">
+              Volver al inicio →
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /wizard-card -->
+  </div><!-- /wizard-body -->
+
+  <!-- FOOTER NOTE -->
+  <div style="text-align:center;padding:0 24px 24px;font-size:12px;color:rgba(255,255,255,.25);line-height:1.6">
+    🔒 Cifrado end-to-end · Sin registro de IP · Cumplimiento internacional: OCDE, GAFI, ISO 37001 · Formularios personalizables por organización e idioma
+  </div>
+
+</div><!-- /wizard-page -->
+
+<script src="main.js"></script>
+<script>
+  // ── Init ──────────────────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const company = params.get('empresa') || 'tu empresa';
+  document.title = `Denuncia · ${company} · LDD`;
+  document.getElementById('companyChipName').textContent = company;
+  document.getElementById('successCompanyName').textContent = company;
+
+  const TOTAL_STEPS = 10;
+  let currentStep = 0;
+
+  // ── Navigation ────────────────────────────────────────────────
+  function goToStep(n) {
+    // Validate step 3 (description required)
+    if (currentStep === 3) {
+      const desc = document.getElementById('descriptionText').value.trim();
+      if (n > 3 && desc.length < 30) {
+        document.getElementById('descriptionText').focus();
+        document.getElementById('descriptionText').style.borderColor = 'var(--primary)';
+        return;
+      }
+    }
+
+    // Validate terms on final step
+    if (currentStep === 10 && n === 'submit') {
+      if (!document.getElementById('termsCheck').checked) {
+        document.getElementById('termsCheck').closest('.form-checkbox').style.outline = '2px solid var(--primary)';
+        return;
+      }
+    }
+
+    // Hide current
+    const cur = document.getElementById(currentStep === 0 ? 'step-0' : `step-${currentStep}`);
+    if (cur) cur.classList.remove('active');
+
+    currentStep = n;
+
+    // Show next
+    const next = document.getElementById(n === 'success' ? 'step-success' : `step-${n}`);
+    if (next) next.classList.add('active');
+
+    // Progress
+    updateProgress();
+    window.scrollTo(0, 0);
+  }
+
+  function updateProgress() {
+    const pct = currentStep === 0 ? 0 : (currentStep / TOTAL_STEPS) * 100;
+    document.getElementById('progressFill').style.width = `${Math.min(pct, 100)}%`;
+    if (currentStep === 0) {
+      document.getElementById('stepLabel').textContent = 'Empezá tu denuncia';
+    } else if (currentStep <= TOTAL_STEPS) {
+      document.getElementById('stepLabel').textContent = `Paso ${currentStep} de ${TOTAL_STEPS}`;
+    } else {
+      document.getElementById('stepLabel').textContent = '¡Listo!';
+    }
+  }
+
+  // ── Selection helpers ─────────────────────────────────────────
+  function selectFreq(btn, step) {
+    document.querySelectorAll(`[data-step="${step}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    // Show complementary ref field if step 1 and "si"
+    if (step === 1) {
+      document.getElementById('complementRef').style.display =
+        btn.dataset.val === 'si' ? 'block' : 'none';
+    }
+  }
+
+  function toggleCat(btn) {
+    btn.classList.toggle('selected');
+    const anySelected = document.querySelectorAll('#step-2 .cat-option.selected').length > 0;
+    document.getElementById('next-2').disabled = !anySelected;
+  }
+
+  function selectPill(btn, group) {
+    // Single select for area
+    document.querySelectorAll(`#areaPills .pill`).forEach(p => p.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  // ── Description counter ───────────────────────────────────────
+  function updateCounter() {
+    const val = document.getElementById('descriptionText').value;
+    document.getElementById('charCount').textContent = val.length;
+    document.getElementById('next-3').disabled = val.trim().length < 30;
+  }
+
+  // ── Dynamic rows ──────────────────────────────────────────────
+  function addInvolvedRow() {
+    const list = document.getElementById('involvedList');
+    const row = document.createElement('div');
+    row.className = 'involved-row';
+    row.innerHTML = `
+      <input class="wizard-input" type="text" placeholder="Nombre y apellido o descripción del rol" style="margin-bottom:8px" />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+        <input class="wizard-input" type="text" placeholder="Relación con la organización" style="margin-bottom:0" />
+        <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />
+      </div>`;
+    list.appendChild(row);
+  }
+
+  function addWitnessRow() {
+    const list = document.getElementById('witnessList');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px';
+    row.innerHTML = `
+      <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+      <input class="wizard-input" type="text" placeholder="Relación con la org." style="margin-bottom:0" />
+      <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />`;
+    list.appendChild(row);
+  }
+
+  function addOtherRow() {
+    const list = document.getElementById('otherPersonsList');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px';
+    row.innerHTML = `
+      <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+      <input class="wizard-input" type="text" placeholder="Vinculación con el hecho" style="margin-bottom:0" />`;
+    list.appendChild(row);
+  }
+
+  // ── Identity toggle ───────────────────────────────────────────
+  function setAnon(anon) {
+    document.getElementById('anonBtn').classList.toggle('active', anon);
+    document.getElementById('identBtn').classList.toggle('active', !anon);
+    document.getElementById('identityFields').classList.toggle('visible', !anon);
+  }
+
+  // ── File upload ───────────────────────────────────────────────
+  document.getElementById('fileInput8').addEventListener('change', function() {
+    const list = document.getElementById('fileList8');
+    Array.from(this.files).forEach(file => {
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gray-100);border-radius:8px;font-size:13px;color:var(--gray-700);margin-bottom:8px';
+      item.innerHTML = `<span>📎</span><span>${file.name}</span><span style="color:var(--gray-400);font-size:12px;margin-left:auto">${(file.size/1024/1024).toFixed(2)} MB</span>`;
+      list.appendChild(item);
+    });
+  });
+
+  // ── Keyboard: Enter to advance ────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+      const nextBtn = document.querySelector(`#step-${currentStep} .wizard-next:not([disabled])`);
+      if (nextBtn) nextBtn.click();
+    }
+  });
+
+  // ── Submit ────────────────────────────────────────────────────
+  function submitForm() {
+    if (!document.getElementById('termsCheck').checked) {
+      document.getElementById('termsCheck').closest('.form-checkbox').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Enviando...';
+
+    setTimeout(() => {
+      const code = 'LDD-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('trackingCodeDisplay').textContent = code;
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('stepLabel').textContent = '¡Listo!';
+      goToStep('success');
+    }, 1800);
+  }
+</script>
+
+<style>
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Disable next-2 initially */
+  #next-2 { opacity: .45; pointer-events: none; }
+  #next-2:not([disabled]) { opacity: 1; pointer-events: auto; }
+</style>
+
+</body>
+</html>

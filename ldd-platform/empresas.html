@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directorio de Empresas · LDD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">LDD<span class="logo-dot">.</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#beneficios">Beneficios</a>
+        <a href="index.html#canales">Canales</a>
+        <a href="index.html#como-funciona">Cómo funciona</a>
+        <a href="empresas.html" style="color:var(--red-600)">Empresas</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="contacto.html" class="btn btn-primary">Solicitar demo</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html#beneficios">Beneficios</a>
+      <a href="index.html#canales">Canales</a>
+      <a href="index.html#como-funciona">Cómo funciona</a>
+      <a href="empresas.html">Empresas</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="section-tag" style="margin-bottom:16px">Directorio seguro</div>
+    <h1>¿A qué empresa pertenecés?</h1>
+    <p>Buscá tu empresa en el directorio y comenzá tu denuncia de forma anónima y segura.</p>
+    <div class="companies-search">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="#9CA3AF" stroke-width="1.8"/><path d="M14 14l3 3" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" id="companySearch" placeholder="Buscar empresa por nombre o rubro..." autocomplete="off" />
+    </div>
+  </section>
+
+  <!-- COMPANIES LIST -->
+  <section class="companies-section">
+    <div class="container">
+
+      <!-- Filters -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:8px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="industryFilters">
+          <button class="filter-btn filter-active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="finanzas">Finanzas</button>
+          <button class="filter-btn" data-filter="salud">Salud</button>
+          <button class="filter-btn" data-filter="retail">Retail</button>
+          <button class="filter-btn" data-filter="tecnologia">Tecnología</button>
+          <button class="filter-btn" data-filter="construccion">Construcción</button>
+          <button class="filter-btn" data-filter="energia">Energía</button>
+        </div>
+        <p id="companiesCount" style="font-size:14px;color:var(--gray-400)">Mostrando <strong>24</strong> empresas</p>
+      </div>
+
+      <div class="companies-grid" id="companiesGrid">
+
+        <div class="company-card" data-industry="finanzas" onclick="goToForm('Banco Meridiano S.A.')">
+          <div class="company-logo-placeholder" style="background:#EFF6FF;color:#2563EB">BM</div>
+          <div>
+            <h3>Banco Meridiano S.A.</h3>
+            <p>Entidad financiera · Buenos Aires</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="salud" onclick="goToForm('Farmacorp S.A.')">
+          <div class="company-logo-placeholder" style="background:#F0FDF4;color:#16A34A">FC</div>
+          <div>
+            <h3>Farmacorp S.A.</h3>
+            <p>Farmacéutica · Córdoba</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="retail" onclick="goToForm('RetailPlus S.A.')">
+          <div class="company-logo-placeholder" style="background:#FFF7ED;color:#EA580C">RP</div>
+          <div>
+            <h3>RetailPlus S.A.</h3>
+            <p>Retail · Buenos Aires</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="tecnologia" onclick="goToForm('TechLatam S.R.L.')">
+          <div class="company-logo-placeholder" style="background:#F5F3FF;color:#7C3AED">TL</div>
+          <div>
+            <h3>TechLatam S.R.L.</h3>
+            <p>Tecnología · Rosario</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="construccion" onclick="goToForm('Constructora Sur S.A.')">
+          <div class="company-logo-placeholder" style="background:#FFFBEB;color:#D97706">CS</div>
+          <div>
+            <h3>Constructora Sur S.A.</h3>
+            <p>Construcción · Mendoza</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="finanzas" onclick="goToForm('Grupo Andina Inversiones')">
+          <div class="company-logo-placeholder" style="background:#FFF0F2;color:#C8102E">GA</div>
+          <div>
+            <h3>Grupo Andina Inversiones</h3>
+            <p>Finanzas e inversiones · Buenos Aires</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="energia" onclick="goToForm('EnergySur S.A.')">
+          <div class="company-logo-placeholder" style="background:#F0F9FF;color:#0284C7">ES</div>
+          <div>
+            <h3>EnergySur S.A.</h3>
+            <p>Energía y utilities · Neuquén</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="salud" onclick="goToForm('ClínicasRed S.A.')">
+          <div class="company-logo-placeholder" style="background:#F0FDF4;color:#16A34A">CR</div>
+          <div>
+            <h3>ClínicasRed S.A.</h3>
+            <p>Salud y clínicas · Multi-sede</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="finanzas" onclick="goToForm('Bancomin S.A.')">
+          <div class="company-logo-placeholder" style="background:#EFF6FF;color:#1D4ED8">BN</div>
+          <div>
+            <h3>Bancomin S.A.</h3>
+            <p>Banca corporativa · Buenos Aires</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="tecnologia" onclick="goToForm('DataCore S.R.L.')">
+          <div class="company-logo-placeholder" style="background:#F5F3FF;color:#6D28D9">DC</div>
+          <div>
+            <h3>DataCore S.R.L.</h3>
+            <p>Tecnología e IA · Buenos Aires</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="retail" onclick="goToForm('SuperChain S.A.')">
+          <div class="company-logo-placeholder" style="background:#FFF7ED;color:#C2410C">SC</div>
+          <div>
+            <h3>SuperChain S.A.</h3>
+            <p>Supermercados · Nacional</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="company-card" data-industry="construccion" onclick="goToForm('InfraArg S.A.')">
+          <div class="company-logo-placeholder" style="background:#F9FAFB;color:#374151">IA</div>
+          <div>
+            <h3>InfraArg S.A.</h3>
+            <p>Infraestructura · Buenos Aires</p>
+          </div>
+          <div class="company-card-cta">
+            Ingresar denuncia
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- No results -->
+      <div id="noResults" style="display:none;text-align:center;padding:80px 24px">
+        <div style="font-size:48px;margin-bottom:16px">🔍</div>
+        <h3 style="font-family:var(--font-heading);font-size:22px;color:var(--black);margin-bottom:8px">No encontramos esa empresa</h3>
+        <p style="font-size:15px;color:var(--gray-500);margin-bottom:24px">Si tu empresa usa LDD y no la encontrás, contactanos.</p>
+        <a href="contacto.html" class="btn btn-primary">Contactar soporte</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER MINI -->
+  <footer class="footer" style="padding-top:0">
+    <div class="footer-container">
+      <div class="footer-bottom">
+        <p>© 2024 LDD · Línea De Denuncias. Todos los derechos reservados.</p>
+        <p>Tu identidad está protegida en todo momento</p>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    .filter-btn {
+      padding: 8px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 100px;
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all .2s;
+      font-family: var(--font-body);
+    }
+    .filter-btn:hover { border-color: var(--gray-400); color: var(--black); }
+    .filter-active {
+      background: var(--red-600);
+      border-color: var(--red-600);
+      color: var(--white);
+    }
+    .filter-active:hover { background: var(--red-700); border-color: var(--red-700); color: var(--white); }
+  </style>
+
+  <script src="main.js"></script>
+  <script>
+    function goToForm(company) {
+      window.location.href = 'formulario.html?empresa=' + encodeURIComponent(company);
+    }
+
+    const searchInput = document.getElementById('companySearch');
+    const cards = document.querySelectorAll('.company-card');
+    const noResults = document.getElementById('noResults');
+    const countEl = document.getElementById('companiesCount');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let activeFilter = 'all';
+
+    function filterCards() {
+      const query = searchInput.value.toLowerCase().trim();
+      let count = 0;
+      cards.forEach(card => {
+        const name = card.querySelector('h3').textContent.toLowerCase();
+        const industry = card.dataset.industry;
+        const matchQuery = !query || name.includes(query);
+        const matchFilter = activeFilter === 'all' || industry === activeFilter;
+        const show = matchQuery && matchFilter;
+        card.style.display = show ? '' : 'none';
+        if (show) count++;
+      });
+      noResults.style.display = count === 0 ? 'block' : 'none';
+      countEl.innerHTML = `Mostrando <strong>${count}</strong> empresa${count !== 1 ? 's' : ''}`;
+    }
+
+    searchInput.addEventListener('input', filterCards);
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('filter-active'));
+        btn.classList.add('filter-active');
+        activeFilter = btn.dataset.filter;
+        filterCards();
+      });
+    });
+  </script>
+</body>
+</html>
