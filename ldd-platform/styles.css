@@ -216,8 +216,16 @@ img { max-width: 100%; }
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .logo-text {
@@ -226,6 +234,9 @@ img { max-width: 100%; }
   font-weight: 800;
   color: var(--black);
   letter-spacing: -.04em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .logo-dot { color: var(--primary); }
@@ -1371,6 +1382,9 @@ img { max-width: 100%; }
   font-weight: 800;
   color: var(--white);
   letter-spacing: -.04em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .wizard-logo-dot { color: var(--primary); }
