@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Argus — Línea de denuncias Corporativa</title>
+  <meta name="description" content="Plataforma multicanal de denuncias corporativas. Segura, confidencial y legalmente robusta. Web, Email, Teléfono y WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">Argus<span class="logo-dot">.</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#beneficios">Beneficios</a>
+        <a href="#canales">Canales</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#empresas">Empresas</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="empresas.html" class="btn btn-ghost">Ingresar denuncia</a>
+        <a href="contacto.html" class="btn btn-primary">Solicitar demo</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#beneficios">Beneficios</a>
+      <a href="#canales">Canales</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#empresas">Empresas</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="empresas.html" class="btn btn-primary" style="margin-top:12px;text-align:center">Ingresar denuncia</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Canal externo independiente de denuncias corporativas
+      </div>
+      <h1 class="hero-title">
+        La voz que protege<br />
+        a tu <span class="hero-accent">organización</span>
+      </h1>
+      <p class="hero-subtitle">
+        Canal de denuncias multicanal, anónimo y seguro. Cumplimiento legal,
+        cultura ética y protección al denunciante — todo en una sola plataforma.
+      </p>
+      <div class="hero-actions">
+        <a href="empresas.html" class="btn btn-primary btn-lg">
+          Realizar una denuncia
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="contacto.html" class="btn btn-outline btn-lg">
+          Solicitar demo gratuita
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">+500</span>
+          <span class="stat-label">Empresas activas</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Anónimo y confidencial</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Canales disponibles</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Disponibilidad</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="floating-card card-1">
+          <div class="fc-icon fc-green">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2l1.8 5.4H18l-4.9 3.6 1.8 5.4L10 13 5.1 16.4l1.8-5.4L2 7.4h6.2L10 2z" fill="currentColor"/></svg>
+          </div>
+          <div class="fc-content">
+            <span class="fc-title">Denuncia recibida</span>
+            <span class="fc-sub">Canal Web · Hace 2 min</span>
+          </div>
+          <div class="fc-badge fc-badge-green">Nuevo</div>
+        </div>
+        <div class="floating-card card-2">
+          <div class="fc-icon fc-red">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 0114 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="fc-content">
+            <span class="fc-title">Identidad protegida</span>
+            <span class="fc-sub">Cifrado end-to-end activo</span>
+          </div>
+          <div class="fc-badge fc-badge-red">Seguro</div>
+        </div>
+        <div class="floating-card card-3">
+          <div class="fc-icon fc-dark">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M6 10h8M6 13h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="fc-content">
+            <span class="fc-title">Informe generado</span>
+            <span class="fc-sub">Dashboard · Compliance</span>
+          </div>
+          <div class="fc-badge fc-badge-dark">Listo</div>
+        </div>
+        <div class="hero-phone">
+          <div class="phone-screen">
+            <div class="phone-header">
+              <span>Argus · WhatsApp</span>
+            </div>
+            <div class="phone-messages">
+              <div class="msg msg-in">Hola, quiero hacer una denuncia de forma anónima</div>
+              <div class="msg msg-out">Perfecto. Tu identidad está protegida. ¿A qué empresa pertenece?</div>
+              <div class="msg msg-in">Soy de Empresa XYZ S.A.</div>
+              <div class="msg msg-out">Código de seguimiento: #ARG-2024-8821</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS CLIENTES -->
+  <section class="clients-strip">
+    <div class="clients-container">
+      <p class="clients-label">Confiado por líderes en compliance corporativo</p>
+      <div class="clients-logos">
+        <div class="logo-placeholder">Farmacorp S.A.</div>
+        <div class="logo-placeholder">Grupo Andina</div>
+        <div class="logo-placeholder">TechLatam</div>
+        <div class="logo-placeholder">Bancomin</div>
+        <div class="logo-placeholder">RetailPlus</div>
+        <div class="logo-placeholder">Constructora Sur</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="section benefits" id="beneficios">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Por qué Argus</div>
+        <h2 class="section-title">Más que un canal.<br/>Una cultura de integridad.</h2>
+        <p class="section-subtitle">Diseñada para organizaciones que entienden que la ética no es un costo, es una ventaja competitiva.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card benefit-featured">
+          <div class="benefit-number">01</div>
+          <div class="benefit-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4l10 5v9c0 5-4.5 9.7-10 11C10.5 27.7 6 23 6 18V9l10-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 16l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Anonimato garantizado</h3>
+          <p>Tecnología de cifrado end-to-end. Sin registros de IP. El denunciante comunica con total seguridad — nadie, ni el administrador, conoce su identidad.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-number">02</div>
+          <div class="benefit-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="6" width="24" height="20" rx="3" stroke="currentColor" stroke-width="2"/><path d="M10 12h12M10 17h8M10 22h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Marco normativo internacional</h3>
+          <p>Alineado con las recomendaciones de la OCDE, los estándares GAFI y el FCPA. Adaptable a la normativa local de protección al denunciante de cada país.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-number">03</div>
+          <div class="benefit-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="2"/><path d="M16 10v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Disponibilidad 24/7</h3>
+          <p>Los cuatro canales operan todo el año. Web, email, teléfono y WhatsApp — siempre disponibles, sin intermediarios.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-number">04</div>
+          <div class="benefit-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 26V16a10 10 0 0120 0v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="22" width="6" height="6" rx="2" stroke="currentColor" stroke-width="2"/><rect x="22" y="22" width="6" height="6" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+          </div>
+          <h3>Seguimiento del caso</h3>
+          <p>Código único de denuncia. El denunciante puede consultar el estado sin revelar su identidad. Dashboard completo para el equipo de compliance.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-number">05</div>
+          <div class="benefit-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 22l7-7 5 5 5-6 7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Analytics e informes</h3>
+          <p>Reportes periódicos, métricas de gestión y alertas automáticas. Información accionable para la Alta Dirección y auditorías internas.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-number">06</div>
+          <div class="benefit-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M6 28c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 6l3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Implementación rápida</h3>
+          <p>Alta en 72 horas. Personalización con la marca de la empresa. Capacitación incluida. Soporte dedicado durante todo el proceso.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAL / VENTAJA COMPETITIVA -->
+  <section class="section differentiator">
+    <div class="container">
+      <div class="diff-grid">
+        <div class="diff-content">
+          <div class="section-tag">Nuestro diferencial</div>
+          <h2 class="section-title">No solo recibimos<br/>denuncias. Las gestionamos.</h2>
+          <p class="section-subtitle">La mayoría de los proveedores te dan un formulario. Nosotros te damos un sistema completo de gestión ética corporativa.</p>
+          <div class="diff-list">
+            <div class="diff-item">
+              <div class="diff-check">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#5B4FDB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Operador humano certificado</strong>
+                <span>Cada denuncia es recibida y procesada por profesionales en compliance, no solo algoritmos.</span>
+              </div>
+            </div>
+            <div class="diff-item">
+              <div class="diff-check">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#5B4FDB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Independencia real del proveedor</strong>
+                <span>Argus es externo a su organización — garantía de imparcialidad ante cualquier caso, incluso de alta dirección.</span>
+              </div>
+            </div>
+            <div class="diff-item">
+              <div class="diff-check">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#5B4FDB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Multicanal real — no solo web</strong>
+                <span>Atendemos por web, email, teléfono y WhatsApp. Cubrimos todos los perfiles de denunciante.</span>
+              </div>
+            </div>
+            <div class="diff-item">
+              <div class="diff-check">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#5B4FDB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Personalización total</strong>
+                <span>Categorías de denuncia, flujos de escalamiento y reportes adaptados a cada industria y regulación.</span>
+              </div>
+            </div>
+          </div>
+          <a href="contacto.html" class="btn btn-primary btn-lg" style="margin-top:32px">Hablar con un especialista</a>
+        </div>
+        <div class="diff-visual">
+          <div class="comparison-table">
+            <div class="ct-header">
+              <div class="ct-col ct-feature">Capacidad</div>
+              <div class="ct-col ct-ldd">Argus</div>
+              <div class="ct-col ct-other">Otros</div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">Canal web seguro</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check yes">✓</span></div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">WhatsApp y teléfono</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check no">✗</span></div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">Operador humano</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check no">✗</span></div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">Dashboard compliance</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check partial">~</span></div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">Seguimiento anónimo</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check partial">~</span></div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">Reportes regulatorios</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check no">✗</span></div>
+            </div>
+            <div class="ct-row">
+              <div class="ct-col ct-feature">Implementación 72hs</div>
+              <div class="ct-col ct-ldd"><span class="ct-check yes">✓</span></div>
+              <div class="ct-col ct-other"><span class="ct-check no">✗</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CANALES -->
+  <section class="section channels" id="canales">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Canales disponibles</div>
+        <h2 class="section-title">Denunciar nunca fue<br/>tan accesible</h2>
+        <p class="section-subtitle">Cuatro canales independientes y seguros. El denunciante elige el que más le resulte cómodo.</p>
+      </div>
+      <div class="channels-grid">
+        <div class="channel-card channel-web">
+          <div class="channel-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="6" width="30" height="22" rx="4" stroke="currentColor" stroke-width="2"/><path d="M3 13h30" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="9.5" r="1.5" fill="currentColor"/><circle cx="13" cy="9.5" r="1.5" fill="currentColor"/><path d="M12 20h12M12 24h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="channel-label">Canal Web</div>
+          <h3>Formulario seguro</h3>
+          <p>Formulario cifrado, sin cookies de rastreo. Adjuntá evidencias. Recibís código de seguimiento inmediato.</p>
+          <a href="empresas.html" class="channel-link">Hacer denuncia online →</a>
+        </div>
+        <div class="channel-card channel-email">
+          <div class="channel-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="4" stroke="currentColor" stroke-width="2"/><path d="M3 14l15 9 15-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="channel-label">Email</div>
+          <h3>Buzón confidencial</h3>
+          <p>Dirección de email dedicada para tu empresa. Los mensajes son encriptados y procesados por compliance officers.</p>
+          <span class="channel-link">Se asigna al contratar →</span>
+        </div>
+        <div class="channel-card channel-phone">
+          <div class="channel-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M6 6h7l3 7-4 2.5a18 18 0 008.5 8.5L23 20l7 3v7a2 2 0 01-2 2C11.2 32 4 24.8 4 8a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="channel-label">Teléfono</div>
+          <h3>Línea dedicada 0800</h3>
+          <p>Atención por operador certificado. Podés optar por voz modulada. Grabación y transcripción segura del caso.</p>
+          <span class="channel-link">Número asignado al contratar →</span>
+        </div>
+        <div class="channel-card channel-whatsapp">
+          <div class="channel-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="14" stroke="currentColor" stroke-width="2"/><path d="M11 24l1.7-5.1A7 7 0 1124 18a7 7 0 01-7 7 6.9 6.9 0 01-3.5-.9L11 24z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15 15.5c.2.5.6 1 1 1.5a5 5 0 002 1.5c.3.1.6 0 .8-.2l.5-.6c.2-.2.5-.3.7-.1l1.5 1c.2.1.3.4.1.6-.8 1-1.8 1.5-3 1.3a7 7 0 01-4.5-4.5c-.2-1.2.3-2.2 1.3-3 .2-.2.5-.1.6.1l1 1.5c.2.2.1.5-.1.7l-.6.5c-.2.3-.3.5-.3.7z" fill="currentColor"/></svg>
+          </div>
+          <div class="channel-label">WhatsApp</div>
+          <h3>Conversación segura</h3>
+          <p>Bot inteligente + derivación a operador humano. Disponible 24/7. El número no queda registrado en nuestra base.</p>
+          <span class="channel-link">Número asignado al contratar →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="section how-it-works" id="como-funciona">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">El proceso</div>
+        <h2 class="section-title">Simple para quien denuncia.<br/>Poderoso para compliance.</h2>
+      </div>
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-connector"></div>
+          <div class="step-content">
+            <h3>Elige el canal</h3>
+            <p>Web, email, teléfono o WhatsApp. El denunciante elige el medio más cómodo y accesible para él.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-connector"></div>
+          <div class="step-content">
+            <h3>Selecciona la empresa</h3>
+            <p>Busca la organización en nuestro directorio seguro. La denuncia va directo al equipo de compliance correspondiente.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-connector"></div>
+          <div class="step-content">
+            <h3>Presenta la denuncia</h3>
+            <p>Describe la situación, adjunta evidencias si las tiene, elige si quiere mantener anonimato total o parcial.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-connector"></div>
+          <div class="step-content">
+            <h3>Recibe su código</h3>
+            <p>Se genera un código único de seguimiento. Con él puede consultar el estado sin revelar su identidad.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Compliance actúa</h3>
+            <p>El equipo de compliance recibe la alerta, investiga y documenta. Todos los plazos quedan registrados.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELECCIÓN DE EMPRESA CTA -->
+  <section class="section company-cta" id="empresas">
+    <div class="container">
+      <div class="company-cta-inner">
+        <div class="cta-text">
+          <div class="section-tag section-tag-light">Ingresar denuncia</div>
+          <h2>¿Querés hacer una denuncia ahora?</h2>
+          <p>Seleccioná tu empresa en nuestro directorio seguro y comenzá el proceso. Es anónimo, confidencial y protegido.</p>
+        </div>
+        <div class="cta-search">
+          <div class="search-box">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="#666" stroke-width="1.8"/><path d="M14 14l3 3" stroke="#666" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" placeholder="Busca tu empresa..." id="heroCompanySearch" />
+          </div>
+          <a href="empresas.html" class="btn btn-primary btn-lg">Ver todas las empresas →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS / SOCIAL PROOF -->
+  <section class="section testimonials">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Testimonios</div>
+        <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Implementamos el canal en 60 horas. La plataforma nos permitió cumplir con los estándares internacionales y el directorio quedó tranquilo. Excelente soporte post-implementación."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">RM</div>
+            <div>
+              <strong>Ricardo M.</strong>
+              <span>Chief Compliance Officer · Farmacorp S.A.</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card testimonial-featured">
+          <div class="stars">★★★★★</div>
+          <p>"Lo que más valoramos es la independencia real del operador. Nuestros empleados saben que Argus no tiene vínculo con la empresa — eso genera confianza genuina para denunciar."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AL</div>
+            <div>
+              <strong>Analía L.</strong>
+              <span>Directora Legal · Grupo Andina</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"El canal de WhatsApp fue clave. Tuvimos más denuncias en el primer mes que en todo el año anterior con el formulario web solamente. La accesibilidad importa."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JP</div>
+            <div>
+              <strong>José P.</strong>
+              <span>Gerente de RRHH · TechLatam</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NORMATIVA / LEGAL -->
+  <section class="section compliance-section">
+    <div class="container">
+      <div class="compliance-inner">
+        <div class="compliance-text">
+          <div class="section-tag">Marco normativo</div>
+          <h2 class="section-title">Estándares internacionales<br/>de referencia</h2>
+          <p>La plataforma está diseñada para satisfacer los requisitos de los principales marcos internacionales de integridad y ética corporativa, con capacidad de adaptación a la normativa local de cada país.</p>
+        </div>
+        <div class="compliance-badges">
+          <div class="compliance-badge">
+            <div class="cb-icon">🌐</div>
+            <div>
+              <strong>OCDE — Directrices anticorrupción</strong>
+              <span>Canal de denuncia como componente esencial del programa de integridad</span>
+            </div>
+          </div>
+          <div class="compliance-badge">
+            <div class="cb-icon">💰</div>
+            <div>
+              <strong>GAFI / FATF — Recomendaciones</strong>
+              <span>Prevención de lavado de activos y financiamiento del terrorismo</span>
+            </div>
+          </div>
+          <div class="compliance-badge">
+            <div class="cb-icon">⚖️</div>
+            <div>
+              <strong>FCPA / UK Bribery Act</strong>
+              <span>Cumplimiento para organizaciones con operaciones internacionales</span>
+            </div>
+          </div>
+          <div class="compliance-badge">
+            <div class="cb-icon">🏛️</div>
+            <div>
+              <strong>Convención de Naciones Unidas</strong>
+              <span>UNCAC — Protección del denunciante como estándar universal</span>
+            </div>
+          </div>
+          <div class="compliance-badge">
+            <div class="cb-icon">🛡️</div>
+            <div>
+              <strong>Directiva UE 2019/1937</strong>
+              <span>Protección de personas que reportan infracciones del derecho de la Unión</span>
+            </div>
+          </div>
+          <div class="compliance-badge">
+            <div class="cb-icon">📋</div>
+            <div>
+              <strong>Normativa local adaptable</strong>
+              <span>Configuración por país para cumplir legislación de protección al denunciante vigente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-final">
+        <h2>¿Tu empresa ya tiene<br/>un canal ético?</h2>
+        <p>Los estándares internacionales lo exigen. El mercado lo valora. Tus empleados lo merecen.</p>
+        <div class="cta-final-actions">
+          <a href="contacto.html" class="btn btn-white btn-lg">Solicitar demo gratuita</a>
+          <a href="contacto.html" class="btn btn-outline-white btn-lg">Hablar con un especialista</a>
+        </div>
+        <p class="cta-note">Sin compromiso · Implementación en 72 horas · Soporte incluido</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <span class="logo-icon">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+                <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="24" cy="22" r="4" fill="#fff"/>
+                <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="logo-text" style="color:#fff;font-size:14px">Argus<span class="logo-dot">.</span></span>
+          </a>
+          <p>Plataforma multicanal de denuncias corporativas. Segura, confidencial y legalmente robusta.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="#" aria-label="Twitter">𝕏</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Plataforma</h4>
+            <a href="#beneficios">Beneficios</a>
+            <a href="#canales">Canales</a>
+            <a href="#como-funciona">Cómo funciona</a>
+            <a href="empresas.html">Directorio de empresas</a>
+          </div>
+          <div class="footer-col">
+            <h4>Empresa</h4>
+            <a href="contacto.html">Contacto</a>
+            <a href="#">Sobre Argus</a>
+            <a href="#">Nuestro equipo</a>
+            <a href="#">Blog de compliance</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="privacidad.html">Política de privacidad</a>
+            <a href="terminos.html">Términos de uso</a>
+            <a href="seguridad.html">Seguridad de datos</a>
+            <a href="terminos.html#canal">Términos del canal</a>
+          </div>
+          <div class="footer-col">
+            <h4>Contacto</h4>
+            <a href="mailto:hola@argus.com">hola@argus.com</a>
+            <a href="tel:+541100000000">+54 11 0000-0000</a>
+            <span>Buenos Aires, Argentina</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Argus · Línea de denuncias. Todos los derechos reservados.</p>
+        <p>Desarrollado con cumplimiento legal · Datos protegidos</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seguridad de Datos · Argus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .legal-page { max-width: 800px; margin: 0 auto; padding: 120px 40px 80px; }
+    @media (max-width: 768px) { .legal-page { padding: 100px 24px 60px; } }
+    .legal-hero { margin-bottom: 56px; }
+    .legal-hero h1 { font-family: var(--font-heading); font-size: clamp(28px, 4vw, 44px); font-weight: 900; letter-spacing: -.04em; color: var(--black); margin-bottom: 12px; }
+    .legal-hero p { font-size: 16px; color: var(--gray-500); line-height: 1.7; }
+    .legal-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    .legal-meta span { font-size: 13px; color: var(--gray-400); font-weight: 500; }
+    .legal-meta strong { color: var(--gray-700); }
+    .legal-section { margin-bottom: 48px; scroll-margin-top: 100px; }
+    .legal-section h2 { font-family: var(--font-heading); font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -.03em; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1.5px solid var(--gray-200); }
+    .legal-section h3 { font-size: 16px; font-weight: 700; color: var(--black); margin: 24px 0 10px; }
+    .legal-section p { font-size: 15px; color: var(--gray-600); line-height: 1.8; margin-bottom: 14px; }
+    .legal-section ul { padding-left: 22px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .legal-section li { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+    .legal-highlight { background: var(--primary-100); border: 1px solid var(--primary-200); border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+    .legal-highlight p { color: var(--primary-800, #3B32A8); font-weight: 500; margin: 0; }
+    .legal-divider { height: 1px; background: var(--gray-200); margin: 40px 0; }
+    .legal-contact-box { background: var(--gray-900); border-radius: 16px; padding: 32px; color: var(--white); }
+    .legal-contact-box h3 { font-family: var(--font-heading); font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 12px; letter-spacing: -.03em; }
+    .legal-contact-box p { font-size: 14px; color: var(--gray-400); line-height: 1.7; margin-bottom: 16px; }
+    .legal-contact-box a { color: var(--primary-200, #D4D0FF); font-weight: 600; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--primary); text-decoration: none; margin-bottom: 32px; }
+    .back-link:hover { text-decoration: underline; }
+    /* Security layers grid */
+    .sec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 24px 0; }
+    @media (max-width: 600px) { .sec-grid { grid-template-columns: 1fr; } }
+    .sec-card { background: var(--gray-100); border-radius: 14px; padding: 22px; }
+    .sec-card-badge { display: inline-block; font-size: 11px; font-weight: 800; background: var(--primary); color: var(--white); border-radius: 100px; padding: 3px 10px; letter-spacing: .06em; margin-bottom: 12px; }
+    .sec-card h4 { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 8px; letter-spacing: -.02em; }
+    .sec-card p { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin: 0; }
+    /* Incident process */
+    .incident-steps { display: flex; flex-direction: column; gap: 0; }
+    .incident-step { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--gray-200); }
+    .incident-step:last-child { border-bottom: none; }
+    .incident-num { font-size: 12px; font-weight: 900; color: var(--primary); min-width: 28px; padding-top: 2px; letter-spacing: .04em; }
+    .incident-step h4 { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
+    .incident-step p { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">Argus<span class="logo-dot">.</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="empresas.html">Empresas</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="empresas.html" class="btn btn-primary" style="font-size:13px">Realizar denuncia</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="legal-page">
+
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Volver al inicio
+    </a>
+
+    <div class="legal-hero">
+      <div class="section-tag" style="margin-bottom:16px">Legal · Seguridad</div>
+      <h1>Seguridad de Datos</h1>
+      <p>Descripción completa de las medidas técnicas y organizativas que Argus implementa para proteger la información de denunciantes y organizaciones clientes.</p>
+      <div class="legal-meta">
+        <span><strong>Versión:</strong> 1.0</span>
+        <span><strong>Última actualización:</strong> Febrero 2025</span>
+        <span><strong>Alcance:</strong> Plataforma web y servicios Argus</span>
+      </div>
+    </div>
+
+    <!-- Principios -->
+    <div class="legal-section">
+      <h2>Principios de seguridad</h2>
+      <p>La arquitectura de seguridad de Argus se basa en tres principios fundamentales:</p>
+      <ul>
+        <li><strong>Privacidad por diseño (<em>privacy by design</em>):</strong> Las decisiones de diseño del sistema priorizan la protección de datos desde su concepción, no como una capa adicional.</li>
+        <li><strong>Mínimo privilegio:</strong> Cada componente del sistema y cada persona tiene acceso únicamente a la información estrictamente necesaria para su función.</li>
+        <li><strong>Defensa en profundidad:</strong> La seguridad se implementa en múltiples capas independientes, de modo que el fallo de una no compromete el sistema completo.</li>
+      </ul>
+      <div class="legal-highlight">
+        <p>El sistema fue diseñado para que, incluso en el escenario de una brecha de seguridad, los datos de los denunciantes anónimos no puedan ser vinculados a personas identificables, dado que esa información nunca fue recopilada.</p>
+      </div>
+    </div>
+
+    <!-- Capas técnicas -->
+    <div class="legal-section">
+      <h2>Capas de seguridad técnica</h2>
+      <div class="sec-grid">
+        <div class="sec-card">
+          <div class="sec-card-badge">TLS 1.3</div>
+          <h4>Cifrado en tránsito</h4>
+          <p>Todas las comunicaciones entre el navegador del usuario y los servidores de Argus utilizan TLS 1.3, el protocolo de cifrado más moderno y seguro disponible.</p>
+        </div>
+        <div class="sec-card">
+          <div class="sec-card-badge">AES-256</div>
+          <h4>Cifrado en reposo</h4>
+          <p>El contenido de todas las denuncias y datos sensibles se almacena cifrado con AES-256. Las claves de cifrado son gestionadas mediante un sistema de gestión de claves dedicado.</p>
+        </div>
+        <div class="sec-card">
+          <div class="sec-card-badge">0 IP</div>
+          <h4>Sin registro de IP</h4>
+          <p>El sistema de denuncia no registra, procesa ni almacena la dirección IP del dispositivo utilizado. Esta decisión de diseño es irreversible a nivel de aplicación.</p>
+        </div>
+        <div class="sec-card">
+          <div class="sec-card-badge">0 Cookies</div>
+          <h4>Sin cookies de rastreo</h4>
+          <p>La plataforma de denuncia no utiliza cookies de sesión persistentes, cookies de terceros ni tecnologías de seguimiento del comportamiento del usuario.</p>
+        </div>
+        <div class="sec-card">
+          <div class="sec-card-badge">AISLADO</div>
+          <h4>Entornos separados</h4>
+          <p>Cada organización cliente opera en un entorno lógicamente aislado. Los datos de una organización no pueden ser accedidos por representantes de otra.</p>
+        </div>
+        <div class="sec-card">
+          <div class="sec-card-badge">2FA</div>
+          <h4>Autenticación fuerte</h4>
+          <p>El personal de Argus y los representantes de organizaciones clientes utilizan autenticación de dos factores para acceder al panel de gestión.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Infraestructura -->
+    <div class="legal-section">
+      <h2>Infraestructura y alojamiento</h2>
+
+      <h3>Servidores y centros de datos</h3>
+      <p>La plataforma Argus opera en infraestructura con las siguientes características:</p>
+      <ul>
+        <li>Centros de datos con certificación de seguridad física de nivel empresarial.</li>
+        <li>Redundancia geográfica para garantizar disponibilidad ante fallos regionales.</li>
+        <li>Entornos de producción, staging y desarrollo estrictamente separados.</li>
+        <li>Backups cifrados con retención conforme a las políticas de datos.</li>
+      </ul>
+
+      <h3>Residencia de datos</h3>
+      <p>Por defecto, los datos se almacenan en servidores con redundancia regional. La residencia específica de datos puede configurarse por país según los requisitos regulatorios locales de cada organización cliente.</p>
+
+      <h3>Proveedores de infraestructura</h3>
+      <p>Los proveedores de infraestructura tecnológica tienen firmados acuerdos de confidencialidad y procesamiento de datos. No tienen acceso al contenido de las denuncias en texto plano.</p>
+    </div>
+
+    <!-- Control de acceso -->
+    <div class="legal-section">
+      <h2>Control de acceso</h2>
+      <ul>
+        <li><strong>Principio de mínimo privilegio:</strong> Cada persona tiene acceso únicamente a la información necesaria para su rol.</li>
+        <li><strong>Gestión de identidades:</strong> Los accesos se revocan inmediatamente ante cambios de rol o desvinculación.</li>
+        <li><strong>Logs de auditoría:</strong> Todos los accesos a datos sensibles son registrados con timestamp, usuario y acción realizada.</li>
+        <li><strong>Revisión periódica de accesos:</strong> Los permisos son revisados trimestralmente.</li>
+        <li><strong>Separación de funciones:</strong> Ninguna persona tiene control unilateral sobre todos los sistemas críticos.</li>
+      </ul>
+    </div>
+
+    <!-- Desarrollo seguro -->
+    <div class="legal-section">
+      <h2>Desarrollo seguro</h2>
+      <ul>
+        <li><strong>Revisión de código:</strong> Todo código que se incorpora a producción pasa por revisión de pares con foco en seguridad.</li>
+        <li><strong>Testing de seguridad:</strong> El equipo realiza pruebas de seguridad periódicas, incluyendo análisis de vulnerabilidades y pruebas de penetración.</li>
+        <li><strong>Actualizaciones:</strong> Las dependencias y componentes de software son actualizados con regularidad para incorporar parches de seguridad.</li>
+        <li><strong>OWASP Top 10:</strong> El proceso de desarrollo contempla las vulnerabilidades más comunes definidas por OWASP.</li>
+        <li><strong>Gestión de secretos:</strong> Las credenciales y claves nunca se almacenan en el código fuente; se gestionan mediante sistemas dedicados.</li>
+      </ul>
+    </div>
+
+    <!-- Respuesta a incidentes -->
+    <div class="legal-section">
+      <h2>Respuesta ante incidentes de seguridad</h2>
+      <p>Argus cuenta con un plan de respuesta ante incidentes de seguridad que incluye los siguientes pasos:</p>
+      <div class="incident-steps">
+        <div class="incident-step">
+          <div class="incident-num">01</div>
+          <div>
+            <h4>Detección y contención</h4>
+            <p>Al detectarse un incidente, se activa el equipo de respuesta. La primera acción es contener el incidente para limitar su impacto.</p>
+          </div>
+        </div>
+        <div class="incident-step">
+          <div class="incident-num">02</div>
+          <div>
+            <h4>Evaluación del impacto</h4>
+            <p>Se evalúa qué datos pudieron haberse visto afectados, el alcance del incidente y si existe riesgo para los derechos y libertades de los titulares.</p>
+          </div>
+        </div>
+        <div class="incident-step">
+          <div class="incident-num">03</div>
+          <div>
+            <h4>Notificación</h4>
+            <p>En caso de brecha de datos con riesgo para las personas, se notifica a las organizaciones afectadas dentro de las 72 horas de confirmado el incidente. Si el riesgo es alto, también se notifica a los titulares afectados.</p>
+          </div>
+        </div>
+        <div class="incident-step">
+          <div class="incident-num">04</div>
+          <div>
+            <h4>Remediación</h4>
+            <p>Se implementan las correcciones necesarias para resolver el incidente y prevenir su recurrencia.</p>
+          </div>
+        </div>
+        <div class="incident-step">
+          <div class="incident-num">05</div>
+          <div>
+            <h4>Análisis post-incidente</h4>
+            <p>Una vez resuelto el incidente, se realiza un análisis de causa raíz y se actualiza el plan de respuesta según las lecciones aprendidas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capacitación -->
+    <div class="legal-section">
+      <h2>Capacitación y cultura de seguridad</h2>
+      <ul>
+        <li>Todo el personal recibe capacitación en seguridad de la información al incorporarse a Argus.</li>
+        <li>Capacitaciones periódicas sobre amenazas actuales, phishing y buenas prácticas.</li>
+        <li>El personal con acceso a datos sensibles recibe capacitación específica en protección de datos.</li>
+        <li>Existe un canal interno para reportar sospechas de incidentes de seguridad sin consecuencias para quien reporta.</li>
+      </ul>
+    </div>
+
+    <!-- Vulnerabilidades -->
+    <div class="legal-section">
+      <h2>Reporte de vulnerabilidades</h2>
+      <p>Argus alienta el reporte responsable de vulnerabilidades de seguridad. Si descubrís una vulnerabilidad en nuestra plataforma, contactanos antes de divulgarla públicamente:</p>
+      <div class="legal-contact-box">
+        <h3>Reporte responsable de vulnerabilidades</h3>
+        <p>Analizamos todos los reportes recibidos y nos comprometemos a comunicarnos con el investigador en un plazo máximo de 5 días hábiles. Los reportes de buena fe no darán lugar a acciones legales.</p>
+        <p>
+          <a href="mailto:seguridad@argus.com">seguridad@argus.com</a> — Vulnerabilidades y seguridad<br />
+          Asunto: "[SECURITY] Descripción breve de la vulnerabilidad"
+        </p>
+        <p>Por favor incluí: descripción del problema, pasos para reproducirlo, impacto potencial y, si es posible, sugerencias de remediación.</p>
+      </div>
+    </div>
+
+    <div class="legal-divider"></div>
+    <p style="font-size:13px;color:var(--gray-400);text-align:center">
+      Argus — Línea de denuncias · <a href="privacidad.html" style="color:var(--primary)">Política de privacidad</a> · <a href="terminos.html" style="color:var(--primary)">Términos de uso</a>
+    </p>
+
+  </div>
+
+  <footer class="footer" style="margin-top:0">
+    <div class="footer-container">
+      <div class="footer-bottom">
+        <p>© 2025 Argus · Línea de denuncias. Todos los derechos reservados.</p>
+        <p><a href="privacidad.html" style="color:var(--gray-400)">Privacidad</a> · <a href="terminos.html" style="color:var(--gray-400)">Términos</a> · <a href="seguridad.html" style="color:var(--gray-400)">Seguridad</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
