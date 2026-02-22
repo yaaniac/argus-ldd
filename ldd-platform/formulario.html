@@ -35,6 +35,7 @@
           Canal de: <span id="navCompanyName" style="color:var(--primary)"></span>
         </span>
         <a href="empresas.html" style="font-size:13px;color:var(--gray-500);font-weight:500;text-decoration:none">← Cambiar empresa</a>
+        <button onclick="startSeguimiento()" class="btn btn-outline" style="font-size:13px">Consultar denuncia</button>
         <button onclick="startWizard()" class="btn btn-primary" style="font-size:13px">Comenzar denuncia</button>
       </div>
     </div>
@@ -524,6 +525,94 @@
 
 
 <!-- ════════════════════════════════════════════════════════════
+     PANEL DE SEGUIMIENTO (oculto inicialmente)
+     ════════════════════════════════════════════════════════════ -->
+<div id="seguimientoPage" style="display:none">
+
+  <!-- TOP BAR -->
+  <header class="navbar" style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200)">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text" style="font-size:14px">Argus<span class="logo-dot">.</span></span>
+      </a>
+      <div style="display:flex;align-items:center;gap:16px;margin-left:auto">
+        <span style="font-size:13px;font-weight:600;color:var(--gray-500)">
+          Canal de: <span id="segNavCompany" style="color:var(--primary)"></span>
+        </span>
+        <button onclick="exitSeguimiento()" style="font-size:13px;color:var(--gray-500);font-weight:500;background:none;border:none;cursor:pointer;font-family:var(--font-body)">← Volver al canal</button>
+        <button onclick="startWizard()" class="btn btn-primary" style="font-size:13px">Comenzar denuncia</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="background:var(--gray-900);padding:120px 24px 60px;text-align:center">
+    <div style="max-width:600px;margin:0 auto">
+      <div class="section-tag" style="margin-bottom:16px;background:rgba(91,79,219,.15);border-color:rgba(91,79,219,.3);color:var(--primary-200)">Consulta confidencial</div>
+      <h1 style="font-family:var(--font-heading);font-size:clamp(28px,4vw,44px);font-weight:900;color:var(--white);margin-bottom:12px;letter-spacing:-.04em;line-height:1.05">Seguimiento de tu denuncia</h1>
+      <p style="font-size:16px;color:var(--gray-400);line-height:1.7">Ingresá el código que recibiste al finalizar tu denuncia. No es necesario identificarte.</p>
+    </div>
+  </section>
+
+  <!-- CARD -->
+  <section style="padding:48px 24px 80px;max-width:640px;margin:0 auto">
+
+    <div class="seg-card">
+      <div class="seg-card-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M20 5L34 13V23C34 30.8 27.8 37.8 20 40C12.2 37.8 6 30.8 6 23V13L20 5Z" fill="var(--primary)" opacity=".1"/><path d="M20 5L34 13V23C34 30.8 27.8 37.8 20 40C12.2 37.8 6 30.8 6 23V13L20 5Z" stroke="var(--primary)" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 20l4 4 8-8" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Consultá el estado de tu caso</h3>
+      <p>El código tiene el formato <code>ARG-AAAA-XXXX</code>. Lo recibiste al finalizar tu denuncia en este canal.</p>
+
+      <div class="seg-input-row">
+        <input type="text" id="segTrackingInput" class="seg-input" placeholder="Ej: ARG-2025-4821" maxlength="16" autocomplete="off" />
+        <button class="btn btn-primary" onclick="consultarSeguimientoForm()" id="segFormBtn">
+          Consultar
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="seg-hint">Tu consulta es anónima. No registramos quién consulta el código.</p>
+      <div id="segFormResult" style="display:none;margin-top:24px"></div>
+    </div>
+
+    <div class="seg-info-grid">
+      <div class="seg-info-item">
+        <div class="seg-info-icon">🔒</div>
+        <strong>Consulta anónima</strong>
+        <p>No registramos tu IP ni ningún dato de identidad al consultar.</p>
+      </div>
+      <div class="seg-info-item">
+        <div class="seg-info-icon">⏱️</div>
+        <strong>Actualización continua</strong>
+        <p>El estado se actualiza cada vez que el equipo avanza en tu caso.</p>
+      </div>
+      <div class="seg-info-item">
+        <div class="seg-info-icon">💬</div>
+        <strong>Mensajes del equipo</strong>
+        <p>Si necesitan más información, verás un mensaje aquí.</p>
+      </div>
+    </div>
+
+    <div class="seg-lost-code">
+      <strong>¿Perdiste tu código?</strong>
+      <p>Si no guardaste el código, no es posible recuperarlo para proteger tu anonimato. Podés realizar una nueva denuncia si lo considerás necesario.</p>
+      <button onclick="exitSeguimiento(); setTimeout(startWizard, 100)" style="color:var(--primary);font-weight:600;font-size:14px;background:none;border:none;cursor:pointer;font-family:var(--font-body);padding:0">Realizar una nueva denuncia →</button>
+    </div>
+
+  </section>
+
+</div><!-- /seguimientoPage -->
+
+
+<!-- ════════════════════════════════════════════════════════════
      WIZARD CONVERSACIONAL (oculto inicialmente)
      ════════════════════════════════════════════════════════════ -->
 <div class="wizard-page" id="wizardPage" style="display:none">
@@ -977,17 +1066,101 @@
   const TOTAL_STEPS = 10;
   let currentStep = 0;
 
-  // ── Landing / Wizard toggle ───────────────────────────────────
-  function startWizard() {
-    document.getElementById('landingPage').style.display = 'none';
-    document.getElementById('wizardPage').style.display = 'flex';
+  // ── Page toggle helpers ───────────────────────────────────────
+  function showOnly(pageId) {
+    ['landingPage','wizardPage','seguimientoPage'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === pageId ? (pageId === 'wizardPage' ? 'flex' : 'block') : 'none';
+    });
     window.scrollTo(0, 0);
   }
 
-  function exitWizard() {
-    document.getElementById('wizardPage').style.display = 'none';
-    document.getElementById('landingPage').style.display = 'block';
-    window.scrollTo(0, 0);
+  function startWizard()       { showOnly('wizardPage'); }
+  function exitWizard()        { showOnly('landingPage'); }
+  function startSeguimiento()  {
+    document.getElementById('segNavCompany').textContent = company;
+    showOnly('seguimientoPage');
+  }
+  function exitSeguimiento()   { showOnly('landingPage'); }
+
+  // ── Seguimiento logic ─────────────────────────────────────────
+  const SEG_STATES = {
+    'ARG-2025-1234': {
+      status: 'active', label: 'En investigación', title: 'Denuncia en proceso',
+      desc: 'Tu denuncia fue recibida y se encuentra en etapa de investigación. El equipo de compliance está recopilando información.',
+      date: 'Última actualización: 14 feb 2025 — 09:41 hs',
+      msg: { title: 'Mensaje del equipo', text: 'La investigación avanza según lo previsto. Se estima resolución en los próximos 30 días hábiles.' }
+    },
+    'ARG-2025-9999': {
+      status: 'closed', label: 'Resuelto', title: 'Caso cerrado',
+      desc: 'La investigación finalizó y se adoptaron las medidas correspondientes.',
+      date: 'Cerrado: 10 ene 2025 — 14:20 hs', msg: null
+    },
+    'ARG-2025-0001': {
+      status: 'pending', label: 'Pendiente de evaluación', title: 'Denuncia recibida — evaluación en curso',
+      desc: 'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad. Recibirás actualización en los próximos 5 días hábiles.',
+      date: 'Recibida: 20 feb 2025 — 11:05 hs', msg: null
+    }
+  };
+
+  function consultarSeguimientoForm() {
+    const raw = document.getElementById('segTrackingInput').value.trim().toUpperCase();
+    const result = document.getElementById('segFormResult');
+    const btn = document.getElementById('segFormBtn');
+
+    if (!/^ARG-\d{4}-\d{4}$/.test(raw)) {
+      result.style.display = 'block';
+      result.innerHTML = `<div class="seg-result-box not-found">
+        <div class="seg-result-label" style="color:var(--gray-500)">Código no válido</div>
+        <div class="seg-result-title">Formato incorrecto</div>
+        <p class="seg-result-desc">El formato correcto es <code>ARG-AAAA-XXXX</code> (ej: ARG-2025-4821).</p>
+      </div>`;
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite"></span> Consultando...';
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = 'Consultar <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const data = SEG_STATES[raw];
+      result.style.display = 'block';
+      if (!data) {
+        result.innerHTML = `<div class="seg-result-box not-found">
+          <div class="seg-result-label" style="color:var(--gray-500)">No encontrado</div>
+          <div class="seg-result-title">Código no registrado</div>
+          <p class="seg-result-desc">No encontramos una denuncia con ese código. Verificá que lo ingresaste correctamente.</p>
+          <p class="seg-result-date">${raw}</p>
+        </div>`;
+        return;
+      }
+      const colors = { pending:'#EA580C', active:'var(--primary)', closed:'#16A34A' };
+      const msgHtml = data.msg ? `<div class="seg-result-msg"><strong>${data.msg.title}</strong><p>${data.msg.text}</p></div>` : '';
+      result.innerHTML = `<div class="seg-result-box ${data.status}">
+        <div class="seg-result-label" style="color:${colors[data.status]}">${data.label}</div>
+        <div class="seg-result-title">${data.title}</div>
+        <p class="seg-result-desc">${data.desc}</p>
+        <p class="seg-result-date">${data.date}</p>
+        ${msgHtml}
+      </div>`;
+    }, 900);
+  }
+
+  document.getElementById('segTrackingInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') consultarSeguimientoForm();
+  });
+  document.getElementById('segTrackingInput')?.addEventListener('input', function() {
+    const pos = this.selectionStart;
+    this.value = this.value.toUpperCase();
+    this.setSelectionRange(pos, pos);
+  });
+
+  // Auto-activate seguimiento if ?tab=seguimiento in URL
+  if (new URLSearchParams(window.location.search).get('tab') === 'seguimiento') {
+    startSeguimiento();
+    const code = new URLSearchParams(window.location.search).get('code');
+    if (code) document.getElementById('segTrackingInput').value = code;
   }
 
   // ── Navigation ────────────────────────────────────────────────
@@ -1129,8 +1302,9 @@
       document.getElementById('trackingCodeDisplay').textContent = code;
       document.getElementById('progressFill').style.width = '100%';
       document.getElementById('stepLabel').textContent = '¡Listo!';
-      // Update seguimiento link with the generated code
-      document.getElementById('seguimientoLink').href = 'empresas.html?tab=seguimiento&code=' + code;
+      // Pre-fill seguimiento input and update button href (same page)
+      document.getElementById('segTrackingInput').value = code;
+      document.getElementById('seguimientoLink').onclick = (e) => { e.preventDefault(); startSeguimiento(); };
       goToStep('success');
     }, 1800);
   }
@@ -1513,6 +1687,81 @@
 
   /* ── Navbar on landing ── */
   #landingPage .navbar { background: rgba(255,255,255,.95); backdrop-filter: blur(12px); }
+
+  /* ════════ SEGUIMIENTO STYLES ════════ */
+  .seg-card {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.06);
+    margin-bottom: 32px;
+  }
+  .seg-card-icon { margin-bottom: 20px; }
+  .seg-card h3 {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--black);
+    letter-spacing: -.03em;
+    margin-bottom: 8px;
+  }
+  .seg-card > p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .seg-card code {
+    font-family: 'Courier New', monospace;
+    background: var(--primary-100);
+    color: var(--primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .seg-input-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .seg-input {
+    flex: 1;
+    height: 48px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    color: var(--black);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .seg-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-100); }
+  .seg-hint { font-size: 12px; color: var(--gray-400); line-height: 1.6; }
+
+  .seg-result-box { border-radius: 12px; padding: 20px 24px; }
+  .seg-result-box.pending { background: #FFF7ED; border: 1px solid #FED7AA; }
+  .seg-result-box.active { background: var(--primary-100); border: 1px solid var(--primary-200); }
+  .seg-result-box.closed { background: #F0FDF4; border: 1px solid #BBF7D0; }
+  .seg-result-box.not-found { background: var(--gray-100); border: 1px solid var(--gray-200); }
+  .seg-result-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+  .seg-result-title { font-family: var(--font-heading); font-size: 17px; font-weight: 800; color: var(--black); margin-bottom: 6px; letter-spacing: -.02em; }
+  .seg-result-desc { font-size: 14px; color: var(--gray-600); line-height: 1.7; margin: 0; }
+  .seg-result-date { font-size: 12px; color: var(--gray-400); margin-top: 8px; }
+  .seg-result-msg { margin-top: 16px; padding: 16px; background: var(--white); border-radius: 8px; border: 1px solid var(--gray-200); }
+  .seg-result-msg strong { font-size: 13px; font-weight: 700; color: var(--black); display: block; margin-bottom: 4px; }
+  .seg-result-msg p { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin: 0; }
+
+  .seg-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  @media (max-width: 600px) { .seg-info-grid { grid-template-columns: 1fr; } }
+  .seg-info-item { background: var(--gray-100); border-radius: 12px; padding: 20px; }
+  .seg-info-icon { font-size: 24px; margin-bottom: 10px; display: block; }
+  .seg-info-item strong { font-size: 14px; font-weight: 700; color: var(--black); display: block; margin-bottom: 6px; }
+  .seg-info-item p { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin: 0; }
+
+  .seg-lost-code { background: var(--gray-100); border-radius: 12px; padding: 24px; }
+  .seg-lost-code strong { font-size: 15px; font-weight: 700; color: var(--black); display: block; margin-bottom: 8px; }
+  .seg-lost-code p { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 12px; }
 </style>
 
 </body>
