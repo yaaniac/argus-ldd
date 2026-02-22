@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canal de Denuncias · Argus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     LANDING INSTITUCIONAL
+     ════════════════════════════════════════════════════════════ -->
+<div id="landingPage">
+
+  <!-- TOP BAR -->
+  <header class="navbar" id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:100">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text" style="font-size:14px">Argus<span class="logo-dot">.</span></span>
+      </a>
+      <div style="display:flex;align-items:center;gap:16px;margin-left:auto">
+        <span id="navCompanyBadge" style="font-size:13px;font-weight:600;color:var(--gray-500);display:none">
+          Canal de: <span id="navCompanyName" style="color:var(--primary)"></span>
+        </span>
+        <a href="empresas.html" style="font-size:13px;color:var(--gray-500);font-weight:500;text-decoration:none">← Cambiar empresa</a>
+        <button onclick="startSeguimiento()" class="btn btn-outline" style="font-size:13px">Consultar denuncia</button>
+        <button onclick="startWizard()" class="btn btn-primary" style="font-size:13px">Comenzar denuncia</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="land-hero" id="landHero">
+    <div class="land-hero-inner">
+      <div class="land-company-chip" id="heroCompanyChip">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="1.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 7h5M4.5 9.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span id="heroCompanyName">Tu empresa</span>
+      </div>
+      <h1>Canal de denuncias<br/><span style="color:var(--primary)">externo e independiente</span></h1>
+      <p>Este es el canal oficial y confidencial para reportar irregularidades, conductas indebidas o incumplimientos éticos. Operado por un tercero independiente — garantía de imparcialidad y protección real.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px">
+        <button onclick="startWizard()" class="btn btn-primary btn-lg">
+          Comenzar denuncia
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <a href="#proceso" class="btn btn-outline btn-lg">¿Cómo funciona? →</a>
+      </div>
+      <div class="land-hero-stats">
+        <div class="land-stat"><strong>100%</strong><span>Anónimo si lo elegís</span></div>
+        <div class="land-stat-div"></div>
+        <div class="land-stat"><strong>24/7</strong><span>Disponible siempre</span></div>
+        <div class="land-stat-div"></div>
+        <div class="land-stat"><strong>Externo</strong><span>Operador independiente</span></div>
+        <div class="land-stat-div"></div>
+        <div class="land-stat"><strong>Confidencial</strong><span>Marco internacional</span></div>
+      </div>
+    </div>
+    <div class="land-hero-visual">
+      <div class="land-shield-card">
+        <div class="land-shield-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 6L40 14V26C40 35.2 33 43.2 24 46C15 43.2 8 35.2 8 26V14L24 6Z" fill="var(--primary)" opacity=".12"/><path d="M24 6L40 14V26C40 35.2 33 43.2 24 46C15 43.2 8 35.2 8 26V14L24 6Z" stroke="var(--primary)" stroke-width="2" stroke-linejoin="round"/><path d="M17 24L21.5 28.5L31 19" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Tu denuncia está protegida</h3>
+        <p>Sin registro de IP · Sin cookies de rastreo · Cifrado en tránsito y en reposo</p>
+        <div class="land-shield-items">
+          <div class="land-shield-item"><span class="lsi-dot"></span>Anonimato total garantizado</div>
+          <div class="land-shield-item"><span class="lsi-dot"></span>Comunicación cifrada</div>
+          <div class="land-shield-item"><span class="lsi-dot"></span>Prohibición de represalias</div>
+          <div class="land-shield-item"><span class="lsi-dot"></span>Código de seguimiento único</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUÉ PODÉS REPORTAR ── -->
+  <section class="land-section land-gray" id="situaciones">
+    <div class="land-container">
+      <div class="land-section-hdr">
+        <div class="section-tag">Qué podés reportar</div>
+        <h2>Tipos de situaciones que podés denunciar</h2>
+        <p>El canal está habilitado para recibir reportes sobre cualquier conducta que vulnere la ética, la integridad o la normativa aplicable a la organización.</p>
+      </div>
+      <div class="land-cats-grid">
+        <div class="land-cat">
+          <div class="land-cat-icon">⚖️</div>
+          <h4>Corrupción y soborno</h4>
+          <p>Pagos indebidos, dádivas, facilitación de contratos irregulares, coimas a funcionarios públicos o privados.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">🧾</div>
+          <h4>Fraude y malversación</h4>
+          <p>Alteración de registros, uso indebido de fondos, facturación falsa, desvío de activos o recursos de la organización.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">🤝</div>
+          <h4>Conflicto de intereses</h4>
+          <p>Relaciones no declaradas con proveedores, clientes o competidores que puedan afectar la objetividad de decisiones.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">💸</div>
+          <h4>Lavado de activos</h4>
+          <p>Operaciones sospechosas, movimientos de fondos sin justificación aparente, estructuras financieras irregulares.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">🚫</div>
+          <h4>Acoso y violencia laboral</h4>
+          <p>Hostigamiento, maltrato, intimidación, violencia física o psicológica en el entorno de trabajo.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">🛑</div>
+          <h4>Acoso sexual</h4>
+          <p>Conductas de naturaleza sexual no consentidas, abuso de poder, presión para obtener favores sexuales.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">⛑️</div>
+          <h4>Seguridad y medioambiente</h4>
+          <p>Incumplimiento de normas de seguridad laboral, ocultamiento de accidentes, daño ambiental no reportado.</p>
+        </div>
+        <div class="land-cat">
+          <div class="land-cat-icon">🔒</div>
+          <h4>Privacidad y datos</h4>
+          <p>Acceso no autorizado a información confidencial, filtración de datos personales, uso indebido de información sensible.</p>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:14px;color:var(--gray-400);margin-top:8px">Si tu situación no figura aquí, podés reportarla igual. El canal acepta cualquier conducta que consideres irregular o contraria a los valores de la organización.</p>
+    </div>
+  </section>
+
+  <!-- ── GARANTÍAS ── -->
+  <section class="land-section" id="garantias">
+    <div class="land-container">
+      <div class="land-two-col">
+        <div class="land-col-text">
+          <div class="section-tag">Protección del denunciante</div>
+          <h2>Tu identidad y seguridad, nuestra prioridad</h2>
+          <p>El canal fue diseñado desde cero para garantizar el anonimato real —no declarativo— del denunciante. Cada capa técnica fue implementada con ese objetivo.</p>
+
+          <div class="land-guarantee-list">
+            <div class="land-guarantee">
+              <div class="lg-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Sin registro de dirección IP</strong>
+                <p>El sistema no almacena, procesa ni registra la dirección IP del dispositivo desde el que se realiza la denuncia.</p>
+              </div>
+            </div>
+            <div class="land-guarantee">
+              <div class="lg-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Sin cookies de rastreo</strong>
+                <p>La plataforma no utiliza cookies analíticas ni de seguimiento. No se comparte información con terceros publicitarios.</p>
+              </div>
+            </div>
+            <div class="land-guarantee">
+              <div class="lg-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Cifrado en tránsito y en reposo</strong>
+                <p>Toda la información viaja cifrada y se almacena cifrada. Ni el operador de la plataforma puede acceder al contenido en texto plano.</p>
+              </div>
+            </div>
+            <div class="land-guarantee">
+              <div class="lg-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Código de seguimiento anónimo</strong>
+                <p>Recibís un código único que te permite consultar el estado de tu denuncia sin revelar ningún dato de identidad.</p>
+              </div>
+            </div>
+            <div class="land-guarantee">
+              <div class="lg-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Prohibición expresa de represalias</strong>
+                <p>El reglamento del canal prohíbe expresamente cualquier medida retaliativa contra el denunciante. Toda represalia es en sí misma una infracción denunciable.</p>
+              </div>
+            </div>
+            <div class="land-guarantee">
+              <div class="lg-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>Operador externo e independiente</strong>
+                <p>El canal es gestionado por una empresa independiente de la organización. Los casos que involucren a la alta dirección son igualmente investigados.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="land-col-visual">
+          <div class="land-tech-card">
+            <h4>Arquitectura de privacidad</h4>
+            <div class="land-tech-layer">
+              <div class="ltl-badge">TLS 1.3</div>
+              <div class="ltl-label">Cifrado de transporte</div>
+            </div>
+            <div class="land-tech-layer">
+              <div class="ltl-badge">AES-256</div>
+              <div class="ltl-label">Cifrado de datos en reposo</div>
+            </div>
+            <div class="land-tech-layer">
+              <div class="ltl-badge">0 IP</div>
+              <div class="ltl-label">Sin registro de identidad técnica</div>
+            </div>
+            <div class="land-tech-layer">
+              <div class="ltl-badge">0 Cookies</div>
+              <div class="ltl-label">Sin rastreo de sesión</div>
+            </div>
+            <div class="land-tech-layer">
+              <div class="ltl-badge">Aislado</div>
+              <div class="ltl-label">Entorno separado por empresa</div>
+            </div>
+            <div class="land-tech-separator"></div>
+            <p style="font-size:12px;color:var(--gray-400);line-height:1.6;margin:0">La arquitectura fue diseñada bajo el principio de privacidad por defecto (<em>privacy by design</em>), conforme a estándares internacionales de protección de datos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESO PASO A PASO ── -->
+  <section class="land-section land-gray" id="proceso">
+    <div class="land-container">
+      <div class="land-section-hdr">
+        <div class="section-tag">El proceso</div>
+        <h2>¿Qué pasa después de enviar tu denuncia?</h2>
+        <p>El proceso es claro, trazable y con plazos definidos. El denunciante puede seguir el estado en todo momento.</p>
+      </div>
+      <div class="land-process-steps">
+        <div class="land-step">
+          <div class="land-step-num">01</div>
+          <div class="land-step-content">
+            <h4>Recepción y registro</h4>
+            <p>Tu denuncia es recibida por el equipo de compliance officers externos, en menos de 24 horas hábiles. Se le asigna un número de caso interno.</p>
+            <div class="land-step-time">Plazo: 24 hs hábiles</div>
+          </div>
+        </div>
+        <div class="land-step">
+          <div class="land-step-num">02</div>
+          <div class="land-step-content">
+            <h4>Evaluación de admisibilidad</h4>
+            <p>El equipo analiza si la denuncia es completa y entra en el ámbito del canal. En casos de urgencia (riesgo a personas o activos críticos), la evaluación es inmediata.</p>
+            <div class="land-step-time">Plazo: 5 días hábiles</div>
+          </div>
+        </div>
+        <div class="land-step">
+          <div class="land-step-num">03</div>
+          <div class="land-step-content">
+            <h4>Investigación</h4>
+            <p>Se recopilan evidencias, se entrevistan testigos (con confidencialidad) y se elabora un informe. La dirección es notificada solo si no está involucrada en el caso.</p>
+            <div class="land-step-time">Plazo: hasta 60 días</div>
+          </div>
+        </div>
+        <div class="land-step">
+          <div class="land-step-num">04</div>
+          <div class="land-step-content">
+            <h4>Resolución y medidas</h4>
+            <p>El equipo emite recomendaciones de acción. Las medidas correctivas o disciplinarias quedan documentadas. Se notifica al denunciante (si identificado) o se actualiza el código de seguimiento.</p>
+            <div class="land-step-time">Plazo: 15 días post-investigación</div>
+          </div>
+        </div>
+        <div class="land-step">
+          <div class="land-step-num">05</div>
+          <div class="land-step-content">
+            <h4>Cierre y seguimiento</h4>
+            <p>El caso queda documentado con trazabilidad completa. Se verifica el cumplimiento de las medidas adoptadas a los 90 días del cierre.</p>
+            <div class="land-step-time">Seguimiento: 90 días</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:48px">
+        <button onclick="startWizard()" class="btn btn-primary btn-lg">
+          Realizar mi denuncia ahora
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="land-section" id="faq">
+    <div class="land-container">
+      <div class="land-section-hdr">
+        <div class="section-tag">Preguntas frecuentes</div>
+        <h2>Lo que más nos preguntan</h2>
+      </div>
+      <div class="land-faq-list" style="max-width:720px;margin:0 auto">
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Puedo denunciar de forma completamente anónima?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>Sí. Podés elegir el anonimato total al final del proceso. En ese caso, no necesitás proporcionar ningún dato personal. Recibirás igualmente un código de seguimiento para consultar el estado de tu caso sin identificarte.</p>
+          </div>
+        </div>
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Mi empresa va a saber que fui yo?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>Si elegís el anonimato total, es técnicamente imposible para la empresa identificarte. El sistema no registra tu IP, no usa cookies, y el contenido está cifrado. Ni el equipo de compliance de la empresa ni los administradores de la plataforma pueden vincular la denuncia a tu identidad.</p>
+          </div>
+        </div>
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Qué pasa si no tengo pruebas?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>No es necesario tener pruebas para realizar una denuncia. El relato de los hechos ya es suficiente para iniciar una investigación. Las evidencias son opcionales y ayudan a agilizar el proceso, pero no son un requisito.</p>
+          </div>
+        </div>
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Puedo recibir represalias por denunciar?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>No. El reglamento del canal prohíbe expresamente cualquier medida retaliativa. Las políticas internacionales de protección al denunciante (OCDE, Directiva EU 2019/1937, UNCAC) establecen que toda represalia es en sí misma una infracción grave. Si experimentás alguna, podés reportarla por este mismo canal.</p>
+          </div>
+        </div>
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Cuánto tiempo lleva el proceso de investigación?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>La investigación puede tomar hasta 60 días hábiles, dependiendo de la complejidad del caso. Podés consultar el estado en cualquier momento con tu código de seguimiento, sin necesidad de identificarte.</p>
+          </div>
+        </div>
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Qué pasa si mi denuncia involucra a la dirección de la empresa?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>Dado que el canal es operado por un tercero externo e independiente, los casos que involucran a la alta dirección o al directorio son investigados con el mismo rigor. La empresa no es notificada si los involucrados forman parte de quienes normalmente recibirían esa notificación.</p>
+          </div>
+        </div>
+
+        <div class="land-faq-item">
+          <button class="land-faq-q" onclick="toggleLandFaq(this)">
+            ¿Puedo realizar una denuncia si no soy empleado de la empresa?
+            <span class="land-faq-icon">+</span>
+          </button>
+          <div class="land-faq-a">
+            <p>Sí. El canal es accesible para empleados, ex-empleados, proveedores, clientes y cualquier persona que haya tenido relación o conocimiento de una situación irregular en la organización.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MARCO NORMATIVO ── -->
+  <section class="land-section land-dark" id="normativa">
+    <div class="land-container">
+      <div class="land-section-hdr" style="color:var(--white)">
+        <div class="section-tag" style="background:rgba(91,79,219,.2);border-color:rgba(91,79,219,.3);color:var(--primary-200)">Marco normativo</div>
+        <h2 style="color:var(--white)">Estándares internacionales que respaldan este canal</h2>
+        <p style="color:var(--gray-400)">El canal de denuncias responde a los principales marcos internacionales de integridad corporativa y protección al denunciante.</p>
+      </div>
+      <div class="land-norm-grid">
+        <div class="land-norm-item">
+          <div class="land-norm-icon">🌐</div>
+          <div>
+            <strong>OCDE — Directrices Anticorrupción</strong>
+            <p>Los canales de denuncia son un componente central del programa de integridad según las directrices de la Organización para la Cooperación y el Desarrollo Económicos.</p>
+          </div>
+        </div>
+        <div class="land-norm-item">
+          <div class="land-norm-icon">💰</div>
+          <div>
+            <strong>GAFI / FATF — Recomendaciones</strong>
+            <p>El Grupo de Acción Financiera Internacional establece la obligación de canales de reporte para la prevención del lavado de activos y el financiamiento del terrorismo.</p>
+          </div>
+        </div>
+        <div class="land-norm-item">
+          <div class="land-norm-icon">🏛️</div>
+          <div>
+            <strong>UNCAC — ONU contra la Corrupción</strong>
+            <p>La Convención de las Naciones Unidas contra la Corrupción establece como estándar universal la protección de quienes reportan actos de corrupción.</p>
+          </div>
+        </div>
+        <div class="land-norm-item">
+          <div class="land-norm-icon">🇪🇺</div>
+          <div>
+            <strong>Directiva EU 2019/1937</strong>
+            <p>La norma europea de protección de denunciantes define los estándares mínimos de confidencialidad, canales seguros y prohibición de represalias.</p>
+          </div>
+        </div>
+        <div class="land-norm-item">
+          <div class="land-norm-icon">⚖️</div>
+          <div>
+            <strong>FCPA / UK Bribery Act</strong>
+            <p>Para organizaciones con operaciones internacionales, la plataforma satisface los requisitos de los programas de compliance del FCPA americano y la Bribery Act británica.</p>
+          </div>
+        </div>
+        <div class="land-norm-item">
+          <div class="land-norm-icon">📋</div>
+          <div>
+            <strong>Normativa local adaptable</strong>
+            <p>La plataforma es configurable para satisfacer los requisitos de la legislación de protección al denunciante vigente en cada país donde opera la organización.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRIVACIDAD Y TÉRMINOS ── -->
+  <section class="land-section" id="privacidad">
+    <div class="land-container">
+      <div class="land-two-col land-two-col-narrow">
+        <div>
+          <div class="section-tag">Política de privacidad</div>
+          <h3 style="font-size:clamp(20px,2.5vw,28px);font-weight:800;letter-spacing:-.03em;margin-bottom:12px">Tus datos, bajo tu control</h3>
+          <p style="color:var(--gray-500);line-height:1.75;margin-bottom:16px">Si elegís el anonimato, no se recopila ningún dato personal. Si dejás tus datos de contacto, son tratados con estricta confidencialidad, usados únicamente para el seguimiento de tu caso y nunca compartidos con la empresa denunciada ni con terceros.</p>
+          <p style="color:var(--gray-500);line-height:1.75;margin-bottom:16px">El contenido de tu denuncia es accesible solo por el equipo de compliance officers habilitados. Los datos se retienen por el período mínimo necesario para completar la investigación y las obligaciones regulatorias.</p>
+          <a href="privacidad.html" style="color:var(--primary);font-weight:600;font-size:14px;text-decoration:none">Leer política de privacidad completa →</a>
+        </div>
+        <div>
+          <div class="section-tag">Términos de uso</div>
+          <h3 style="font-size:clamp(20px,2.5vw,28px);font-weight:800;letter-spacing:-.03em;margin-bottom:12px">Uso responsable del canal</h3>
+          <p style="color:var(--gray-500);line-height:1.75;margin-bottom:16px">El canal está habilitado para reportes de buena fe. Las denuncias con información falsa a sabiendas pueden acarrear consecuencias legales para quien las realiza. Sin embargo, una denuncia que no pueda ser probada no implica mala fe.</p>
+          <p style="color:var(--gray-500);line-height:1.75;margin-bottom:16px">El uso del canal implica aceptar que la información provista sea procesada por el equipo de compliance para los fines de investigación establecidos en los procedimientos internos de la organización.</p>
+          <a href="terminos.html" style="color:var(--primary);font-weight:600;font-size:14px;text-decoration:none">Leer términos y condiciones completos →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA FINAL ── -->
+  <section class="land-cta-final">
+    <div class="land-container" style="text-align:center">
+      <h2>¿Listo para hacer tu denuncia?</h2>
+      <p>El proceso toma menos de 5 minutos. Es guiado, confidencial y podés elegir el anonimato total.</p>
+      <button onclick="startWizard()" class="btn btn-primary btn-lg" style="margin:0 auto">
+        Comenzar denuncia ahora
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <span class="logo-icon">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+                <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="24" cy="22" r="4" fill="#fff"/>
+                <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="logo-text" style="color:#fff;font-size:13px">Argus<span class="logo-dot">.</span></span>
+          </a>
+          <p>Canal externo e independiente de denuncias corporativas. Operado con estándares internacionales de integridad y protección al denunciante.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Este canal</h4>
+            <a href="#situaciones">¿Qué podés reportar?</a>
+            <a href="#garantias">Garantías de anonimato</a>
+            <a href="#proceso">El proceso</a>
+            <a href="#faq">Preguntas frecuentes</a>
+          </div>
+          <div class="footer-col">
+            <h4>Marco normativo</h4>
+            <a href="#normativa">OCDE · GAFI</a>
+            <a href="#normativa">Directiva EU 2019/1937</a>
+            <a href="#normativa">FCPA · UK Bribery Act</a>
+            <a href="#normativa">UNCAC</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="privacidad.html">Política de privacidad</a>
+            <a href="terminos.html">Términos de uso</a>
+            <a href="seguridad.html">Seguridad de datos</a>
+            <a href="empresas.html">Cambiar empresa</a>
+          </div>
+          <div class="footer-col">
+            <h4>Soporte</h4>
+            <a href="contacto.html">Contactar operador</a>
+            <a href="index.html">Sobre la plataforma</a>
+            <span style="font-size:13px;color:var(--gray-500)">Canal operado por tercero externo e independiente de la organización</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Argus · Línea de denuncias. Todos los derechos reservados.</p>
+        <p>Los formularios, preguntas e idioma son personalizables por organización</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /landingPage -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PANEL DE SEGUIMIENTO (oculto inicialmente)
+     ════════════════════════════════════════════════════════════ -->
+<div id="seguimientoPage" style="display:none">
+
+  <!-- TOP BAR -->
+  <header class="navbar" style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200)">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text" style="font-size:14px">Argus<span class="logo-dot">.</span></span>
+      </a>
+      <div style="display:flex;align-items:center;gap:16px;margin-left:auto">
+        <span style="font-size:13px;font-weight:600;color:var(--gray-500)">
+          Canal de: <span id="segNavCompany" style="color:var(--primary)"></span>
+        </span>
+        <button onclick="exitSeguimiento()" style="font-size:13px;color:var(--gray-500);font-weight:500;background:none;border:none;cursor:pointer;font-family:var(--font-body)">← Volver al canal</button>
+        <button onclick="startWizard()" class="btn btn-primary" style="font-size:13px">Comenzar denuncia</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="background:var(--gray-900);padding:120px 24px 60px;text-align:center">
+    <div style="max-width:600px;margin:0 auto">
+      <div class="section-tag" style="margin-bottom:16px;background:rgba(91,79,219,.15);border-color:rgba(91,79,219,.3);color:var(--primary-200)">Consulta confidencial</div>
+      <h1 style="font-family:var(--font-heading);font-size:clamp(28px,4vw,44px);font-weight:900;color:var(--white);margin-bottom:12px;letter-spacing:-.04em;line-height:1.05">Seguimiento de tu denuncia</h1>
+      <p style="font-size:16px;color:var(--gray-400);line-height:1.7">Ingresá el código que recibiste al finalizar tu denuncia. No es necesario identificarte.</p>
+    </div>
+  </section>
+
+  <!-- CARD -->
+  <section style="padding:48px 24px 80px;max-width:640px;margin:0 auto">
+
+    <div class="seg-card">
+      <div class="seg-card-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M20 5L34 13V23C34 30.8 27.8 37.8 20 40C12.2 37.8 6 30.8 6 23V13L20 5Z" fill="var(--primary)" opacity=".1"/><path d="M20 5L34 13V23C34 30.8 27.8 37.8 20 40C12.2 37.8 6 30.8 6 23V13L20 5Z" stroke="var(--primary)" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 20l4 4 8-8" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Consultá el estado de tu caso</h3>
+      <p>El código tiene el formato <code>ARG-AAAA-XXXX</code>. Lo recibiste al finalizar tu denuncia en este canal.</p>
+
+      <div class="seg-input-row">
+        <input type="text" id="segTrackingInput" class="seg-input" placeholder="Ej: ARG-2025-4821" maxlength="16" autocomplete="off" />
+        <button class="btn btn-primary" onclick="consultarSeguimientoForm()" id="segFormBtn">
+          Consultar
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="seg-hint">Tu consulta es anónima. No registramos quién consulta el código.</p>
+      <div id="segFormResult" style="display:none;margin-top:24px"></div>
+    </div>
+
+    <div class="seg-info-grid">
+      <div class="seg-info-item">
+        <div class="seg-info-icon">🔒</div>
+        <strong>Consulta anónima</strong>
+        <p>No registramos tu IP ni ningún dato de identidad al consultar.</p>
+      </div>
+      <div class="seg-info-item">
+        <div class="seg-info-icon">⏱️</div>
+        <strong>Actualización continua</strong>
+        <p>El estado se actualiza cada vez que el equipo avanza en tu caso.</p>
+      </div>
+      <div class="seg-info-item">
+        <div class="seg-info-icon">💬</div>
+        <strong>Mensajes del equipo</strong>
+        <p>Si necesitan más información, verás un mensaje aquí.</p>
+      </div>
+    </div>
+
+    <div class="seg-lost-code">
+      <strong>¿Perdiste tu código?</strong>
+      <p>Si no guardaste el código, no es posible recuperarlo para proteger tu anonimato. Podés realizar una nueva denuncia si lo considerás necesario.</p>
+      <button onclick="exitSeguimiento(); setTimeout(startWizard, 100)" style="color:var(--primary);font-weight:600;font-size:14px;background:none;border:none;cursor:pointer;font-family:var(--font-body);padding:0">Realizar una nueva denuncia →</button>
+    </div>
+
+  </section>
+
+</div><!-- /seguimientoPage -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+     WIZARD CONVERSACIONAL (oculto inicialmente)
+     ════════════════════════════════════════════════════════════ -->
+<div class="wizard-page" id="wizardPage" style="display:none">
+
+  <!-- TOP BAR -->
+  <div class="wizard-topbar">
+    <a href="#" onclick="exitWizard()" class="wizard-logo">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+        <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="24" cy="22" r="4" fill="#fff"/>
+        <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="wizard-logo-text" style="font-size:13px">Argus<span class="wizard-logo-dot">.</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="#" onclick="exitWizard()" style="font-size:13px;color:rgba(255,255,255,.4);font-weight:500;text-decoration:none">← Volver al canal</a>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="wizard-progress-track">
+    <div class="wizard-progress-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+  <div class="wizard-step-label" id="stepLabel">Empezá tu denuncia</div>
+
+  <!-- BODY -->
+  <div class="wizard-body">
+    <div class="wizard-card" id="wizardCard">
+
+      <!-- ===== STEP 0: INTRO ===== -->
+      <div class="wizard-step active" id="step-0">
+        <div class="wizard-intro">
+          <div class="company-chip" id="companyChip">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h4M5 9.5h2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <span id="companyChipName">Tu empresa</span>
+          </div>
+          <h1>Hacé tu denuncia</h1>
+          <p>El proceso es confidencial, guiado y toma menos de 5 minutos. Podés elegir el anonimato total.</p>
+          <div class="wizard-guarantees">
+            <div class="guarantee"><span class="guarantee-dot"></span>100% anónimo si querés</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Sin registro de IP</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Operador externo</div>
+            <div class="guarantee"><span class="guarantee-dot"></span>Confidencial</div>
+          </div>
+          <button class="wizard-next" onclick="goToStep(1)" style="margin:0 auto;display:flex">
+            Comenzar
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <p style="margin-top:20px;font-size:12px;color:rgba(0,0,0,.3);font-style:italic">
+            Los formularios, preguntas e idioma son personalizables según cada organización.
+          </p>
+        </div>
+      </div>
+
+      <!-- ===== STEP 1: ¿ES DENUNCIA COMPLEMENTARIA? ===== -->
+      <div class="wizard-step" id="step-1">
+        <span class="wizard-step-num">Paso 1 · Identificación</span>
+        <h2>¿Es una denuncia complementaria?</h2>
+        <p class="step-hint">Indicá si esta denuncia está relacionada con una anterior ya registrada en el sistema.</p>
+        <div class="freq-grid">
+          <button class="freq-option" data-step="1" data-val="no" onclick="selectFreq(this,1)">
+            <div class="freq-dot"></div>
+            <div class="freq-text">
+              <strong>No, es una denuncia nueva</strong>
+              <span>Nunca presenté esta situación antes</span>
+            </div>
+          </button>
+          <button class="freq-option" data-step="1" data-val="si" onclick="selectFreq(this,1)">
+            <div class="freq-dot"></div>
+            <div class="freq-text">
+              <strong>Sí, complementa una denuncia anterior</strong>
+              <span>Tengo un código o referencia previa</span>
+            </div>
+          </button>
+        </div>
+        <div id="complementRef" style="display:none">
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">Código o referencia de la denuncia anterior (opcional)</label>
+          <input class="wizard-input" type="text" placeholder="Ej: ARG-2024-8821 o fecha aproximada..." />
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(0)">← Anterior</button>
+          <button class="wizard-next" id="next-1" onclick="goToStep(2)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 2: TIPO DE IRREGULARIDAD ===== -->
+      <div class="wizard-step" id="step-2">
+        <span class="wizard-step-num">Paso 2 · Tipo de hecho</span>
+        <h2>¿Qué tipo de irregularidad querés denunciar?</h2>
+        <p class="step-hint">Seleccioná la categoría que mejor describe la situación. Podés elegir más de una.</p>
+        <div class="category-grid">
+          <button class="cat-option" onclick="toggleCat(this)" data-val="corrupcion">
+            <span class="cat-icon">⚖️</span>
+            <span class="cat-label">Corrupción / Soborno</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="fraude">
+            <span class="cat-icon">🧾</span>
+            <span class="cat-label">Fraude o malversación</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="conflicto">
+            <span class="cat-icon">🤝</span>
+            <span class="cat-label">Conflicto de intereses</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="lavado">
+            <span class="cat-icon">💸</span>
+            <span class="cat-label">Lavado de activos</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="acoso_laboral">
+            <span class="cat-icon">🚫</span>
+            <span class="cat-label">Acoso laboral</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="acoso_sexual">
+            <span class="cat-icon">🛑</span>
+            <span class="cat-label">Acoso / violencia sexual</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="discriminacion">
+            <span class="cat-icon">🏳️</span>
+            <span class="cat-label">Discriminación</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="seguridad">
+            <span class="cat-icon">⛑️</span>
+            <span class="cat-label">Seguridad laboral / ambiental</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="datos">
+            <span class="cat-icon">🔒</span>
+            <span class="cat-label">Violación de datos / privacidad</span>
+          </button>
+          <button class="cat-option" onclick="toggleCat(this)" data-val="otro">
+            <span class="cat-icon">📋</span>
+            <span class="cat-label">Otro / No especificado</span>
+          </button>
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(1)">← Anterior</button>
+          <button class="wizard-next" id="next-2" onclick="goToStep(3)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 3: DESCRIPCIÓN ===== -->
+      <div class="wizard-step" id="step-3">
+        <span class="wizard-step-num">Paso 3 · Descripción del hecho</span>
+        <h2>¿En qué consistió el hecho?</h2>
+        <p class="step-hint">Describí con detalle el hecho y/o incumplimiento denunciado. Mientras más específico, mejor podemos actuar.</p>
+        <textarea class="wizard-textarea" id="descriptionText" maxlength="4000" placeholder="Describí qué ocurrió, cuándo, dónde y en qué contexto..." oninput="updateCounter()"></textarea>
+        <div class="char-counter"><span id="charCount">0</span> / 4000 caracteres</div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(2)">← Anterior</button>
+          <button class="wizard-next" id="next-3" onclick="goToStep(4)" disabled>Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 4: ÁREA ===== -->
+      <div class="wizard-step" id="step-4">
+        <span class="wizard-step-num">Paso 4 · Área involucrada</span>
+        <h2>¿En qué área ocurrieron los hechos?</h2>
+        <p class="step-hint">Seleccioná el sector o departamento relacionado con la denuncia.</p>
+        <div class="pills-grid" id="areaPills">
+          <button class="pill" onclick="selectPill(this,'area')" data-val="direccion">Dirección General</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="rrhh">Recursos Humanos</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="finanzas">Finanzas / Contabilidad</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="compras">Compras / Proveedores</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="ventas">Ventas / Comercial</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="operaciones">Operaciones</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="it">IT / Sistemas</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="legal">Legal / Compliance</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="produccion">Producción</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="logistica">Logística / Distribución</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="marketing">Marketing / Comunicación</button>
+          <button class="pill" onclick="selectPill(this,'area')" data-val="no_sé">No lo sé / Prefiero no decir</button>
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(3)">← Anterior</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="wizard-skip" onclick="goToStep(5)">Omitir</button>
+            <button class="wizard-next" id="next-4" onclick="goToStep(5)">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 5: PERÍODO ===== -->
+      <div class="wizard-step" id="step-5">
+        <span class="wizard-step-num">Paso 5 · Período</span>
+        <h2>¿En qué período ocurrieron los hechos?</h2>
+        <p class="step-hint">Indicá la fecha o rango aproximado. No es necesario ser exacto.</p>
+        <div class="freq-grid">
+          <button class="freq-option" data-step="5" data-val="actualmente" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Está ocurriendo ahora</strong><span>La situación es actual y en curso</span></div>
+          </button>
+          <button class="freq-option" data-step="5" data-val="reciente" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Hace menos de 6 meses</strong><span>Situación reciente</span></div>
+          </button>
+          <button class="freq-option" data-step="5" data-val="hace_tiempo" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Hace más de 6 meses</strong><span>Situación pasada</span></div>
+          </button>
+          <button class="freq-option" data-step="5" data-val="no_se" onclick="selectFreq(this,5)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No lo sé con exactitud</strong><span>No recuerdo la fecha</span></div>
+          </button>
+        </div>
+        <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">Fecha aproximada (dd/mm/aaaa) — opcional</label>
+        <input class="wizard-input" type="text" placeholder="Ej: 15/03/2024 o marzo 2024" />
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(4)">← Anterior</button>
+          <button class="wizard-next" onclick="goToStep(6)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 6: CONOCIMIENTO DE LA DIRECCIÓN ===== -->
+      <div class="wizard-step" id="step-6">
+        <span class="wizard-step-num">Paso 6 · Conocimiento interno</span>
+        <h2>¿La Dirección y/o Gerencia está al tanto de este problema?</h2>
+        <p class="step-hint">Esta información es importante para determinar el nivel de escalamiento de la investigación.</p>
+        <div class="freq-grid">
+          <button class="freq-option" data-step="6" data-val="si" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Sí, está al tanto</strong><span>La dirección o gerencia conoce la situación</span></div>
+          </button>
+          <button class="freq-option" data-step="6" data-val="no" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No, no lo saben</strong><span>La situación no fue reportada internamente</span></div>
+          </button>
+          <button class="freq-option" data-step="6" data-val="involucrada" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Están involucrados</strong><span>La dirección o gerencia forma parte del problema</span></div>
+          </button>
+          <button class="freq-option" data-step="6" data-val="no_sé" onclick="selectFreq(this,6)">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No lo sé</strong><span>No tengo información sobre esto</span></div>
+          </button>
+        </div>
+        <div style="margin-top:8px">
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">¿Cómo te enteraste? (opcional)</label>
+          <input class="wizard-input" type="text" placeholder="Ej: lo presencié, me lo contaron, encontré documentos..." />
+        </div>
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(5)">← Anterior</button>
+          <button class="wizard-next" onclick="goToStep(7)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 7: INVOLUCRADOS ===== -->
+      <div class="wizard-step" id="step-7">
+        <span class="wizard-step-num">Paso 7 · Personas involucradas</span>
+        <h2>¿Quiénes son los involucrados?</h2>
+        <p class="step-hint">Podés agregar más de un involucrado. Usá términos generales si preferís no nombrar personas específicas (ej: "el gerente de compras").</p>
+
+        <div id="involvedList">
+          <div class="involved-row">
+            <input class="wizard-input" type="text" placeholder="Nombre y apellido o descripción del rol" style="margin-bottom:8px" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+              <input class="wizard-input" type="text" placeholder="Relación con la organización" style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />
+            </div>
+          </div>
+        </div>
+
+        <button onclick="addInvolvedRow()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body);margin-bottom:24px">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M9 6v6M6 9h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Agregar otro involucrado
+        </button>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(6)">← Anterior</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="wizard-skip" onclick="goToStep(8)">Omitir</button>
+            <button class="wizard-next" onclick="goToStep(8)">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 8: TESTIGOS + EVIDENCIAS ===== -->
+      <div class="wizard-step" id="step-8">
+        <span class="wizard-step-num">Paso 8 · Testigos y evidencias</span>
+        <h2>¿Hay testigos o pruebas del hecho?</h2>
+        <p class="step-hint">Esta información fortalece la investigación. Todo es opcional.</p>
+
+        <div style="margin-bottom:24px">
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="var(--primary)" stroke-width="1.4"/><path d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="var(--primary)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Testigos (opcional)
+          </label>
+          <div id="witnessList">
+            <div class="involved-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+              <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Relación con la org." style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />
+            </div>
+          </div>
+          <button onclick="addWitnessRow()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body)">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Agregar testigo
+          </button>
+        </div>
+
+        <div>
+          <label style="font-size:14px;font-weight:600;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="var(--primary)" stroke-width="1.4"/><path d="M5 8h6M5 11h3" stroke="var(--primary)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Adjuntar documentación (opcional)
+          </label>
+          <div class="wizard-upload" id="uploadZone8" onclick="document.getElementById('fileInput8').click()">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="color:var(--gray-400)"><path d="M14 18V10m0 0l-4 4m4-4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="19" width="22" height="6" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
+            <p>Arrastrá archivos o <span style="color:var(--primary);font-weight:600">hacé clic para subir</span></p>
+            <span>PDF, imágenes, audio, video · Máx. 25 MB</span>
+            <input type="file" id="fileInput8" multiple style="display:none" accept=".pdf,.jpg,.jpeg,.png,.mp3,.mp4,.doc,.docx" />
+          </div>
+          <div id="fileList8"></div>
+        </div>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(7)">← Anterior</button>
+          <button class="wizard-next" onclick="goToStep(9)">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- ===== STEP 9: OTRAS PERSONAS INVOLUCRADAS ===== -->
+      <div class="wizard-step" id="step-9">
+        <span class="wizard-step-num">Paso 9 · Otras personas</span>
+        <h2>¿Hay otras personas relacionadas con los hechos?</h2>
+        <p class="step-hint">Además de los directamente denunciados, ¿hay otros individuos relacionados que debería conocer el equipo de investigación?</p>
+
+        <div class="freq-grid" style="margin-bottom:16px">
+          <button class="freq-option" data-step="9" data-val="si" onclick="selectFreq(this,9); document.getElementById('otherPersonsField').style.display='block'">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>Sí, hay otras personas</strong><span>Quiero indicar quiénes y cómo están involucradas</span></div>
+          </button>
+          <button class="freq-option" data-step="9" data-val="no" onclick="selectFreq(this,9); document.getElementById('otherPersonsField').style.display='none'">
+            <div class="freq-dot"></div>
+            <div class="freq-text"><strong>No</strong><span>Solo son las personas ya mencionadas</span></div>
+          </button>
+        </div>
+
+        <div id="otherPersonsField" style="display:none">
+          <div id="otherPersonsList">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+              <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+              <input class="wizard-input" type="text" placeholder="Vinculación con el hecho" style="margin-bottom:0" />
+            </div>
+          </div>
+          <button onclick="addOtherRow()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body);margin-bottom:8px">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Agregar otra persona
+          </button>
+        </div>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(8)">← Anterior</button>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button class="wizard-skip" onclick="goToStep(10)">Omitir</button>
+            <button class="wizard-next" onclick="goToStep(10)">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STEP 10: IDENTIDAD + SUBMIT ===== -->
+      <div class="wizard-step" id="step-10">
+        <span class="wizard-step-num">Paso 10 · Tu identidad</span>
+        <h2>¿Deseás realizar la denuncia de forma anónima?</h2>
+        <p class="step-hint">Podés elegir el anonimato total. Si dejás tus datos, podemos contactarte si necesitamos más información — siempre de forma confidencial.</p>
+
+        <div class="anon-toggle">
+          <button class="anon-btn active" id="anonBtn" onclick="setAnon(true)">
+            🛡️ Sí, permanecer anónimo
+          </button>
+          <button class="anon-btn" id="identBtn" onclick="setAnon(false)">
+            👤 No, dejar mis datos
+          </button>
+        </div>
+
+        <div class="identity-fields" id="identityFields">
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;line-height:1.6">
+            Tus datos son tratados con estricta confidencialidad y solo serán utilizados para el seguimiento de tu denuncia.
+          </p>
+          <div class="identity-row">
+            <input class="wizard-input" type="text" placeholder="Nombre y apellido" />
+            <input class="wizard-input" type="email" placeholder="Email de contacto" />
+          </div>
+          <input class="wizard-input" type="tel" placeholder="Teléfono (opcional)" />
+        </div>
+
+        <div class="form-checkbox" style="margin-top:16px">
+          <input type="checkbox" id="termsCheck" />
+          <label for="termsCheck" style="font-size:13px;color:var(--gray-500);line-height:1.6;font-weight:400">
+            Confirmo que la información provista es verídica y completa según mi conocimiento. He leído la
+            <a href="privacidad.html" style="color:var(--primary)">Política de Privacidad</a>
+            y acepto que mi denuncia sea procesada por el equipo de compliance.
+          </label>
+        </div>
+
+        <div class="wizard-footer">
+          <button class="wizard-back" onclick="goToStep(9)">← Anterior</button>
+          <button class="wizard-next" id="submitBtn" onclick="submitForm()">
+            Enviar denuncia
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== SUCCESS ===== -->
+      <div class="wizard-step" id="step-success">
+        <div class="wizard-success">
+          <div class="success-check">✓</div>
+          <h2>Denuncia recibida</h2>
+          <p>Tu denuncia fue enviada de forma segura al equipo de compliance de <strong id="successCompanyName"></strong>. Guardá tu código de seguimiento.</p>
+          <div class="tracking-box">
+            <p>Código de seguimiento</p>
+            <div class="tracking-code" id="trackingCodeDisplay"></div>
+          </div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:28px;line-height:1.6">
+            Con este código podés consultar el estado de tu denuncia en cualquier momento, sin revelar tu identidad.
+          </p>
+          <div class="success-actions">
+            <button onclick="window.print()" class="btn btn-outline btn-lg" style="justify-content:center;width:100%">
+              🖨️ Guardar comprobante
+            </button>
+            <a id="seguimientoLink" href="empresas.html?tab=seguimiento" class="btn btn-primary btn-lg" style="justify-content:center;width:100%">
+              Consultar estado →
+            </a>
+            <a href="index.html" class="btn btn-ghost" style="justify-content:center;font-size:14px;width:100%">
+              Volver al inicio
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /wizard-card -->
+  </div><!-- /wizard-body -->
+
+</div><!-- /wizardPage -->
+
+
+<script src="main.js"></script>
+<script>
+  // ── Init ──────────────────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const company = params.get('empresa') || 'tu empresa';
+
+  document.title = `Canal de denuncias · ${company}`;
+
+  // Set company name in all locations
+  document.getElementById('heroCompanyChip').querySelector('span').textContent = company;
+  document.getElementById('heroCompanyName').textContent = company;
+  document.getElementById('navCompanyName').textContent = company;
+  document.getElementById('navCompanyBadge').style.display = 'flex';
+  document.getElementById('companyChipName').textContent = company;
+  document.getElementById('successCompanyName').textContent = company;
+
+  const TOTAL_STEPS = 10;
+  let currentStep = 0;
+
+  // ── Page toggle helpers ───────────────────────────────────────
+  function showOnly(pageId) {
+    ['landingPage','wizardPage','seguimientoPage'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === pageId ? (pageId === 'wizardPage' ? 'flex' : 'block') : 'none';
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function startWizard()       { showOnly('wizardPage'); }
+  function exitWizard()        { showOnly('landingPage'); }
+  function startSeguimiento()  {
+    document.getElementById('segNavCompany').textContent = company;
+    showOnly('seguimientoPage');
+  }
+  function exitSeguimiento()   { showOnly('landingPage'); }
+
+  // ── Seguimiento logic ─────────────────────────────────────────
+  const SEG_STATES = {
+    'ARG-2025-1234': {
+      status: 'active', label: 'En investigación', title: 'Denuncia en proceso',
+      desc: 'Tu denuncia fue recibida y se encuentra en etapa de investigación. El equipo de compliance está recopilando información.',
+      date: 'Última actualización: 14 feb 2025 — 09:41 hs',
+      msg: { title: 'Mensaje del equipo', text: 'La investigación avanza según lo previsto. Se estima resolución en los próximos 30 días hábiles.' }
+    },
+    'ARG-2025-9999': {
+      status: 'closed', label: 'Resuelto', title: 'Caso cerrado',
+      desc: 'La investigación finalizó y se adoptaron las medidas correspondientes.',
+      date: 'Cerrado: 10 ene 2025 — 14:20 hs', msg: null
+    },
+    'ARG-2025-0001': {
+      status: 'pending', label: 'Pendiente de evaluación', title: 'Denuncia recibida — evaluación en curso',
+      desc: 'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad. Recibirás actualización en los próximos 5 días hábiles.',
+      date: 'Recibida: 20 feb 2025 — 11:05 hs', msg: null
+    }
+  };
+
+  function consultarSeguimientoForm() {
+    const raw = document.getElementById('segTrackingInput').value.trim().toUpperCase();
+    const result = document.getElementById('segFormResult');
+    const btn = document.getElementById('segFormBtn');
+
+    if (!/^ARG-\d{4}-\d{4}$/.test(raw)) {
+      result.style.display = 'block';
+      result.innerHTML = `<div class="seg-result-box not-found">
+        <div class="seg-result-label" style="color:var(--gray-500)">Código no válido</div>
+        <div class="seg-result-title">Formato incorrecto</div>
+        <p class="seg-result-desc">El formato correcto es <code>ARG-AAAA-XXXX</code> (ej: ARG-2025-4821).</p>
+      </div>`;
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite"></span> Consultando...';
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = 'Consultar <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const data = SEG_STATES[raw];
+      result.style.display = 'block';
+      if (!data) {
+        result.innerHTML = `<div class="seg-result-box not-found">
+          <div class="seg-result-label" style="color:var(--gray-500)">No encontrado</div>
+          <div class="seg-result-title">Código no registrado</div>
+          <p class="seg-result-desc">No encontramos una denuncia con ese código. Verificá que lo ingresaste correctamente.</p>
+          <p class="seg-result-date">${raw}</p>
+        </div>`;
+        return;
+      }
+      const colors = { pending:'#EA580C', active:'var(--primary)', closed:'#16A34A' };
+      const msgHtml = data.msg ? `<div class="seg-result-msg"><strong>${data.msg.title}</strong><p>${data.msg.text}</p></div>` : '';
+      result.innerHTML = `<div class="seg-result-box ${data.status}">
+        <div class="seg-result-label" style="color:${colors[data.status]}">${data.label}</div>
+        <div class="seg-result-title">${data.title}</div>
+        <p class="seg-result-desc">${data.desc}</p>
+        <p class="seg-result-date">${data.date}</p>
+        ${msgHtml}
+      </div>`;
+    }, 900);
+  }
+
+  document.getElementById('segTrackingInput')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') consultarSeguimientoForm();
+  });
+  document.getElementById('segTrackingInput')?.addEventListener('input', function() {
+    const pos = this.selectionStart;
+    this.value = this.value.toUpperCase();
+    this.setSelectionRange(pos, pos);
+  });
+
+  // Auto-activate seguimiento if ?tab=seguimiento in URL
+  if (new URLSearchParams(window.location.search).get('tab') === 'seguimiento') {
+    startSeguimiento();
+    const code = new URLSearchParams(window.location.search).get('code');
+    if (code) document.getElementById('segTrackingInput').value = code;
+  }
+
+  // ── Navigation ────────────────────────────────────────────────
+  function goToStep(n) {
+    if (currentStep === 3) {
+      const desc = document.getElementById('descriptionText').value.trim();
+      if (n > 3 && desc.length < 30) {
+        document.getElementById('descriptionText').focus();
+        document.getElementById('descriptionText').style.borderColor = 'var(--primary)';
+        return;
+      }
+    }
+
+    const cur = document.getElementById(currentStep === 0 ? 'step-0' : `step-${currentStep}`);
+    if (cur) cur.classList.remove('active');
+
+    currentStep = n;
+
+    const next = document.getElementById(n === 'success' ? 'step-success' : `step-${n}`);
+    if (next) next.classList.add('active');
+
+    updateProgress();
+    window.scrollTo(0, 0);
+  }
+
+  function updateProgress() {
+    const pct = currentStep === 0 ? 0 : (currentStep / TOTAL_STEPS) * 100;
+    document.getElementById('progressFill').style.width = `${Math.min(pct, 100)}%`;
+    if (currentStep === 0) {
+      document.getElementById('stepLabel').textContent = 'Empezá tu denuncia';
+    } else if (currentStep <= TOTAL_STEPS) {
+      document.getElementById('stepLabel').textContent = `Paso ${currentStep} de ${TOTAL_STEPS}`;
+    } else {
+      document.getElementById('stepLabel').textContent = '¡Listo!';
+    }
+  }
+
+  // ── Selection helpers ─────────────────────────────────────────
+  function selectFreq(btn, step) {
+    document.querySelectorAll(`[data-step="${step}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    if (step === 1) {
+      document.getElementById('complementRef').style.display =
+        btn.dataset.val === 'si' ? 'block' : 'none';
+    }
+  }
+
+  function toggleCat(btn) {
+    btn.classList.toggle('selected');
+    const anySelected = document.querySelectorAll('#step-2 .cat-option.selected').length > 0;
+    document.getElementById('next-2').disabled = !anySelected;
+  }
+
+  function selectPill(btn, group) {
+    document.querySelectorAll(`#areaPills .pill`).forEach(p => p.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  // ── Description counter ───────────────────────────────────────
+  function updateCounter() {
+    const val = document.getElementById('descriptionText').value;
+    document.getElementById('charCount').textContent = val.length;
+    document.getElementById('next-3').disabled = val.trim().length < 30;
+  }
+
+  // ── Dynamic rows ──────────────────────────────────────────────
+  function addInvolvedRow() {
+    const list = document.getElementById('involvedList');
+    const row = document.createElement('div');
+    row.className = 'involved-row';
+    row.innerHTML = `
+      <input class="wizard-input" type="text" placeholder="Nombre y apellido o descripción del rol" style="margin-bottom:8px" />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+        <input class="wizard-input" type="text" placeholder="Relación con la organización" style="margin-bottom:0" />
+        <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />
+      </div>`;
+    list.appendChild(row);
+  }
+
+  function addWitnessRow() {
+    const list = document.getElementById('witnessList');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px';
+    row.innerHTML = `
+      <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+      <input class="wizard-input" type="text" placeholder="Relación con la org." style="margin-bottom:0" />
+      <input class="wizard-input" type="text" placeholder="Cargo / puesto" style="margin-bottom:0" />`;
+    list.appendChild(row);
+  }
+
+  function addOtherRow() {
+    const list = document.getElementById('otherPersonsList');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px';
+    row.innerHTML = `
+      <input class="wizard-input" type="text" placeholder="Nombre / descripción" style="margin-bottom:0" />
+      <input class="wizard-input" type="text" placeholder="Vinculación con el hecho" style="margin-bottom:0" />`;
+    list.appendChild(row);
+  }
+
+  // ── Identity toggle ───────────────────────────────────────────
+  function setAnon(anon) {
+    document.getElementById('anonBtn').classList.toggle('active', anon);
+    document.getElementById('identBtn').classList.toggle('active', !anon);
+    document.getElementById('identityFields').classList.toggle('visible', !anon);
+  }
+
+  // ── File upload ───────────────────────────────────────────────
+  document.getElementById('fileInput8').addEventListener('change', function() {
+    const list = document.getElementById('fileList8');
+    Array.from(this.files).forEach(file => {
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--gray-100);border-radius:8px;font-size:13px;color:var(--gray-700);margin-bottom:8px';
+      item.innerHTML = `<span>📎</span><span>${file.name}</span><span style="color:var(--gray-400);font-size:12px;margin-left:auto">${(file.size/1024/1024).toFixed(2)} MB</span>`;
+      list.appendChild(item);
+    });
+  });
+
+  // ── Keyboard: Enter to advance ────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && document.getElementById('wizardPage').style.display !== 'none') {
+      const nextBtn = document.querySelector(`#step-${currentStep} .wizard-next:not([disabled])`);
+      if (nextBtn) nextBtn.click();
+    }
+  });
+
+  // ── Submit ────────────────────────────────────────────────────
+  function submitForm() {
+    if (!document.getElementById('termsCheck').checked) {
+      document.getElementById('termsCheck').closest('.form-checkbox').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Enviando...';
+
+    setTimeout(() => {
+      const code = 'ARG-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('trackingCodeDisplay').textContent = code;
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('stepLabel').textContent = '¡Listo!';
+      // Pre-fill seguimiento input and update button href (same page)
+      document.getElementById('segTrackingInput').value = code;
+      document.getElementById('seguimientoLink').onclick = (e) => { e.preventDefault(); startSeguimiento(); };
+      goToStep('success');
+    }, 1800);
+  }
+
+  // ── Landing FAQ ───────────────────────────────────────────────
+  function toggleLandFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.land-faq-q.open').forEach(q => {
+      q.classList.remove('open');
+      q.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      answer.classList.add('open');
+    }
+  }
+</script>
+
+<style>
+  /* ── Wizard spinner ── */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Disable next-2 initially */
+  #next-2 { opacity: .45; pointer-events: none; }
+  #next-2:not([disabled]) { opacity: 1; pointer-events: auto; }
+
+  /* ════════════════════════════════════════════════════
+     LANDING STYLES
+  ════════════════════════════════════════════════════ */
+
+  /* ── Hero ── */
+  .land-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 140px 40px 80px;
+  }
+  @media (max-width: 900px) {
+    .land-hero { grid-template-columns: 1fr; gap: 40px; padding: 120px 24px 60px; }
+    .land-hero-visual { display: none; }
+  }
+  .land-hero h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 900;
+    letter-spacing: -.04em;
+    line-height: 1.05;
+    color: var(--black);
+    margin-bottom: 20px;
+  }
+  .land-hero p {
+    font-size: 17px;
+    color: var(--gray-500);
+    line-height: 1.75;
+    max-width: 520px;
+  }
+  .land-company-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: var(--primary-100);
+    border: 1px solid var(--primary-200);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 20px;
+  }
+  .land-hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+  .land-stat { display: flex; flex-direction: column; gap: 2px; }
+  .land-stat strong { font-size: 18px; font-weight: 800; color: var(--black); letter-spacing: -.02em; }
+  .land-stat span { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+  .land-stat-div { width: 1px; height: 32px; background: var(--gray-200); }
+
+  /* Shield card */
+  .land-shield-card {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.06);
+  }
+  .land-shield-icon { margin-bottom: 20px; }
+  .land-shield-card h3 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--black);
+    margin-bottom: 8px;
+    letter-spacing: -.03em;
+  }
+  .land-shield-card > p { font-size: 13px; color: var(--gray-400); margin-bottom: 24px; line-height: 1.6; }
+  .land-shield-items { display: flex; flex-direction: column; gap: 12px; }
+  .land-shield-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 500; color: var(--gray-700);
+  }
+  .lsi-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+  }
+
+  /* ── Sections ── */
+  .land-section { padding: 96px 40px; }
+  .land-gray { background: var(--gray-50, #F9FAFB); }
+  .land-dark { background: var(--gray-900); }
+  @media (max-width: 768px) { .land-section { padding: 64px 24px; } }
+
+  .land-container { max-width: var(--container); margin: 0 auto; }
+
+  .land-section-hdr {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 56px;
+  }
+  .land-section-hdr h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 900;
+    letter-spacing: -.04em;
+    color: var(--black);
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+  .land-section-hdr p { font-size: 16px; color: var(--gray-500); line-height: 1.7; }
+
+  /* ── Categories grid ── */
+  .land-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 900px) { .land-cats-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .land-cats-grid { grid-template-columns: 1fr; } }
+
+  .land-cat {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .land-cat:hover { border-color: var(--primary-200); box-shadow: 0 4px 20px rgba(91,79,219,.08); }
+  .land-cat-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .land-cat h4 {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 8px;
+    letter-spacing: -.02em;
+  }
+  .land-cat p { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin: 0; }
+
+  /* ── Two col layout ── */
+  .land-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .land-two-col-narrow { gap: 48px; }
+  @media (max-width: 768px) { .land-two-col { grid-template-columns: 1fr; gap: 40px; } }
+
+  .land-col-text .section-tag { margin-bottom: 16px; }
+  .land-col-text h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 900;
+    letter-spacing: -.04em;
+    color: var(--black);
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+  .land-col-text > p { font-size: 16px; color: var(--gray-500); line-height: 1.7; margin-bottom: 32px; }
+
+  /* Guarantee list */
+  .land-guarantee-list { display: flex; flex-direction: column; gap: 24px; }
+  .land-guarantee { display: flex; gap: 16px; align-items: flex-start; }
+  .lg-icon {
+    width: 32px; height: 32px; flex-shrink: 0;
+    background: var(--primary-100);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary);
+  }
+  .land-guarantee strong {
+    display: block;
+    font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 4px;
+  }
+  .land-guarantee p { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin: 0; }
+
+  /* Tech card */
+  .land-tech-card {
+    background: var(--gray-900);
+    border-radius: 20px;
+    padding: 32px;
+    position: sticky;
+    top: 100px;
+  }
+  .land-tech-card h4 {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,.4);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 24px;
+  }
+  .land-tech-layer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .land-tech-layer:last-of-type { border-bottom: none; }
+  .ltl-badge {
+    background: var(--primary);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    min-width: 72px;
+    text-align: center;
+  }
+  .ltl-label { font-size: 14px; color: rgba(255,255,255,.7); font-weight: 500; }
+  .land-tech-separator { height: 1px; background: rgba(255,255,255,.08); margin: 20px 0; }
+
+  /* ── Process steps ── */
+  .land-process-steps { display: flex; flex-direction: column; gap: 0; max-width: 800px; margin: 0 auto; }
+  .land-step {
+    display: flex;
+    gap: 24px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-200);
+    position: relative;
+  }
+  .land-step:last-child { border-bottom: none; }
+  .land-step-num {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: .04em;
+    min-width: 32px;
+    padding-top: 4px;
+  }
+  .land-step-content h4 {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--black);
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .land-step-content p { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 10px; }
+  .land-step-time {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--primary-100);
+    border: 1px solid var(--primary-200);
+    border-radius: 100px;
+    padding: 3px 12px;
+  }
+
+  /* ── FAQ ── */
+  .land-faq-list { display: flex; flex-direction: column; gap: 8px; }
+  .land-faq-item {
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .land-faq-q {
+    width: 100%;
+    padding: 20px 24px;
+    background: var(--white);
+    border: none;
+    text-align: left;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: background .2s;
+  }
+  .land-faq-q:hover { background: var(--gray-50, #F9FAFB); }
+  .land-faq-q.open { background: var(--primary-100); color: var(--primary); }
+  .land-faq-icon {
+    font-size: 20px; font-weight: 300;
+    color: var(--primary);
+    transition: transform .3s;
+    flex-shrink: 0;
+  }
+  .land-faq-q.open .land-faq-icon { transform: rotate(45deg); }
+  .land-faq-a {
+    display: none;
+    padding: 0 24px 20px;
+    background: var(--gray-50, #F9FAFB);
+  }
+  .land-faq-a p { font-size: 14px; color: var(--gray-600); line-height: 1.75; margin: 0; }
+  .land-faq-a.open { display: block; }
+
+  /* ── Normativa (dark) ── */
+  .land-norm-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 768px) { .land-norm-grid { grid-template-columns: 1fr; } }
+  .land-norm-item {
+    display: flex;
+    gap: 16px;
+    padding: 24px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+  }
+  .land-norm-icon { font-size: 24px; flex-shrink: 0; padding-top: 2px; }
+  .land-norm-item strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .land-norm-item p { font-size: 13px; color: var(--gray-400); line-height: 1.6; margin: 0; }
+
+  /* ── CTA final ── */
+  .land-cta-final {
+    background: var(--primary);
+    padding: 80px 40px;
+    text-align: center;
+  }
+  .land-cta-final h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(26px, 3vw, 42px);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: -.04em;
+    margin-bottom: 12px;
+  }
+  .land-cta-final p { font-size: 17px; color: rgba(255,255,255,.7); margin-bottom: 32px; }
+  .land-cta-final .btn-primary {
+    background: var(--white);
+    color: var(--primary);
+  }
+  .land-cta-final .btn-primary:hover { background: var(--primary-100); }
+
+  /* ── Navbar on landing ── */
+  #landingPage .navbar { background: rgba(255,255,255,.95); backdrop-filter: blur(12px); }
+
+  /* ════════ SEGUIMIENTO STYLES ════════ */
+  .seg-card {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.06);
+    margin-bottom: 32px;
+  }
+  .seg-card-icon { margin-bottom: 20px; }
+  .seg-card h3 {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--black);
+    letter-spacing: -.03em;
+    margin-bottom: 8px;
+  }
+  .seg-card > p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .seg-card code {
+    font-family: 'Courier New', monospace;
+    background: var(--primary-100);
+    color: var(--primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .seg-input-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .seg-input {
+    flex: 1;
+    height: 48px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    color: var(--black);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .seg-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-100); }
+  .seg-hint { font-size: 12px; color: var(--gray-400); line-height: 1.6; }
+
+  .seg-result-box { border-radius: 12px; padding: 20px 24px; }
+  .seg-result-box.pending { background: #FFF7ED; border: 1px solid #FED7AA; }
+  .seg-result-box.active { background: var(--primary-100); border: 1px solid var(--primary-200); }
+  .seg-result-box.closed { background: #F0FDF4; border: 1px solid #BBF7D0; }
+  .seg-result-box.not-found { background: var(--gray-100); border: 1px solid var(--gray-200); }
+  .seg-result-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+  .seg-result-title { font-family: var(--font-heading); font-size: 17px; font-weight: 800; color: var(--black); margin-bottom: 6px; letter-spacing: -.02em; }
+  .seg-result-desc { font-size: 14px; color: var(--gray-600); line-height: 1.7; margin: 0; }
+  .seg-result-date { font-size: 12px; color: var(--gray-400); margin-top: 8px; }
+  .seg-result-msg { margin-top: 16px; padding: 16px; background: var(--white); border-radius: 8px; border: 1px solid var(--gray-200); }
+  .seg-result-msg strong { font-size: 13px; font-weight: 700; color: var(--black); display: block; margin-bottom: 4px; }
+  .seg-result-msg p { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin: 0; }
+
+  .seg-info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  @media (max-width: 600px) { .seg-info-grid { grid-template-columns: 1fr; } }
+  .seg-info-item { background: var(--gray-100); border-radius: 12px; padding: 20px; }
+  .seg-info-icon { font-size: 24px; margin-bottom: 10px; display: block; }
+  .seg-info-item strong { font-size: 14px; font-weight: 700; color: var(--black); display: block; margin-bottom: 6px; }
+  .seg-info-item p { font-size: 13px; color: var(--gray-500); line-height: 1.6; margin: 0; }
+
+  .seg-lost-code { background: var(--gray-100); border-radius: 12px; padding: 24px; }
+  .seg-lost-code strong { font-size: 15px; font-weight: 700; color: var(--black); display: block; margin-bottom: 8px; }
+  .seg-lost-code p { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 12px; }
+</style>
+
+</body>
+</html>

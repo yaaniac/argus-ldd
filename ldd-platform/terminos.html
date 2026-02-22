@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Términos de Uso · Argus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .legal-page { max-width: 800px; margin: 0 auto; padding: 120px 40px 80px; }
+    @media (max-width: 768px) { .legal-page { padding: 100px 24px 60px; } }
+    .legal-hero { margin-bottom: 56px; }
+    .legal-hero h1 { font-family: var(--font-heading); font-size: clamp(28px, 4vw, 44px); font-weight: 900; letter-spacing: -.04em; color: var(--black); margin-bottom: 12px; }
+    .legal-hero p { font-size: 16px; color: var(--gray-500); line-height: 1.7; }
+    .legal-meta { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+    .legal-meta span { font-size: 13px; color: var(--gray-400); font-weight: 500; }
+    .legal-meta strong { color: var(--gray-700); }
+    .legal-toc { background: var(--gray-100); border-radius: 16px; padding: 24px 28px; margin-bottom: 48px; }
+    .legal-toc h4 { font-size: 13px; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; }
+    .legal-toc ol { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .legal-toc li a { font-size: 14px; color: var(--primary); font-weight: 500; text-decoration: none; }
+    .legal-toc li a:hover { text-decoration: underline; }
+    .legal-section { margin-bottom: 48px; scroll-margin-top: 100px; }
+    .legal-section h2 { font-family: var(--font-heading); font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -.03em; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1.5px solid var(--gray-200); }
+    .legal-section h3 { font-size: 16px; font-weight: 700; color: var(--black); margin: 24px 0 10px; }
+    .legal-section p { font-size: 15px; color: var(--gray-600); line-height: 1.8; margin-bottom: 14px; }
+    .legal-section ul, .legal-section ol { padding-left: 22px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .legal-section li { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+    .legal-highlight { background: var(--primary-100); border: 1px solid var(--primary-200); border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+    .legal-highlight p { color: var(--primary-800, #3B32A8); font-weight: 500; margin: 0; }
+    .legal-warning { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+    .legal-warning p { color: #92400E; font-weight: 500; margin: 0; font-size: 14px; }
+    .legal-divider { height: 1px; background: var(--gray-200); margin: 40px 0; }
+    .legal-contact-box { background: var(--gray-900); border-radius: 16px; padding: 32px; color: var(--white); }
+    .legal-contact-box h3 { font-family: var(--font-heading); font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 12px; letter-spacing: -.03em; }
+    .legal-contact-box p { font-size: 14px; color: var(--gray-400); line-height: 1.7; margin-bottom: 16px; }
+    .legal-contact-box a { color: var(--primary-200, #D4D0FF); font-weight: 600; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--primary); text-decoration: none; margin-bottom: 32px; }
+    .back-link:hover { text-decoration: underline; }
+    .tab-group { display: flex; gap: 4px; background: var(--gray-100); border-radius: 12px; padding: 4px; margin-bottom: 32px; }
+    .tab-btn { flex: 1; padding: 10px 16px; border: none; background: none; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--gray-500); cursor: pointer; font-family: var(--font-body); transition: all .2s; text-align: center; }
+    .tab-btn.active { background: var(--white); color: var(--black); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
+            <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="22" r="4" fill="#fff"/>
+            <path d="M22.5 22l1 1 2-2" stroke="#5B4FDB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="logo-text">Argus<span class="logo-dot">.</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="empresas.html">Empresas</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="empresas.html" class="btn btn-primary" style="font-size:13px">Realizar denuncia</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="legal-page">
+
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Volver al inicio
+    </a>
+
+    <div class="legal-hero">
+      <div class="section-tag" style="margin-bottom:16px">Legal</div>
+      <h1>Términos de Uso</h1>
+      <p>Estos términos regulan el acceso y uso de la plataforma Argus — Línea de denuncias, tanto para denunciantes individuales como para organizaciones clientes.</p>
+      <div class="legal-meta">
+        <span><strong>Versión:</strong> 1.0</span>
+        <span><strong>Última actualización:</strong> Febrero 2025</span>
+        <span><strong>Aplicable a:</strong> Canal web, plataforma y servicios Argus</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-group">
+      <button class="tab-btn active" onclick="switchTab('denunciantes')">Para denunciantes</button>
+      <button class="tab-btn" onclick="switchTab('organizaciones')" id="tab-org">Para organizaciones</button>
+      <button class="tab-btn" onclick="switchTab('general')" id="tab-gen">Términos generales</button>
+    </div>
+
+    <!-- Tab: Denunciantes -->
+    <div class="tab-panel active" id="panel-denunciantes">
+
+      <div class="legal-section" id="canal">
+        <h2>Uso del canal de denuncias</h2>
+
+        <h3>Propósito del canal</h3>
+        <p>El canal de denuncias de Argus es un servicio diseñado para que empleados, ex-empleados, proveedores, clientes y cualquier persona con conocimiento de irregularidades pueda reportarlas de forma segura, confidencial y, si así lo desea, anónima.</p>
+        <p>El canal está habilitado para recibir denuncias relacionadas con conductas que vulneren la ética, la integridad o la normativa aplicable a la organización denunciada.</p>
+
+        <h3>Uso aceptable</h3>
+        <p>Al utilizar el canal de denuncias, aceptás que:</p>
+        <ul>
+          <li>La información que proporcionás es verídica y completa según tu conocimiento al momento de presentar la denuncia.</li>
+          <li>El canal es utilizado de buena fe, con el propósito de reportar situaciones que genuinamente considerás irregulares.</li>
+          <li>No utilizarás el canal para denuncias cuya falsedad conocés de antemano, para hostigar a personas o para obtener ventajas personales indebidas.</li>
+          <li>La denuncia se refiere a conductas que involucran a la organización a la que dirigís el reporte.</li>
+        </ul>
+
+        <div class="legal-highlight">
+          <p>Una denuncia que no pueda ser probada o verificada durante la investigación no implica automáticamente mala fe por parte del denunciante. La mala fe requiere conocimiento previo de la falsedad de los hechos reportados.</p>
+        </div>
+
+        <h3>Protección del denunciante</h3>
+        <p>Argus, en cumplimiento de los estándares internacionales de protección al denunciante (OCDE, Directiva EU 2019/1937, UNCAC), garantiza:</p>
+        <ul>
+          <li>La confidencialidad de la identidad del denunciante en todo momento.</li>
+          <li>La prohibición de cualquier medida retaliativa contra el denunciante por parte de la organización.</li>
+          <li>El tratamiento imparcial de todas las denuncias, independientemente de quién sea el denunciado.</li>
+          <li>El acceso a un código de seguimiento para consultar el estado del caso sin necesidad de identificarse.</li>
+        </ul>
+
+        <h3>Consecuencias de la denuncia de mala fe</h3>
+        <div class="legal-warning">
+          <p>⚠️ La presentación de denuncias con información manifiestamente falsa y con conocimiento de su falsedad puede constituir un ilícito civil o penal según la legislación aplicable en cada jurisdicción. Argus colaborará con las autoridades judiciales competentes en los casos en que se determine la existencia de una denuncia de mala fe comprobada.</p>
+        </div>
+
+        <h3>Código de seguimiento</h3>
+        <p>Al finalizar el proceso de denuncia, recibirás un código alfanumérico único. Este código es el único medio para consultar el estado de tu caso. Argus no puede recuperar el código si lo perdés, por lo que recomendamos guardarlo de forma segura.</p>
+
+        <h3>Limitaciones del canal</h3>
+        <p>El canal de denuncias de Argus:</p>
+        <ul>
+          <li>No es un servicio de emergencia. Ante situaciones de riesgo inmediato para personas, contactá a las autoridades correspondientes.</li>
+          <li>No tiene jurisdicción legal directa sobre las organizaciones. Argus gestiona el proceso de investigación interna, pero la aplicación de sanciones corresponde a cada organización y/o a las autoridades competentes.</li>
+          <li>No garantiza un resultado específico de la investigación, ya que este depende de la evidencia disponible y los procedimientos internos de cada organización.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Tab: Organizaciones -->
+    <div class="tab-panel" id="panel-organizaciones">
+
+      <div class="legal-section">
+        <h2>Términos para organizaciones clientes</h2>
+
+        <h3>Contrato de servicios</h3>
+        <p>El uso de la plataforma Argus por parte de organizaciones clientes se rige por el contrato de servicios suscripto entre la organización y Argus. Estos términos complementan dicho contrato.</p>
+
+        <h3>Obligaciones de la organización</h3>
+        <p>La organización que contrata los servicios de Argus se compromete a:</p>
+        <ul>
+          <li>Implementar y comunicar activamente el canal de denuncias a todos los integrantes de la organización.</li>
+          <li>No interferir en el proceso de investigación de las denuncias gestionadas por Argus.</li>
+          <li>Prohibir expresamente cualquier medida retaliativa contra los denunciantes.</li>
+          <li>Actuar sobre las recomendaciones emitidas por Argus al cierre de cada investigación.</li>
+          <li>Designar un representante habilitado para la gestión del canal con las atribuciones necesarias.</li>
+          <li>Mantener la confidencialidad de la información contenida en las denuncias.</li>
+          <li>Abonar los servicios conforme a los términos comerciales acordados.</li>
+        </ul>
+
+        <h3>Acceso a la información</h3>
+        <p>La organización cliente tiene acceso a:</p>
+        <ul>
+          <li>El contenido de las denuncias recibidas en su canal, con excepción de los datos de identidad de los denunciantes que hayan elegido el anonimato.</li>
+          <li>El estado y evolución de cada caso.</li>
+          <li>Los informes y recomendaciones emitidos al cierre de cada investigación.</li>
+          <li>Estadísticas agregadas de uso del canal.</li>
+        </ul>
+        <p>Argus se reserva el derecho de limitar el acceso de determinados representantes de la organización a información que pudiera comprometer la independencia de una investigación, particularmente cuando el representante habitual sea parte investigada.</p>
+
+        <h3>Indemnidad</h3>
+        <p>La organización indemnizará a Argus frente a cualquier reclamación derivada del incumplimiento de estos términos o del contrato de servicios, incluyendo las derivadas de medidas retaliativas tomadas contra denunciantes.</p>
+
+        <h3>Confidencialidad</h3>
+        <p>Ambas partes mantienen la confidencialidad de la información compartida en el marco de la relación comercial. Esta obligación subsiste durante 5 años tras la finalización del contrato.</p>
+
+        <h3>Propiedad intelectual</h3>
+        <p>La plataforma Argus, incluyendo su software, diseño, metodología y documentación, es propiedad exclusiva de Argus. La organización cliente recibe una licencia de uso no exclusiva, no transferible, durante la vigencia del contrato.</p>
+      </div>
+
+    </div>
+
+    <!-- Tab: General -->
+    <div class="tab-panel" id="panel-general">
+
+      <div class="legal-section">
+        <h2>Disposiciones generales</h2>
+
+        <h3>Aceptación de los términos</h3>
+        <p>El acceso y uso de la plataforma Argus implica la aceptación plena de estos términos de uso. Si no estás de acuerdo con alguna disposición, debés abstenerte de utilizar la plataforma.</p>
+
+        <h3>Modificaciones</h3>
+        <p>Argus se reserva el derecho de modificar estos términos en cualquier momento. Las modificaciones entrarán en vigor a los 30 días de su publicación en este sitio. El uso continuado de la plataforma tras dicho período implica la aceptación de los términos modificados.</p>
+        <p>Para cambios sustanciales, notificaremos a los clientes corporativos mediante correo electrónico con al menos 30 días de antelación.</p>
+
+        <h3>Disponibilidad del servicio</h3>
+        <p>Argus procura mantener la disponibilidad del servicio las 24 horas del día, los 7 días de la semana. Sin embargo, no garantiza la disponibilidad ininterrumpida y puede realizar mantenimientos planificados con previo aviso.</p>
+        <p>Argus no será responsable por interrupciones del servicio debidas a causas fuera de su control razonable (fuerza mayor, fallos de infraestructura de terceros, ataques informáticos, etc.).</p>
+
+        <h3>Limitación de responsabilidad</h3>
+        <p>La responsabilidad total de Argus frente a cualquier reclamación no superará el importe abonado por el cliente en los 12 meses anteriores al hecho generador de la reclamación.</p>
+        <p>Argus no será responsable por daños indirectos, lucro cesante, pérdida de datos o daños reputacionales.</p>
+        <p>Argus no garantiza que las denuncias presentadas darán lugar a medidas disciplinarias o legales específicas, ya que estas decisiones corresponden exclusivamente a la organización y/o a las autoridades competentes.</p>
+
+        <h3>Ley aplicable y jurisdicción</h3>
+        <p>Estos términos se rigen por las leyes del lugar donde Argus tiene su sede principal. Para cualquier controversia que no pueda resolverse de forma amistosa, las partes se someten a la jurisdicción de los tribunales competentes del mismo lugar, con renuncia a cualquier otro fuero que pudiera corresponderles.</p>
+
+        <h3>Integridad del acuerdo</h3>
+        <p>Estos términos, junto con la política de privacidad, la política de seguridad y el contrato de servicios (cuando aplique), constituyen el acuerdo completo entre las partes respecto al uso de la plataforma.</p>
+
+        <h3>Nulidad parcial</h3>
+        <p>Si alguna disposición de estos términos fuera declarada nula o inaplicable por una autoridad competente, el resto de las disposiciones continuará en plena vigencia y efecto.</p>
+      </div>
+
+      <div class="legal-contact-box">
+        <h3>¿Tenés preguntas sobre estos términos?</h3>
+        <p>Nuestro equipo legal responde consultas sobre los términos de uso y contratos de servicio.</p>
+        <p>
+          <a href="mailto:legal@argus.com">legal@argus.com</a> — Consultas legales y contractuales<br />
+          <a href="mailto:hola@argus.com">hola@argus.com</a> — Consultas generales<br />
+          Tel: +54 11 0000-0000
+        </p>
+      </div>
+
+    </div>
+
+    <div class="legal-divider"></div>
+    <p style="font-size:13px;color:var(--gray-400);text-align:center">
+      Argus — Línea de denuncias · <a href="privacidad.html" style="color:var(--primary)">Política de privacidad</a> · <a href="seguridad.html" style="color:var(--primary)">Seguridad de datos</a>
+    </p>
+
+  </div>
+
+  <footer class="footer" style="margin-top:0">
+    <div class="footer-container">
+      <div class="footer-bottom">
+        <p>© 2025 Argus · Línea de denuncias. Todos los derechos reservados.</p>
+        <p><a href="privacidad.html" style="color:var(--gray-400)">Privacidad</a> · <a href="terminos.html" style="color:var(--gray-400)">Términos</a> · <a href="seguridad.html" style="color:var(--gray-400)">Seguridad</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+      document.getElementById(`panel-${tab}`).classList.add('active');
+    }
+    // Auto-activate canal tab if #canal hash
+    if (window.location.hash === '#canal') {
+      switchTab('denunciantes');
+      setTimeout(() => document.getElementById('canal')?.scrollIntoView({ behavior: 'smooth' }), 300);
+    }
+  </script>
+</body>
+</html>
