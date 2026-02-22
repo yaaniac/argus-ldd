@@ -506,9 +506,16 @@
       }
     }
 
-    // Auto-activate seguimiento tab if ?seguimiento or #seguimiento in URL
-    if (window.location.hash === '#seguimiento' || new URLSearchParams(window.location.search).get('tab') === 'seguimiento') {
+    // Auto-activate seguimiento tab if ?tab=seguimiento or #seguimiento in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (window.location.hash === '#seguimiento' || urlParams.get('tab') === 'seguimiento') {
       switchEmpTab('seguimiento');
+      // Auto-fill code if provided
+      const code = urlParams.get('code');
+      if (code) {
+        const input = document.getElementById('trackingInput');
+        if (input) { input.value = code; }
+      }
     }
 
     // ── Seguimiento ───────────────────────────────────────────────

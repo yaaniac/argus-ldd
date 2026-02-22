@@ -942,8 +942,11 @@
             <button onclick="window.print()" class="btn btn-outline btn-lg" style="justify-content:center;width:100%">
               🖨️ Guardar comprobante
             </button>
+            <a id="seguimientoLink" href="empresas.html?tab=seguimiento" class="btn btn-primary btn-lg" style="justify-content:center;width:100%">
+              Consultar estado →
+            </a>
             <a href="index.html" class="btn btn-ghost" style="justify-content:center;font-size:14px;width:100%">
-              Volver al inicio →
+              Volver al inicio
             </a>
           </div>
         </div>
@@ -1126,6 +1129,8 @@
       document.getElementById('trackingCodeDisplay').textContent = code;
       document.getElementById('progressFill').style.width = '100%';
       document.getElementById('stepLabel').textContent = '¡Listo!';
+      // Update seguimiento link with the generated code
+      document.getElementById('seguimientoLink').href = 'empresas.html?tab=seguimiento&code=' + code;
       goToStep('success');
     }, 1800);
   }
