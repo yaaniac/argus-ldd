@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="client-config.js"></script>
 </head>
 <body>
 
@@ -75,6 +76,10 @@
         <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('usuarios')">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M1 16c0-3.3 2.7-6 6-6h0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="13" cy="11" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M10 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 13.5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span>Usuarios y roles</span>
+        </a>
+        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('configuracion')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a1 1 0 011 1v.6a5.5 5.5 0 011.3.75l.52-.3a1 1 0 011.37.37l1 1.73a1 1 0 01-.37 1.37l-.52.3c.04.27.07.54.07.83s-.03.56-.07.83l.52.3a1 1 0 01.37 1.37l-1 1.73a1 1 0 01-1.37.37l-.52-.3A5.5 5.5 0 0110 14.4V15a1 1 0 01-2 0v-.6a5.5 5.5 0 01-1.3-.75l-.52.3a1 1 0 01-1.37-.37l-1-1.73a1 1 0 01.37-1.37l.52-.3A5.6 5.6 0 014.6 9c0-.29.03-.56.07-.83l-.52-.3a1 1 0 01-.37-1.37l1-1.73a1 1 0 011.37-.37l.52.3A5.5 5.5 0 018 3.6V3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="9" cy="9" r="2.2" stroke="currentColor" stroke-width="1.4"/></svg>
+          <span>Configuración</span>
         </a>
         <a href="index.html" class="bo-nav-item" target="_blank">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3H3a1 1 0 00-1 1v11a1 1 0 001 1h11a1 1 0 001-1v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 2h5v5M16 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -663,6 +668,182 @@
       </div>
     </div>
 
+    <!-- ═══ VIEW: CONFIGURACIÓN ═══ -->
+    <div class="bo-view" id="view-configuracion">
+      <div class="bo-page-header">
+        <div>
+          <h1 class="bo-page-title">Configuración del portal</h1>
+          <p class="bo-page-sub">Personalizá el portal de denuncias para tu organización. Los cambios se aplican de inmediato en el sitio público.</p>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="bo-btn bo-btn-ghost" onclick="cfgReset()">Restaurar defaults</button>
+          <button class="bo-btn bo-btn-primary" onclick="cfgSaveAll()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Guardar cambios
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS de configuración -->
+      <div class="cfg-tabs">
+        <button class="cfg-tab active" onclick="showCfgTab('empresa', this)">🏢 Empresa</button>
+        <button class="cfg-tab" onclick="showCfgTab('landing', this)">🌐 Landing</button>
+        <button class="cfg-tab" onclick="showCfgTab('categorias', this)">🏷️ Categorías</button>
+        <button class="cfg-tab" onclick="showCfgTab('canales', this)">📡 Canales</button>
+        <button class="cfg-tab" onclick="showCfgTab('faq', this)">❓ FAQ</button>
+        <button class="cfg-tab" onclick="showCfgTab('apariencia', this)">🎨 Apariencia</button>
+      </div>
+
+      <!-- TAB: Empresa -->
+      <div class="cfg-panel active" id="cfgpanel-empresa">
+        <div class="bo-card" style="padding:28px">
+          <h3 class="cfg-section-title">Datos de la empresa</h3>
+          <div class="bo-form-grid">
+            <div class="bo-form-group">
+              <label>Nombre de la empresa *</label>
+              <input type="text" class="bo-select-full" id="cfg-empresa-nombre" placeholder="Ej: Acme S.A." />
+            </div>
+            <div class="bo-form-group">
+              <label>Slogan del portal</label>
+              <input type="text" class="bo-select-full" id="cfg-empresa-slogan" placeholder="Ej: Canal confidencial de denuncias" />
+            </div>
+            <div class="bo-form-group">
+              <label>Email de contacto / denuncias</label>
+              <input type="email" class="bo-select-full" id="cfg-empresa-email" placeholder="denuncias@empresa.com" />
+            </div>
+            <div class="bo-form-group">
+              <label>Teléfono / 0800</label>
+              <input type="text" class="bo-select-full" id="cfg-empresa-telefono" placeholder="0800-XXX-XXXX" />
+            </div>
+            <div class="bo-form-group bo-span2">
+              <label>URL del logo (imagen)</label>
+              <input type="url" class="bo-select-full" id="cfg-empresa-logoUrl" placeholder="https://..." />
+              <span style="font-size:11px;color:var(--gray-500);margin-top:4px;display:block">Subí la imagen a un servidor y pegá la URL. Formatos: PNG, SVG, JPG.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Landing -->
+      <div class="cfg-panel" id="cfgpanel-landing" style="display:none">
+        <div class="bo-card" style="padding:28px">
+          <h3 class="cfg-section-title">Texto del hero (portada)</h3>
+          <div class="bo-form-grid">
+            <div class="bo-form-group bo-span2">
+              <label>Título principal</label>
+              <input type="text" class="bo-select-full" id="cfg-landing-heroTitle" placeholder="Ej: Tu denuncia importa. Tu identidad, protegida." />
+              <span style="font-size:11px;color:var(--gray-500);margin-top:4px;display:block">Podés usar &lt;br/&gt; para saltos de línea.</span>
+            </div>
+            <div class="bo-form-group bo-span2">
+              <label>Subtítulo / descripción</label>
+              <textarea class="bo-textarea" id="cfg-landing-heroSubtitle" rows="3" placeholder="Describí el propósito del canal..."></textarea>
+            </div>
+            <div class="bo-form-group">
+              <label>Texto del botón principal</label>
+              <input type="text" class="bo-select-full" id="cfg-landing-ctaLabel" placeholder="Hacer una denuncia" />
+            </div>
+            <div class="bo-form-group">
+              <label>Texto del botón secundario</label>
+              <input type="text" class="bo-select-full" id="cfg-landing-ctaSecLabel" placeholder="Seguir mi caso" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Categorías -->
+      <div class="cfg-panel" id="cfgpanel-categorias" style="display:none">
+        <div class="bo-card" style="padding:28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <h3 class="cfg-section-title" style="margin:0">Categorías de denuncia</h3>
+            <button class="bo-btn bo-btn-primary" style="font-size:12px" onclick="cfgAddCategoria()">+ Agregar categoría</button>
+          </div>
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Estas categorías aparecen en el formulario de denuncia para que el denunciante clasifique su caso.</p>
+          <div id="cfg-categorias-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </div>
+
+      <!-- TAB: Canales -->
+      <div class="cfg-panel" id="cfgpanel-canales" style="display:none">
+        <div class="bo-card" style="padding:28px">
+          <h3 class="cfg-section-title">Canales habilitados</h3>
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:20px">Activá los canales de denuncia disponibles para tu organización. Solo los activos aparecerán en el portal.</p>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <label class="cfg-toggle-row">
+              <div>
+                <strong>Canal web</strong>
+                <p style="font-size:12px;color:var(--gray-500);margin:2px 0 0">Formulario en línea en el portal</p>
+              </div>
+              <input type="checkbox" class="cfg-toggle" id="cfg-canal-web" checked />
+            </label>
+            <label class="cfg-toggle-row">
+              <div>
+                <strong>Email confidencial</strong>
+                <p style="font-size:12px;color:var(--gray-500);margin:2px 0 0">Bandeja de entrada dedicada</p>
+              </div>
+              <input type="checkbox" class="cfg-toggle" id="cfg-canal-email" checked />
+            </label>
+            <label class="cfg-toggle-row">
+              <div>
+                <strong>Teléfono / 0800</strong>
+                <p style="font-size:12px;color:var(--gray-500);margin:2px 0 0">Línea de atención humana</p>
+              </div>
+              <input type="checkbox" class="cfg-toggle" id="cfg-canal-telefono" checked />
+            </label>
+            <label class="cfg-toggle-row">
+              <div>
+                <strong>WhatsApp</strong>
+                <p style="font-size:12px;color:var(--gray-500);margin:2px 0 0">Canal de mensajería</p>
+              </div>
+              <input type="checkbox" class="cfg-toggle" id="cfg-canal-whatsapp" checked />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: FAQ -->
+      <div class="cfg-panel" id="cfgpanel-faq" style="display:none">
+        <div class="bo-card" style="padding:28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <h3 class="cfg-section-title" style="margin:0">Preguntas frecuentes</h3>
+            <button class="bo-btn bo-btn-primary" style="font-size:12px" onclick="cfgAddFaq()">+ Agregar pregunta</button>
+          </div>
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Estas preguntas aparecen en la sección de contacto del portal.</p>
+          <div id="cfg-faq-list" style="display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+      </div>
+
+      <!-- TAB: Apariencia -->
+      <div class="cfg-panel" id="cfgpanel-apariencia" style="display:none">
+        <div class="bo-card" style="padding:28px">
+          <h3 class="cfg-section-title">Colores del portal</h3>
+          <div class="bo-form-grid">
+            <div class="bo-form-group">
+              <label>Color primario (botones, links, íconos)</label>
+              <div style="display:flex;align-items:center;gap:12px">
+                <input type="color" id="cfg-color-primario" value="#0097A7" style="width:48px;height:36px;border-radius:8px;border:1px solid var(--gray-200);cursor:pointer" oninput="cfgPreviewColor(this.value)" />
+                <input type="text" id="cfg-color-primario-hex" class="bo-select-full" value="#0097A7" placeholder="#0097A7" oninput="cfgSyncColor(this.value)" style="flex:1" />
+              </div>
+            </div>
+            <div class="bo-form-group">
+              <label>Color del sidebar (back office)</label>
+              <div style="display:flex;align-items:center;gap:12px">
+                <input type="color" id="cfg-color-sidebar" value="#003D44" style="width:48px;height:36px;border-radius:8px;border:1px solid var(--gray-200);cursor:pointer" oninput="cfgPreviewSidebar(this.value)" />
+                <input type="text" id="cfg-color-sidebar-hex" class="bo-select-full" value="#003D44" placeholder="#003D44" oninput="cfgSyncSidebar(this.value)" style="flex:1" />
+              </div>
+            </div>
+          </div>
+          <div id="cfg-color-preview" style="margin-top:20px;padding:16px;border-radius:10px;border:1px solid var(--gray-200)">
+            <p style="font-size:12px;color:var(--gray-500);margin-bottom:12px">Vista previa del color primario:</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="bo-btn bo-btn-primary" id="cfgPreviewBtn">Botón primario</button>
+              <span id="cfgPreviewBadge" style="display:inline-flex;align-items:center;padding:4px 14px;border-radius:100px;font-size:12px;font-weight:600;background:#E0F7FA;color:#0097A7">Badge</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /view-configuracion -->
+
     <!-- ═══ OTRAS VISTAS (placeholder) ═══ -->
     <div class="bo-view" id="view-tareas">
       <div class="bo-page-header"><h1 class="bo-page-title">Mis tareas</h1></div>
@@ -1072,6 +1253,51 @@ a { text-decoration: none; color: inherit; }
   color: var(--gray-400);
   margin-top: 2px;
 }
+
+/* ── Config panel ── */
+.cfg-tabs {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.cfg-tab {
+  padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--gray-200);
+  background: var(--white); font-size: 13px; font-weight: 600;
+  color: var(--gray-600); cursor: pointer; font-family: var(--font);
+  transition: all .18s;
+}
+.cfg-tab:hover { border-color: var(--primary); color: var(--primary); }
+.cfg-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.cfg-section-title {
+  font-size: 15px; font-weight: 700; color: var(--black);
+  margin-bottom: 20px; letter-spacing: -.01em;
+}
+.cfg-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border: 1.5px solid var(--gray-200);
+  border-radius: 10px; cursor: pointer; transition: border-color .18s;
+}
+.cfg-toggle-row:hover { border-color: var(--primary); }
+.cfg-toggle {
+  width: 40px; height: 22px; appearance: none; background: var(--gray-200);
+  border-radius: 100px; cursor: pointer; position: relative; transition: background .2s;
+  flex-shrink: 0;
+}
+.cfg-toggle:checked { background: var(--primary); }
+.cfg-toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; background: #fff;
+  border-radius: 50%; transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.cfg-toggle:checked::after { left: 21px; }
+.cfg-cat-row, .cfg-faq-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border: 1.5px solid var(--gray-200);
+  border-radius: 10px; background: var(--gray-50);
+}
+.cfg-cat-row input { flex: 1; }
+.cfg-faq-row { flex-direction: column; }
+.cfg-faq-row .cfg-faq-fields { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.cfg-row-actions { display: flex; gap: 6px; align-self: flex-start; }
 
 /* ── Dashboard Hero Header ── */
 .dash-hero {
@@ -1723,7 +1949,8 @@ const viewTitles = {
   tareas: 'Mis tareas',
   comunicaciones: 'Comunicaciones',
   auditoria: 'Auditoría / Log',
-  usuarios: 'Usuarios y roles'
+  usuarios: 'Usuarios y roles',
+  configuracion: 'Configuración del portal'
 };
 
 function showView(name) {
@@ -1845,6 +2072,199 @@ function sendInvite() {
   document.getElementById('inviteUserModal').style.display = 'none';
   showToast('Invitación enviada a ' + email, '📧');
 }
+
+// ══════════════════════════════════════════════════════════════
+//  CONFIGURACIÓN DEL PORTAL
+// ══════════════════════════════════════════════════════════════
+function showCfgTab(tab, btn) {
+  document.querySelectorAll('.cfg-panel').forEach(function(p){ p.style.display='none'; });
+  document.querySelectorAll('.cfg-tab').forEach(function(b){ b.classList.remove('active'); });
+  var panel = document.getElementById('cfgpanel-' + tab);
+  if (panel) panel.style.display = 'block';
+  if (btn) btn.classList.add('active');
+  if (tab === 'categorias') cfgRenderCategorias();
+  if (tab === 'faq')        cfgRenderFaq();
+  if (tab === 'canales')    cfgLoadCanales();
+}
+
+function cfgLoad() {
+  if (typeof ArgusConfig === 'undefined') return;
+  var cfg = ArgusConfig.get();
+  setVal('cfg-empresa-nombre',       cfg.empresa.nombre);
+  setVal('cfg-empresa-slogan',       cfg.empresa.slogan);
+  setVal('cfg-empresa-email',        cfg.empresa.email);
+  setVal('cfg-empresa-telefono',     cfg.empresa.telefono);
+  setVal('cfg-empresa-logoUrl',      cfg.empresa.logoUrl);
+  setVal('cfg-landing-heroTitle',    cfg.landing.heroTitle);
+  setVal('cfg-landing-heroSubtitle', cfg.landing.heroSubtitle);
+  setVal('cfg-landing-ctaLabel',     cfg.landing.ctaLabel);
+  setVal('cfg-landing-ctaSecLabel',  cfg.landing.ctaSecLabel);
+  setVal('cfg-color-primario-hex',   cfg.apariencia.colorPrimario);
+  setVal('cfg-color-sidebar-hex',    cfg.apariencia.colorSidebar);
+  var cp = document.getElementById('cfg-color-primario');
+  if (cp) cp.value = cfg.apariencia.colorPrimario;
+  var cs = document.getElementById('cfg-color-sidebar');
+  if (cs) cs.value = cfg.apariencia.colorSidebar;
+}
+
+function cfgSaveAll() {
+  if (typeof ArgusConfig === 'undefined') { showToast('Error: client-config.js no cargado', '⚠️'); return; }
+  var cfg = ArgusConfig.get();
+  // Empresa
+  cfg.empresa.nombre    = getVal('cfg-empresa-nombre')    || cfg.empresa.nombre;
+  cfg.empresa.slogan    = getVal('cfg-empresa-slogan')    || cfg.empresa.slogan;
+  cfg.empresa.email     = getVal('cfg-empresa-email')     || cfg.empresa.email;
+  cfg.empresa.telefono  = getVal('cfg-empresa-telefono')  || cfg.empresa.telefono;
+  cfg.empresa.logoUrl   = getVal('cfg-empresa-logoUrl');
+  // Landing
+  cfg.landing.heroTitle    = getVal('cfg-landing-heroTitle')    || cfg.landing.heroTitle;
+  cfg.landing.heroSubtitle = getVal('cfg-landing-heroSubtitle') || cfg.landing.heroSubtitle;
+  cfg.landing.ctaLabel     = getVal('cfg-landing-ctaLabel')     || cfg.landing.ctaLabel;
+  cfg.landing.ctaSecLabel  = getVal('cfg-landing-ctaSecLabel')  || cfg.landing.ctaSecLabel;
+  // Canales
+  cfg.canales.web      = !!document.getElementById('cfg-canal-web')?.checked;
+  cfg.canales.email    = !!document.getElementById('cfg-canal-email')?.checked;
+  cfg.canales.telefono = !!document.getElementById('cfg-canal-telefono')?.checked;
+  cfg.canales.whatsapp = !!document.getElementById('cfg-canal-whatsapp')?.checked;
+  // Categorías desde DOM
+  var cats = [];
+  document.querySelectorAll('.cfg-cat-input').forEach(function(i){ if(i.value.trim()) cats.push(i.value.trim()); });
+  if (cats.length) cfg.categorias = cats;
+  // FAQ desde DOM
+  var faqs = [];
+  document.querySelectorAll('.cfg-faq-row').forEach(function(row){
+    var q = row.querySelector('.cfg-faq-q');
+    var a = row.querySelector('.cfg-faq-a');
+    if (q && a && q.value.trim()) faqs.push({ q: q.value.trim(), a: a.value.trim() });
+  });
+  if (faqs.length) cfg.faq = faqs;
+  // Apariencia
+  cfg.apariencia.colorPrimario = getVal('cfg-color-primario-hex') || cfg.apariencia.colorPrimario;
+  cfg.apariencia.colorSidebar  = getVal('cfg-color-sidebar-hex')  || cfg.apariencia.colorSidebar;
+
+  ArgusConfig.save(cfg);
+  showToast('Configuración guardada. Se aplica al abrir el portal.', '✅');
+}
+
+function cfgReset() {
+  if (!confirm('¿Restaurar toda la configuración a los valores por defecto?')) return;
+  ArgusConfig.reset();
+  cfgLoad();
+  cfgRenderCategorias();
+  cfgRenderFaq();
+  cfgLoadCanales();
+  showToast('Configuración restaurada', '↩️');
+}
+
+/* ── Categorías ── */
+function cfgRenderCategorias() {
+  var list = document.getElementById('cfg-categorias-list');
+  if (!list || typeof ArgusConfig === 'undefined') return;
+  var cats = ArgusConfig.get().categorias;
+  list.innerHTML = cats.map(function(cat, i){
+    return '<div class="cfg-cat-row" data-idx="' + i + '">' +
+      '<input type="text" class="bo-select-full cfg-cat-input" value="' + escHtml(cat) + '" />' +
+      '<button class="bo-btn bo-btn-ghost" style="color:#DC2626;padding:6px 10px" onclick="cfgRemoveCategoria(this)">✕</button>' +
+      '</div>';
+  }).join('');
+}
+function cfgAddCategoria() {
+  var list = document.getElementById('cfg-categorias-list');
+  if (!list) return;
+  var row = document.createElement('div');
+  row.className = 'cfg-cat-row';
+  row.innerHTML = '<input type="text" class="bo-select-full cfg-cat-input" placeholder="Nueva categoría..." />' +
+    '<button class="bo-btn bo-btn-ghost" style="color:#DC2626;padding:6px 10px" onclick="cfgRemoveCategoria(this)">✕</button>';
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+function cfgRemoveCategoria(btn) { btn.closest('.cfg-cat-row').remove(); }
+
+/* ── FAQ ── */
+function cfgRenderFaq() {
+  var list = document.getElementById('cfg-faq-list');
+  if (!list || typeof ArgusConfig === 'undefined') return;
+  var faqs = ArgusConfig.get().faq;
+  list.innerHTML = faqs.map(function(item, i){
+    return '<div class="cfg-faq-row">' +
+      '<div class="cfg-faq-fields">' +
+      '<input type="text" class="bo-select-full cfg-faq-q" placeholder="Pregunta..." value="' + escHtml(item.q) + '" />' +
+      '<textarea class="bo-textarea cfg-faq-a" rows="2" placeholder="Respuesta...">' + escHtml(item.a) + '</textarea>' +
+      '</div>' +
+      '<button class="bo-btn bo-btn-ghost" style="color:#DC2626;font-size:11px;align-self:flex-start;margin-top:4px" onclick="cfgRemoveFaq(this)">✕ Eliminar</button>' +
+      '</div>';
+  }).join('');
+}
+function cfgAddFaq() {
+  var list = document.getElementById('cfg-faq-list');
+  if (!list) return;
+  var row = document.createElement('div');
+  row.className = 'cfg-faq-row';
+  row.innerHTML = '<div class="cfg-faq-fields">' +
+    '<input type="text" class="bo-select-full cfg-faq-q" placeholder="Nueva pregunta..." />' +
+    '<textarea class="bo-textarea cfg-faq-a" rows="2" placeholder="Respuesta..."></textarea>' +
+    '</div>' +
+    '<button class="bo-btn bo-btn-ghost" style="color:#DC2626;font-size:11px;align-self:flex-start;margin-top:4px" onclick="cfgRemoveFaq(this)">✕ Eliminar</button>';
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+function cfgRemoveFaq(btn) { btn.closest('.cfg-faq-row').remove(); }
+
+/* ── Canales ── */
+function cfgLoadCanales() {
+  if (typeof ArgusConfig === 'undefined') return;
+  var c = ArgusConfig.get().canales;
+  setCheck('cfg-canal-web',      c.web);
+  setCheck('cfg-canal-email',    c.email);
+  setCheck('cfg-canal-telefono', c.telefono);
+  setCheck('cfg-canal-whatsapp', c.whatsapp);
+}
+
+/* ── Colores preview ── */
+function cfgPreviewColor(val) {
+  document.documentElement.style.setProperty('--primary', val);
+  setVal('cfg-color-primario-hex', val);
+  var btn = document.getElementById('cfgPreviewBtn');
+  if (btn) btn.style.background = val;
+  var badge = document.getElementById('cfgPreviewBadge');
+  if (badge) badge.style.color = val;
+}
+function cfgSyncColor(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    var cp = document.getElementById('cfg-color-primario');
+    if (cp) cp.value = val;
+    cfgPreviewColor(val);
+  }
+}
+function cfgPreviewSidebar(val) {
+  document.documentElement.style.setProperty('--gray-900', val);
+  setVal('cfg-color-sidebar-hex', val);
+}
+function cfgSyncSidebar(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    var cs = document.getElementById('cfg-color-sidebar');
+    if (cs) cs.value = val;
+    cfgPreviewSidebar(val);
+  }
+}
+
+/* ── utils ── */
+function getVal(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function setVal(id, v) { var el = document.getElementById(id); if (el) el.value = v || ''; }
+function setCheck(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Cargar config cuando el usuario abre la vista
+var _origShowView = showView;
+showView = function(name) {
+  _origShowView(name);
+  if (name === 'configuracion') {
+    cfgLoad();
+    cfgLoadCanales();
+    cfgRenderCategorias();
+    cfgRenderFaq();
+  }
+};
 
 // ── Dashboard greeting ────────────────────────────────────────
 function setDashGreeting() {

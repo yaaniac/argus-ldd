@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="client-config.js"></script>
 </head>
 <body>
 
@@ -316,59 +317,8 @@
         <div class="section-tag">Preguntas frecuentes</div>
         <h2 class="section-title">Respondemos tus dudas</h2>
       </div>
-      <div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            ¿Cuánto tiempo lleva implementar Argus en mi empresa?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>La implementación estándar toma 72 horas hábiles desde la firma del contrato. En ese tiempo configuramos todos los canales, personalizamos la plataforma con la identidad de tu empresa y capacitamos al equipo de compliance.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            ¿Cumple con los estándares internacionales de compliance?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Sí. La plataforma está alineada con las recomendaciones de la OCDE, los estándares GAFI/FATF, el FCPA, la Directiva EU 2019/1937 y la Convención de Naciones Unidas contra la Corrupción (UNCAC). Para normativa local de cada país, la plataforma es configurable y adaptable.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            ¿Cómo se garantiza el anonimato del denunciante?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>La plataforma no registra direcciones IP, no usa cookies de rastreo, y el canal de comunicación usa cifrado end-to-end. Ni el administrador de la empresa ni Argus pueden identificar al denunciante si este elige el anonimato total.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            ¿Qué pasa si alguien hace una denuncia de mala fe?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Nuestro equipo de compliance officers evalúa cada denuncia antes de escalarla. Las denuncias infundadas son documentadas y archivadas. El protocolo incluye medidas para proteger a los denunciados de acusaciones falsas, mientras se mantiene la protección del denunciante.</p>
-          </div>
-        </div>
-
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            ¿Dónde están alojados los datos?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Los datos se alojan en servidores con redundancia regional. La residencia de datos es configurable por país según los requisitos regulatorios locales de cada cliente. Consultá nuestra <a href="seguridad.html" style="color:var(--primary)">política de seguridad de datos</a> para más detalle.</p>
-          </div>
-        </div>
-
+      <div id="faq-dynamic-container" style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
+        <!-- Generado dinámicamente desde ArgusConfig -->
       </div>
     </div>
   </section>
@@ -510,6 +460,36 @@
         this.style.display = 'none';
         document.getElementById('contactSuccess').style.display = 'block';
       }, 1500);
+    });
+
+    /* ── FAQ dinámico desde ArgusConfig ── */
+    function renderFaq() {
+      var container = document.getElementById('faq-dynamic-container');
+      if (!container) return;
+      var faqList = (window.ArgusConfig ? ArgusConfig.get().faq : null) || [];
+      container.innerHTML = '';
+      faqList.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'faq-item';
+        div.innerHTML =
+          '<button class="faq-question" onclick="toggleFaq(this)">' +
+            escHtml(item.q) +
+            '<span class="faq-icon">+</span>' +
+          '</button>' +
+          '<div class="faq-answer"><p>' + escHtml(item.a) + '</p></div>';
+        container.appendChild(div);
+      });
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderFaq();
+      if (window.ArgusConfig) ArgusConfig.apply();
     });
   </script>
 </body>

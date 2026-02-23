@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="client-config.js"></script>
 </head>
 <body>
 
@@ -704,47 +705,8 @@
         <span class="wizard-step-num">Paso 2 · Tipo de hecho</span>
         <h2>¿Qué tipo de irregularidad querés denunciar?</h2>
         <p class="step-hint">Seleccioná la categoría que mejor describe la situación. Podés elegir más de una.</p>
-        <div class="category-grid">
-          <button class="cat-option" onclick="toggleCat(this)" data-val="corrupcion">
-            <span class="cat-icon">⚖️</span>
-            <span class="cat-label">Corrupción / Soborno</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="fraude">
-            <span class="cat-icon">🧾</span>
-            <span class="cat-label">Fraude o malversación</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="conflicto">
-            <span class="cat-icon">🤝</span>
-            <span class="cat-label">Conflicto de intereses</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="lavado">
-            <span class="cat-icon">💸</span>
-            <span class="cat-label">Lavado de activos</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="acoso_laboral">
-            <span class="cat-icon">🚫</span>
-            <span class="cat-label">Acoso laboral</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="acoso_sexual">
-            <span class="cat-icon">🛑</span>
-            <span class="cat-label">Acoso / violencia sexual</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="discriminacion">
-            <span class="cat-icon">🏳️</span>
-            <span class="cat-label">Discriminación</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="seguridad">
-            <span class="cat-icon">⛑️</span>
-            <span class="cat-label">Seguridad laboral / ambiental</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="datos">
-            <span class="cat-icon">🔒</span>
-            <span class="cat-label">Violación de datos / privacidad</span>
-          </button>
-          <button class="cat-option" onclick="toggleCat(this)" data-val="otro">
-            <span class="cat-icon">📋</span>
-            <span class="cat-label">Otro / No especificado</span>
-          </button>
+        <div class="category-grid" id="cat-grid-dynamic">
+          <!-- Generado dinámicamente desde ArgusConfig -->
         </div>
         <div class="wizard-footer">
           <button class="wizard-back" onclick="goToStep(1)">← Anterior</button>
@@ -1322,6 +1284,34 @@
       answer.classList.add('open');
     }
   }
+
+  /* ── Categorías dinámicas desde ArgusConfig ── */
+  var CAT_ICONS = [
+    '⚖️','🧾','🤝','💸','🚫','🛑','🏳️','⛑️','🔒','📋',
+    '📢','💼','🔍','🌿','🏦','⚠️','🧩','🎯','📊','📝'
+  ];
+
+  function renderCatGrid() {
+    var grid = document.getElementById('cat-grid-dynamic');
+    if (!grid) return;
+    var cats = (window.ArgusConfig ? ArgusConfig.get().categorias : null) || [];
+    grid.innerHTML = '';
+    cats.forEach(function(cat, i) {
+      var slug = cat.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      var icon = CAT_ICONS[i % CAT_ICONS.length];
+      var btn = document.createElement('button');
+      btn.className = 'cat-option';
+      btn.setAttribute('onclick', 'toggleCat(this)');
+      btn.setAttribute('data-val', slug);
+      btn.innerHTML = '<span class="cat-icon">' + icon + '</span><span class="cat-label">' + cat + '</span>';
+      grid.appendChild(btn);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    renderCatGrid();
+    if (window.ArgusConfig) ArgusConfig.apply();
+  });
 </script>
 
 <style>

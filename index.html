@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="client-config.js"></script>
 </head>
 <body>
 
@@ -24,7 +25,7 @@
             <path d="M22.5 22l1 1 2-2" stroke="#0097A7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <span class="logo-text">Argus<span class="logo-dot">.</span></span>
+        <span class="logo-text" data-cfg="empresa.nombre">Argus<span class="logo-dot">.</span></span>
       </a>
       <nav class="nav-links">
         <a href="#beneficios">Beneficios</a>
@@ -59,17 +60,17 @@
         <span class="badge-dot"></span>
         Canal externo independiente de denuncias corporativas
       </div>
-      <h1 class="hero-title">
+      <h1 class="hero-title" data-cfg="landing.heroTitle">
         La voz que protege<br />
         a tu <span class="hero-accent">organización</span>
       </h1>
-      <p class="hero-subtitle">
+      <p class="hero-subtitle" data-cfg="landing.heroSubtitle">
         Canal de denuncias multicanal, anónimo y seguro. Cumplimiento legal,
         cultura ética y protección al denunciante — todo en una sola plataforma.
       </p>
       <div class="hero-actions">
         <a href="empresas.html" class="btn btn-primary btn-lg">
-          Realizar una denuncia
+          <span data-cfg="landing.ctaLabel">Realizar una denuncia</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
         <a href="contacto.html" class="btn btn-outline btn-lg">
@@ -616,5 +617,6 @@
   </footer>
 
   <script src="main.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', function(){ if(window.ArgusConfig) ArgusConfig.apply(); });</script>
 </body>
 </html>
