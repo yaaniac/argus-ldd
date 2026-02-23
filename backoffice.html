@@ -3162,230 +3162,156 @@ function updateDashboard(days) { /* live filter — placeholder */ }
 // ══════════════════════════════════════════════════════════════
 
 /* Helpers ── */
-function _printSection(sectionId, title) {
-  var section = document.getElementById(sectionId);
-  if (!section) { showToast('No se encontró el contenido a exportar', '⚠️'); return; }
+/* ════════════════════════════════════════════════════════════
+   EXPORTAR — usa iframe oculto (no requiere permitir popups)
+   ════════════════════════════════════════════════════════════ */
 
-  var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
-  var fecha   = new Date().toLocaleDateString('es-AR', { year:'numeric', month:'long', day:'numeric' });
+var PRINT_CSS = [
+  'body{font-family:system-ui,sans-serif;color:#111;margin:0;padding:24px 28px;font-size:12px}',
+  '.ph{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2.5px solid #0097A7;padding-bottom:12px;margin-bottom:18px}',
+  '.logo{font-size:20px;font-weight:900;color:#0097A7;letter-spacing:-.03em}',
+  '.meta{font-size:11px;color:#666;text-align:right;line-height:1.7}',
+  '.sec{font-size:11px;font-weight:700;color:#002B2E;text-transform:uppercase;letter-spacing:.06em;margin:18px 0 8px;border-left:3px solid #0097A7;padding-left:7px}',
+  /* KPIs */
+  '.bo-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px}',
+  '.bo-kpi-card{border:1px solid #dde8ea;border-radius:8px;padding:12px 14px;background:#fafefe}',
+  '.bo-kpi-label{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#5F9EA5;font-weight:600}',
+  '.bo-kpi-value{font-size:26px;font-weight:800;color:#002B2E;margin:4px 0 2px}',
+  '.bo-kpi-delta{font-size:10px}',
+  '.bo-kpi-icon{display:none}',
+  /* Table */
+  'table{width:100%;border-collapse:collapse}',
+  'th{background:#f0f7f8;padding:6px 8px;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:#5F9EA5;border-bottom:2px solid #cce8eb;font-weight:700;white-space:nowrap}',
+  'td{padding:6px 8px;border-bottom:1px solid #eef5f6;vertical-align:middle}',
+  'code{font-family:monospace;font-size:9px;background:#e0f7fa;padding:1px 5px;border-radius:3px;color:#006064}',
+  '.risk-tag,.status-tag,.sla-tag{display:inline-block;padding:2px 7px;border-radius:100px;font-size:9px;font-weight:700}',
+  '.risk-critical{background:#fef2f2;color:#dc2626}.risk-high{background:#fff7ed;color:#ea580c}',
+  '.risk-medium{background:#fefce8;color:#ca8a04}.risk-low{background:#f0fdf4;color:#16a34a}',
+  '.status-new{background:#e0f7fa;color:#0097a7}.status-investigating{background:#fff7ed;color:#ea580c}',
+  '.status-review{background:#f5f3ff;color:#7c3aed}.status-closed-ok{background:#f0fdf4;color:#16a34a}',
+  '.status-closed-no{background:#eaf6f7;color:#5f9ea5}',
+  '.sla-ok{background:#f0fdf4;color:#16a34a}.sla-warn{background:#fff7ed;color:#ea580c}.sla-over{background:#fef2f2;color:#dc2626}',
+  '.bo-unassigned{color:#9ca3af;font-style:italic;font-size:9px}',
+  '.bo-table-link{display:none}.bo-checkbox{display:none}',
+  'button{display:none}',
+  '.print-footer{margin-top:18px;font-size:9px;color:#9ca3af;text-align:center;border-top:1px solid #eee;padding-top:8px}',
+  '@media print{body{padding:10px}@page{size:landscape;margin:12mm}}',
+].join('');
 
-  var printWin = window.open('', '_blank', 'width=900,height=700');
-  printWin.document.write('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>');
-  printWin.document.write('<title>' + title + ' · ' + empresa + '</title>');
-  printWin.document.write('<style>');
-  printWin.document.write([
-    'body { font-family: system-ui, -apple-system, sans-serif; color: #111; margin: 0; padding: 24px; }',
-    '.print-header { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0097A7; padding-bottom:14px; margin-bottom:20px; }',
-    '.print-logo  { font-size:20px; font-weight:800; color:#0097A7; letter-spacing:-.03em; }',
-    '.print-meta  { font-size:12px; color:#666; text-align:right; line-height:1.6; }',
-    '.print-title { font-size:16px; font-weight:700; color:#111; margin:0 0 16px; }',
-    /* KPI cards */
-    '.bo-kpi-grid  { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }',
-    '.bo-kpi-card  { border:1px solid #ddd; border-radius:8px; padding:14px; }',
-    '.bo-kpi-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#666; }',
-    '.bo-kpi-value { font-size:26px; font-weight:800; color:#002B2E; margin:4px 0; }',
-    '.bo-kpi-delta { font-size:11px; color:#16A34A; }',
-    /* Table */
-    'table { width:100%; border-collapse:collapse; font-size:12px; margin-top:12px; }',
-    'th { background:#f5f5f5; padding:8px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#555; border-bottom:1px solid #ddd; }',
-    'td { padding:8px 10px; border-bottom:1px solid #eee; vertical-align:middle; }',
-    'tr:last-child td { border-bottom:none; }',
-    '.badge { display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:700; }',
-    '.risk-critical { background:#FEF2F2; color:#DC2626; }',
-    '.risk-high     { background:#FFF7ED; color:#EA580C; }',
-    '.risk-medium   { background:#FEFCE8; color:#CA8A04; }',
-    '.risk-low      { background:#F0FDF4; color:#16A34A; }',
-    '.st-new        { background:#E0F7FA; color:#0097A7; }',
-    '.st-investigating { background:#FFF7ED; color:#EA580C; }',
-    '.st-review     { background:#F5F3FF; color:#7C3AED; }',
-    '.st-closed     { background:#F0FDF4; color:#16A34A; }',
-    '.print-footer  { margin-top:24px; font-size:10px; color:#999; text-align:center; border-top:1px solid #eee; padding-top:10px; }',
-    '@media print { body { padding:0; } button { display:none; } }',
-  ].join('\n'));
-  printWin.document.write('</style></head><body>');
+function _printViaIframe(html) {
+  // Elimina iframe previo si existe
+  var old = document.getElementById('__print_frame');
+  if (old) old.remove();
 
-  // Header
-  printWin.document.write(
-    '<div class="print-header">' +
-      '<div><div class="print-logo">Argus<span style="color:#0097A7">.</span></div>' +
-        '<div style="font-size:12px;color:#666;margin-top:2px">' + empresa + ' · Back Office</div></div>' +
-      '<div class="print-meta">' + title + '<br>' + fecha + '</div>' +
-    '</div>'
-  );
+  var iframe = document.createElement('iframe');
+  iframe.id = '__print_frame';
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none';
+  document.body.appendChild(iframe);
 
-  printWin.document.write('<div class="print-title">' + title + '</div>');
+  var doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open();
+  doc.write(html);
+  doc.close();
 
-  // Contenido
-  printWin.document.write(section.outerHTML);
+  // Esperar a que cargue antes de imprimir
+  iframe.onload = function() {
+    setTimeout(function() {
+      try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+      catch(e) { showToast('No se pudo abrir el diálogo de impresión', '⚠️'); }
+    }, 200);
+  };
+}
 
-  // Footer
-  printWin.document.write(
-    '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Confidencial</div>' +
-    '<script>window.onload=function(){ window.print(); window.onafterprint=function(){ window.close(); }; };<\/script>' +
-    '</body></html>'
-  );
-  printWin.document.close();
+function _buildPrintHeader(empresa, fecha, titulo, subtitulo) {
+  return '<div class="ph">' +
+    '<div><span class="logo">Argus<span style="color:#0097A7">.</span></span>' +
+      '<div style="font-size:11px;color:#666;margin-top:2px">' + empresa + ' · Back Office</div></div>' +
+    '<div class="meta">' + titulo + '<br>' + (subtitulo ? subtitulo + '<br>' : '') + fecha + ' · <strong>Confidencial</strong></div>' +
+  '</div>';
 }
 
 /* ── Dashboard PDF ── */
 function exportDashPdf() {
-  // Construye un snapshot del dashboard
-  var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
-  var fecha   = new Date().toLocaleDateString('es-AR', { year:'numeric', month:'long', day:'numeric' });
+  var empresa  = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
+  var fecha    = new Date().toLocaleDateString('es-AR', {year:'numeric', month:'long', day:'numeric'});
+  var kpiGrid  = document.querySelector('.bo-kpi-grid');
+  var dashWrap = document.querySelector('#view-dashboard .bo-table-wrap');
 
-  // Captura KPIs
-  var kpiGrid = document.querySelector('.bo-kpi-grid');
-  var kpiHtml = kpiGrid ? kpiGrid.outerHTML : '';
-
-  // Captura alertas
-  var alertBox = document.querySelector('#view-dashboard .bo-card:last-of-type');
-
-  // Captura tabla de casos recientes del dash si existe
-  var dashTable = document.querySelector('#view-dashboard .bo-table-wrap');
-  var tableHtml = dashTable ? dashTable.outerHTML : '';
-
-  var printWin = window.open('', '_blank', 'width=960,height=720');
-  printWin.document.write('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>');
-  printWin.document.write('<title>Dashboard · ' + empresa + '</title>');
-  printWin.document.write('<style>' + [
-    'body { font-family: system-ui, sans-serif; color:#111; margin:0; padding:28px 32px; }',
-    '.ph  { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2.5px solid #0097A7; padding-bottom:14px; margin-bottom:22px; }',
-    '.logo{ font-size:22px; font-weight:900; color:#0097A7; letter-spacing:-.03em; }',
-    '.meta{ font-size:12px; color:#666; text-align:right; line-height:1.7; }',
-    '.section-title { font-size:13px; font-weight:700; color:#002B2E; text-transform:uppercase; letter-spacing:.05em; margin:18px 0 10px; border-left:3px solid #0097A7; padding-left:8px; }',
-    '.bo-kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }',
-    '.bo-kpi-card { border:1px solid #e0ecee; border-radius:8px; padding:14px 16px; background:#fafefe; }',
-    '.bo-kpi-label{ font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:#5F9EA5; font-weight:600; }',
-    '.bo-kpi-value{ font-size:28px; font-weight:800; color:#002B2E; margin:6px 0 2px; }',
-    '.bo-kpi-delta{ font-size:11px; }',
-    '.bo-kpi-icon { display:none; }',
-    'table { width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }',
-    'th { background:#f0f7f8; padding:7px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#5F9EA5; border-bottom:1px solid #cce8eb; font-weight:700; }',
-    'td { padding:7px 10px; border-bottom:1px solid #eef5f6; font-size:12px; }',
-    'code { font-family:monospace; font-size:11px; background:#e0f7fa; padding:1px 5px; border-radius:4px; color:#006064; }',
-    '.risk-tag,.status-tag,.sla-tag,.role-tag { display:inline-block; padding:2px 7px; border-radius:100px; font-size:10px; font-weight:700; }',
-    '.risk-critical { background:#fef2f2; color:#dc2626; } .risk-high { background:#fff7ed; color:#ea580c; }',
-    '.risk-medium { background:#fefce8; color:#ca8a04; } .risk-low { background:#f0fdf4; color:#16a34a; }',
-    '.status-new { background:#e0f7fa; color:#0097a7; } .status-investigating { background:#fff7ed; color:#ea580c; }',
-    '.status-review { background:#f5f3ff; color:#7c3aed; } .status-closed-ok { background:#f0fdf4; color:#16a34a; }',
-    '.sla-ok { background:#f0fdf4; color:#16a34a; } .sla-warn { background:#fff7ed; color:#ea580c; } .sla-over { background:#fef2f2; color:#dc2626; }',
-    '.bo-unassigned { color:#9ca3af; font-style:italic; font-size:11px; }',
-    '.bo-table-link { display:none; }',
-    '.bo-checkbox { display:none; }',
-    '.print-footer { margin-top:24px; font-size:10px; color:#9ca3af; text-align:center; border-top:1px solid #eee; padding-top:10px; }',
-    '@media print { body{padding:16px;} }',
-  ].join('') + '</style></head><body>');
-
-  printWin.document.write(
-    '<div class="ph">' +
-      '<div><span class="logo">Argus<span style="color:#0097A7">.</span></span>' +
-        '<div style="font-size:12px;color:#666;margin-top:3px">' + empresa + ' · Back Office</div></div>' +
-      '<div class="meta">Reporte de Dashboard<br>' + fecha + '<br><strong>Confidencial</strong></div>' +
-    '</div>'
-  );
-
-  // KPIs
-  printWin.document.write('<div class="section-title">Indicadores clave</div>');
-  printWin.document.write(kpiHtml);
-
-  // Tabla de casos recientes
-  if (tableHtml) {
-    printWin.document.write('<div class="section-title">Casos recientes</div>');
-    printWin.document.write(tableHtml);
+  var body = _buildPrintHeader(empresa, fecha, 'Reporte de Dashboard');
+  body += '<div class="sec">Indicadores clave</div>';
+  body += kpiGrid ? kpiGrid.outerHTML : '<p style="color:#999">Sin datos de KPIs</p>';
+  if (dashWrap) {
+    body += '<div class="sec">Casos recientes</div>' + dashWrap.outerHTML;
   }
+  body += '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Documento confidencial — uso interno</div>';
 
-  printWin.document.write(
-    '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Documento confidencial — uso interno</div>' +
-    '<script>window.onload=function(){ window.print(); window.onafterprint=function(){ window.close(); }; };<\/script>' +
-    '</body></html>'
-  );
-  printWin.document.close();
+  _printViaIframe('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Dashboard · ' + empresa + '</title>' +
+    '<style>' + PRINT_CSS + '</style></head><body>' + body + '</body></html>');
+  showToast('Preparando PDF del dashboard…', '🖨️');
 }
 
 /* ── Casos PDF ── */
 function exportCasosPdf() {
   var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
-  var fecha   = new Date().toLocaleDateString('es-AR', { year:'numeric', month:'long', day:'numeric' });
+  var fecha   = new Date().toLocaleDateString('es-AR', {year:'numeric', month:'long', day:'numeric'});
 
-  // Obtener filas visibles actualmente
-  var tbody = document.getElementById('casosTableBody');
-  var tableHtml = tbody ? '<table>' + document.querySelector('#view-casos .bo-table').outerHTML.replace(/<table[^>]*>/, '') : '';
+  // Asegurar que la tabla de casos esté renderizada
+  if (!document.getElementById('casosTableBody') ||
+      document.getElementById('casosTableBody').children.length === 0) {
+    renderCasosTable();
+  }
 
-  var printWin = window.open('', '_blank', 'width=1100,height=760');
-  printWin.document.write('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>');
-  printWin.document.write('<title>Casos · ' + empresa + '</title>');
-  printWin.document.write('<style>' + [
-    'body { font-family:system-ui,sans-serif; color:#111; margin:0; padding:24px 28px; font-size:12px; }',
-    '.ph  { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2.5px solid #0097A7; padding-bottom:12px; margin-bottom:18px; }',
-    '.logo{ font-size:20px; font-weight:900; color:#0097A7; letter-spacing:-.03em; }',
-    '.meta{ font-size:11px; color:#666; text-align:right; line-height:1.7; }',
-    'table { width:100%; border-collapse:collapse; }',
-    'th { background:#f0f7f8; padding:7px 8px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#5F9EA5; border-bottom:2px solid #cce8eb; font-weight:700; white-space:nowrap; }',
-    'td { padding:6px 8px; border-bottom:1px solid #eef5f6; vertical-align:middle; }',
-    'tr:hover { background:none; }',
-    'code { font-family:monospace; font-size:10px; background:#e0f7fa; padding:1px 5px; border-radius:4px; color:#006064; }',
-    '.risk-tag,.status-tag,.sla-tag { display:inline-block; padding:2px 7px; border-radius:100px; font-size:10px; font-weight:700; }',
-    '.risk-critical{background:#fef2f2;color:#dc2626} .risk-high{background:#fff7ed;color:#ea580c}',
-    '.risk-medium{background:#fefce8;color:#ca8a04} .risk-low{background:#f0fdf4;color:#16a34a}',
-    '.status-new{background:#e0f7fa;color:#0097a7} .status-investigating{background:#fff7ed;color:#ea580c}',
-    '.status-review{background:#f5f3ff;color:#7c3aed} .status-closed-ok{background:#f0fdf4;color:#16a34a}',
-    '.status-closed-no{background:#eaf6f7;color:#5f9ea5}',
-    '.sla-ok{background:#f0fdf4;color:#16a34a} .sla-warn{background:#fff7ed;color:#ea580c} .sla-over{background:#fef2f2;color:#dc2626}',
-    '.bo-unassigned{color:#9ca3af;font-style:italic;font-size:10px}',
-    '.bo-table-link{display:none} .bo-checkbox{display:none}',
-    '.print-footer{margin-top:20px;font-size:10px;color:#9ca3af;text-align:center;border-top:1px solid #eee;padding-top:8px}',
-    '@media print{body{padding:12px} @page{size:landscape}}',
-  ].join('') + '</style></head><body>');
+  var tabla    = document.querySelector('#view-casos .bo-table');
+  var rowCount = tabla ? tabla.querySelectorAll('tbody tr').length : 0;
+  var tableHtml = tabla ? tabla.outerHTML : '<p style="color:#999">Sin casos para mostrar</p>';
 
-  var rowCount = tbody ? tbody.querySelectorAll('tr').length : '—';
-  printWin.document.write(
-    '<div class="ph">' +
-      '<div><span class="logo">Argus<span style="color:#0097A7">.</span></span>' +
-        '<div style="font-size:11px;color:#666;margin-top:2px">' + empresa + ' · Repositorio de casos</div></div>' +
-      '<div class="meta">Exportado: ' + fecha + '<br>' + rowCount + ' casos · Confidencial</div>' +
-    '</div>'
-  );
-  printWin.document.write(tableHtml);
-  printWin.document.write(
-    '<div class="print-footer">Argus Compliance · ' + fecha + ' · Confidencial — uso interno</div>' +
-    '<script>window.onload=function(){ window.print(); window.onafterprint=function(){ window.close(); }; };<\/script>' +
-    '</body></html>'
-  );
-  printWin.document.close();
+  var body = _buildPrintHeader(empresa, fecha, 'Repositorio de casos', rowCount + ' casos');
+  body += tableHtml;
+  body += '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Confidencial — uso interno</div>';
+
+  _printViaIframe('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Casos · ' + empresa + '</title>' +
+    '<style>' + PRINT_CSS + '</style></head><body>' + body + '</body></html>');
+  showToast('Preparando PDF de casos…', '🖨️');
 }
 
 /* ── Casos CSV ── */
 function exportCasosCsv() {
-  var headers = ['ID','Tipo','Área','Canal','Riesgo','Estado','Anónimo','Investigador','SLA (días)','Fecha'];
-  var riskMap  = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' };
-  var stMap    = { new:'Nuevo', eval:'En evaluación', review:'En revisión',
-                   investigating:'Investigando', 'closed-ok':'Cerrado', 'closed-no':'Desestimado' };
+  var riskMap = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' };
+  var stMap   = { new:'Nuevo', eval:'En evaluación', review:'En revisión',
+                  investigating:'Investigando', 'closed-ok':'Cerrado', 'closed-no':'Desestimado' };
 
-  // Usa los casos visibles actualmente (respeta filtros)
-  var rows = [];
+  // Obtener casos visibles según filtros activos
   var tbody = document.getElementById('casosTableBody');
-  if (tbody) {
-    // Reconstruir desde CASOS_DATA según filas visibles
-    var visibleIds = Array.from(tbody.querySelectorAll('td:nth-child(2) code')).map(function(el){ return el.textContent.trim(); });
-    rows = CASOS_DATA.filter(function(c){ return visibleIds.indexOf(c.id) !== -1; });
+  var rows;
+  if (tbody && tbody.children.length > 0) {
+    var visibleIds = Array.from(tbody.querySelectorAll('td:nth-child(2) code'))
+                         .map(function(el){ return el.textContent.trim(); });
+    rows = visibleIds.length > 0
+      ? CASOS_DATA.filter(function(c){ return visibleIds.indexOf(c.id) !== -1; })
+      : CASOS_DATA;
   } else {
     rows = CASOS_DATA;
   }
 
+  if (!rows || rows.length === 0) {
+    showToast('No hay casos para exportar', '⚠️'); return;
+  }
+
+  var headers = ['ID','Tipo','Área','Canal','Riesgo','Estado','Anónimo','Investigador','SLA (días)','Fecha'];
   var csvLines = [headers.map(function(h){ return '"' + h + '"'; }).join(',')];
   rows.forEach(function(c) {
-    var sla = c.sla_s === 'over' ? 'VENCIDO' : c.sla;
     csvLines.push([
       c.id, c.tipo, c.area, c.canal,
       riskMap[c.riesgo] || c.riesgo,
       stMap[c.estado]   || c.estado,
-      c.anon, c.inv, sla, c.fecha
+      c.anon, c.inv,
+      c.sla_s === 'over' ? 'VENCIDO' : c.sla,
+      c.fecha
     ].map(function(v){ return '"' + String(v||'').replace(/"/g,'""') + '"'; }).join(','));
   });
 
-  var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : 'argus') || 'argus';
-  var fechaFile = new Date().toISOString().slice(0,10);
-  var filename = 'casos_' + empresa.toLowerCase().replace(/\s/g,'-') + '_' + fechaFile + '.csv';
+  var empresa  = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : 'argus') || 'argus';
+  var filename = 'casos_' + empresa.toLowerCase().replace(/\s+/g,'-') + '_' + new Date().toISOString().slice(0,10) + '.csv';
 
   var blob = new Blob(['\uFEFF' + csvLines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
   var url  = URL.createObjectURL(blob);
@@ -3393,8 +3319,8 @@ function exportCasosCsv() {
   a.href = url; a.download = filename; a.style.display = 'none';
   document.body.appendChild(a);
   a.click();
-  setTimeout(function(){ URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
-  showToast(rows.length + ' casos exportados a CSV', '📊');
+  setTimeout(function(){ URL.revokeObjectURL(url); document.body.removeChild(a); }, 600);
+  showToast(rows.length + ' casos exportados → ' + filename, '📊');
 }
 
 // Inicializar UI del tenant cuando el DOM esté listo
