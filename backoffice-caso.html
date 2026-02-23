@@ -1091,6 +1091,43 @@ a { text-decoration:none; color:inherit; }
 .bo-modal-body { padding:24px; }
 .bo-modal-footer { padding:16px 24px; border-top:1.5px solid var(--gray-100); display:flex; justify-content:flex-end; gap:10px; }
 @media (max-width:768px) { .bo-sidebar { transform:translateX(-100%); } .bo-sidebar.mobile-open { transform:translateX(0); } .bo-main { margin-left:0; } .bo-mobile-menu { display:block; } .evidence-header,.evidence-row { grid-template-columns:1fr; } }
+
+/* ── Print zone ─────────────────────────────── */
+#argus-print-zone { display:none; }
+@media print {
+  body > *:not(#argus-print-zone) { display:none !important; }
+  #argus-print-zone {
+    display:block !important;
+    font-family:system-ui,sans-serif;
+    font-size:12px;
+    color:#111;
+    padding:20px 24px;
+  }
+  #argus-print-zone .ph { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2.5px solid #0097A7; padding-bottom:10px; margin-bottom:16px; }
+  #argus-print-zone .logo { font-size:20px; font-weight:900; color:#0097A7; }
+  #argus-print-zone .pmeta { font-size:10px; color:#666; text-align:right; line-height:1.7; }
+  #argus-print-zone .sec { font-size:10px; font-weight:700; color:#002B2E; text-transform:uppercase; letter-spacing:.06em; margin:14px 0 6px; border-left:3px solid #0097A7; padding-left:6px; }
+  #argus-print-zone .pcard { border:1px solid #dde8ea; border-radius:6px; padding:10px 12px; margin-bottom:8px; background:#fafefe; }
+  #argus-print-zone .pcard h3 { font-size:9px; text-transform:uppercase; letter-spacing:.06em; color:#5F9EA5; margin:0 0 6px; }
+  #argus-print-zone .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  #argus-print-zone .case-h-print { background:#f0f7f8; border-radius:6px; padding:10px 14px; margin-bottom:10px; }
+  #argus-print-zone .case-h-print h2 { margin:0 0 4px; font-size:15px; color:#002B2E; }
+  #argus-print-zone .case-h-meta { font-size:10px; color:#5F9EA5; }
+  #argus-print-zone .irow { display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid #f0f7f8; font-size:10.5px; }
+  #argus-print-zone .irow span:first-child { color:#5F9EA5; }
+  #argus-print-zone .tl-row { padding:4px 0; border-bottom:1px solid #f0f7f8; font-size:10.5px; }
+  #argus-print-zone .nota-p { padding:5px 0; border-bottom:1px solid #f0f7f8; }
+  #argus-print-zone .nota-p .nm { font-size:9px; color:#9ca3af; }
+  #argus-print-zone .risk-tag, #argus-print-zone .status-tag, #argus-print-zone .bo-tag { display:inline-block; padding:1px 7px; border-radius:100px; font-size:9px; font-weight:700; }
+  #argus-print-zone .risk-critical { background:#fef2f2; color:#dc2626; }
+  #argus-print-zone .risk-high { background:#fff7ed; color:#ea580c; }
+  #argus-print-zone .risk-medium { background:#fefce8; color:#ca8a04; }
+  #argus-print-zone .bo-tag { background:#e0f7fa; color:#006064; }
+  #argus-print-zone .status-investigating { background:#fff7ed; color:#ea580c; }
+  #argus-print-zone .sla-info { font-size:10px; background:#fff7ed; color:#92400e; border-radius:4px; padding:5px 8px; margin:6px 0; }
+  #argus-print-zone .print-footer { margin-top:16px; font-size:9px; color:#9ca3af; text-align:center; border-top:1px solid #eee; padding-top:6px; }
+  @page { size:A4 portrait; margin:14mm; }
+}
 </style>
 
 <script>
@@ -1414,140 +1451,153 @@ function _casoPrintViaIframe(html) {
 function exportCasoPdf() {
   var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
   var fecha   = new Date().toLocaleDateString('es-AR', {year:'numeric', month:'long', day:'numeric'});
+  var pz      = document.getElementById('argus-print-zone');
+  if (!pz) return;
 
-  // Header de página
-  var header = '<div class="ph">' +
+  var html = '';
+
+  // Encabezado
+  html += '<div class="ph">' +
     '<div><span class="logo">Argus<span style="color:#0097A7">.</span></span>' +
-      '<div style="font-size:11px;color:#666;margin-top:2px">' + empresa + ' · Back Office</div></div>' +
-    '<div class="meta">Reporte de Caso<br>' + caseId + '<br>' + fecha + ' · <strong>Confidencial</strong></div>' +
+      '<div style="font-size:10px;color:#666;margin-top:2px">' + empresa + ' · Back Office</div></div>' +
+    '<div class="pmeta">Reporte de Caso<br><strong>' + caseId + '</strong><br>' + fecha + ' · Confidencial</div>' +
   '</div>';
 
-  // Encabezado del caso
-  var casoHeader = '<div class="case-h">' +
-    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">' +
-      '<code>' + caseId + '</code>' +
-      (document.querySelector('.risk-tag') ? document.querySelector('.risk-tag').outerHTML : '') +
-      (document.getElementById('caseStatusBadge') ? document.getElementById('caseStatusBadge').outerHTML : '') +
-    '</div>' +
-    '<h2>' + (document.querySelector('.case-title') ? document.querySelector('.case-title').textContent : '') + '</h2>' +
-    '<div class="case-h-meta">' + (document.querySelector('.case-meta') ? document.querySelector('.case-meta').innerText : '') + '</div>' +
+  // Header del caso
+  var riskTag   = document.querySelector('.risk-tag')        ? document.querySelector('.risk-tag').outerHTML        : '';
+  var statusTag = document.getElementById('caseStatusBadge') ? document.getElementById('caseStatusBadge').outerHTML : '';
+  var titulo    = document.querySelector('.case-title')       ? document.querySelector('.case-title').textContent    : '';
+  var metaTxt   = document.querySelector('.case-meta')        ? document.querySelector('.case-meta').innerText       : '';
+  html += '<div class="case-h-print">' +
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:5px"><code style="font-family:monospace;background:#e0f7fa;padding:1px 6px;border-radius:3px;font-size:9px;color:#006064">' + caseId + '</code>' + riskTag + statusTag + '</div>' +
+    '<h2>' + titulo + '</h2>' +
+    '<div class="case-h-meta">' + metaTxt + '</div>' +
   '</div>';
 
   // SLA
   var slaText = document.querySelector('.sla-bar-info') ? document.querySelector('.sla-bar-info').innerText : '';
-  var slaHtml = '<div style="font-size:11px;background:#fff7ed;color:#92400e;border-radius:6px;padding:6px 10px;margin:8px 0">' + slaText + '</div>';
+  html += '<div class="sla-info">' + slaText + '</div>';
 
-  // Grilla principal
-  var body = header + casoHeader + slaHtml;
+  // Grilla 2 columnas
+  html += '<div class="grid2">';
 
-  body += '<div class="grid2">';
-
-  // Columna izquierda: descripción + personas + riesgo
-  body += '<div class="col">';
+  // ── Columna izquierda ──
+  html += '<div>';
 
   // Descripción
   var descEl = document.querySelector('#tab-resumen .case-description');
   if (descEl) {
-    body += '<div class="sec">Descripción del hecho</div><div class="card">';
-    body += '<p class="desc">' + (descEl.querySelector('p') ? descEl.querySelector('p').textContent : '') + '</p>';
-    var tagsHtml = Array.from(descEl.querySelectorAll('.bo-tag')).map(function(t){ return '<span class="bo-tag">' + t.textContent.replace(' ×','') + '</span>'; }).join(' ');
-    if (tagsHtml) body += '<div style="margin-top:8px">' + tagsHtml + '</div>';
-    body += '</div>';
+    var descTxt  = descEl.querySelector('p') ? descEl.querySelector('p').textContent : '';
+    var tagItems = Array.from(descEl.querySelectorAll('.bo-tag')).map(function(t){
+      return '<span class="bo-tag">' + t.textContent.replace(/\s*×\s*$/, '') + '</span>';
+    }).join(' ');
+    html += '<div class="sec">Descripción del hecho</div><div class="pcard">' +
+      '<p style="margin:0 0 6px;line-height:1.5;font-size:11px">' + descTxt + '</p>' +
+      (tagItems ? '<div>' + tagItems + '</div>' : '') +
+    '</div>';
   }
 
   // Personas involucradas
   var invEl = document.querySelector('.involved-list');
   if (invEl) {
-    body += '<div class="sec">Personas involucradas</div><div class="card">';
+    html += '<div class="sec">Personas involucradas</div><div class="pcard">';
     Array.from(invEl.querySelectorAll('.involved-item')).forEach(function(item) {
-      var nombre = item.querySelector('strong') ? item.querySelector('strong').textContent : '';
-      var rol    = item.querySelector('span') ? item.querySelector('span').textContent : '';
-      var tag    = item.querySelector('.risk-tag') ? item.querySelector('.risk-tag').outerHTML : '';
-      body += '<div class="inv-item">' +
-        '<div class="inv-info"><strong>' + nombre + '</strong><span>' + rol + '</span></div>' + tag + '</div>';
+      var n   = item.querySelector('strong') ? item.querySelector('strong').textContent : '';
+      var rol = item.querySelectorAll('span')[0] ? item.querySelectorAll('span')[0].textContent : '';
+      var tag = item.querySelector('.risk-tag') ? item.querySelector('.risk-tag').outerHTML : '';
+      html += '<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f0f7f8;font-size:10.5px">' +
+        '<span><strong>' + n + '</strong> · ' + rol + '</span>' + tag + '</div>';
     });
-    body += '</div>';
+    html += '</div>';
   }
 
   // Evaluación de riesgo
   var riskEl = document.querySelector('.risk-eval-grid');
   if (riskEl) {
-    body += '<div class="sec">Evaluación de riesgo</div><div class="card">';
+    html += '<div class="sec">Evaluación de riesgo</div><div class="pcard">';
     Array.from(riskEl.querySelectorAll('.risk-eval-item')).forEach(function(row) {
-      var lbl = row.querySelector('.risk-eval-label') ? row.querySelector('.risk-eval-label').textContent : '';
-      var val = row.querySelector('.risk-eval-val') ? row.querySelector('.risk-eval-val').textContent : '';
-      var fillStyle = row.querySelector('.risk-eval-bar div') ? row.querySelector('.risk-eval-bar div').getAttribute('style') : '';
-      var w   = (fillStyle.match(/width:(\d+%)/) || [])[1] || '50%';
-      var bg  = (fillStyle.match(/background:(#[0-9a-fA-F]+)/) || [])[1] || '#0097A7';
-      body += '<div class="risk-bar-row">' +
-        '<span class="risk-bar-label">' + lbl + '</span>' +
-        '<div class="risk-bar-track"><div class="risk-bar-fill" style="width:' + w + ';background:' + bg + '"></div></div>' +
-        '<span class="risk-bar-val">' + val + '</span>' +
-      '</div>';
+      var lbl  = row.querySelector('.risk-eval-label') ? row.querySelector('.risk-eval-label').textContent : '';
+      var val  = row.querySelector('.risk-eval-val')   ? row.querySelector('.risk-eval-val').textContent   : '';
+      var fill = row.querySelector('.risk-eval-bar div');
+      var w    = fill ? ((fill.style.width || '50%')) : '50%';
+      var bg   = fill ? ((fill.style.background || '#0097A7')) : '#0097A7';
+      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:10.5px">' +
+        '<span style="width:140px;color:#374151">' + lbl + '</span>' +
+        '<div style="flex:1;height:5px;background:#e5e7eb;border-radius:3px"><div style="width:' + w + ';height:5px;background:' + bg + ';border-radius:3px"></div></div>' +
+        '<span style="width:36px;text-align:right">' + val + '</span></div>';
     });
-    body += '</div>';
+    html += '</div>';
   }
 
-  body += '</div>'; // /col izquierda
+  html += '</div>'; // /col izq
 
-  // Columna derecha: asignación + info del caso + notas
-  body += '<div class="col">';
+  // ── Columna derecha ──
+  html += '<div>';
 
   // Asignación
-  body += '<div class="sec">Asignación</div><div class="card">';
-  var assignRows = [
-    { label: 'Investigador principal', id: 'assignName-inv' },
-    { label: 'Revisión legal',         id: 'assignName-legal' },
-    { label: 'Supervisor',             text: 'M. Álvarez' },
-    { label: 'Equipo RRHH',            id: 'assignName-rrhh' }
-  ];
-  assignRows.forEach(function(r) {
-    var val = r.text || (document.getElementById(r.id) ? document.getElementById(r.id).textContent : '—');
-    body += '<div class="assign-row"><span class="assign-label">' + r.label + '</span><span>' + val + '</span></div>';
+  html += '<div class="sec">Asignación</div><div class="pcard">';
+  [
+    ['Investigador principal', 'assignName-inv'],
+    ['Revisión legal',         'assignName-legal'],
+    ['Supervisor',             null, 'M. Álvarez'],
+    ['Equipo RRHH',            'assignName-rrhh']
+  ].forEach(function(r) {
+    var v = r[2] || (document.getElementById(r[1]) ? document.getElementById(r[1]).textContent.trim() : '—');
+    html += '<div class="irow"><span>' + r[0] + '</span><span>' + v + '</span></div>';
   });
-  body += '</div>';
+  html += '</div>';
 
-  // Información del caso
-  body += '<div class="sec">Información del caso</div><div class="card">';
-  var infoRows = document.querySelectorAll('.case-info-row');
-  infoRows.forEach(function(row) {
+  // Info del caso
+  html += '<div class="sec">Información del caso</div><div class="pcard">';
+  document.querySelectorAll('.case-info-row').forEach(function(row) {
     var spans = row.querySelectorAll('span, code');
     if (spans.length >= 2) {
-      body += '<div class="info-row"><span>' + spans[0].textContent + '</span><span>' + spans[spans.length-1].textContent + '</span></div>';
+      html += '<div class="irow"><span>' + spans[0].textContent + '</span><span>' + spans[spans.length-1].textContent + '</span></div>';
     }
   });
-  body += '</div>';
+  html += '</div>';
 
   // Notas internas
   var notasEl = document.getElementById('notasList');
   if (notasEl && notasEl.querySelectorAll('.nota-item').length > 0) {
-    body += '<div class="sec">Notas internas</div><div class="card">';
+    html += '<div class="sec">Notas internas</div><div class="pcard">';
     notasEl.querySelectorAll('.nota-item').forEach(function(nota) {
-      var meta = nota.querySelector('.nota-meta') ? nota.querySelector('.nota-meta').textContent : '';
+      var meta  = nota.querySelector('.nota-meta') ? nota.querySelector('.nota-meta').textContent : '';
       var texto = nota.querySelector('.nota-body, p') ? nota.querySelector('.nota-body, p').textContent : '';
-      body += '<div class="nota"><div class="nota-meta">' + meta + '</div><p class="nota-body">' + texto + '</p></div>';
+      html += '<div class="nota-p"><div class="nm">' + meta + '</div><div>' + texto + '</div></div>';
     });
-    body += '</div>';
+    html += '</div>';
   }
 
-  body += '</div>'; // /col derecha
-  body += '</div>'; // /grid2
+  html += '</div>'; // /col der
+  html += '</div>'; // /grid2
 
-  // Timeline / Log
+  // Timeline
   var tlEl = document.querySelector('.case-timeline');
   if (tlEl) {
-    body += '<div class="sec">Log de actividad</div><div class="card">';
-    Array.from(tlEl.querySelectorAll('.timeline-item, .tl-entry, li, [class*="timeline"]')).slice(0,12).forEach(function(item) {
-      body += '<div class="tl-item"><div class="tl-dot"></div><div class="tl-body">' + item.innerText + '</div></div>';
-    });
-    body += '</div>';
+    var tlItems = Array.from(tlEl.children).slice(0, 10);
+    if (tlItems.length > 0) {
+      html += '<div class="sec">Log de actividad</div><div class="pcard">';
+      tlItems.forEach(function(item) {
+        html += '<div class="tl-row">' + item.innerText.replace(/\n/g, ' · ') + '</div>';
+      });
+      html += '</div>';
+    }
   }
 
-  body += '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Documento confidencial — uso interno exclusivo</div>';
+  html += '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Confidencial — uso interno exclusivo</div>';
 
-  _casoPrintViaIframe('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Caso ' + caseId + ' · ' + empresa + '</title>' +
-    '<style>' + CASO_PRINT_CSS + '</style></head><body>' + body + '</body></html>');
-  showToast('Preparando PDF del caso…', '🖨️');
+  // Inyectar en el print zone y llamar window.print()
+  pz.innerHTML = html;
+  document.title = 'Caso ' + caseId + ' — ' + empresa;
+  showToast('Abriendo diálogo de impresión…', '🖨️');
+  setTimeout(function() {
+    window.print();
+    // Restaurar título después de imprimir
+    setTimeout(function() {
+      document.title = 'Caso ' + caseId + ' · Argus Back Office';
+    }, 2000);
+  }, 100);
 }
 
 function exportCasoCsv() {
@@ -1636,6 +1686,9 @@ function gateLogout() {
   window.location.href = 'backoffice.html';
 }
 </script>
+
+<!-- Print zone: oculto en pantalla, visible solo al imprimir -->
+<div id="argus-print-zone"></div>
 
 </body>
 </html>
