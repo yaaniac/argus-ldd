@@ -7,23 +7,23 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Primary palette — violet blue */
-  --primary:     #5B4FDB;
-  --primary-700: #4A40C4;
-  --primary-800: #3B32A8;
-  --primary-100: #EEECFF;
-  --primary-200: #D4D0FF;
+  /* Primary palette — teal */
+  --primary:     #0097A7;
+  --primary-700: #00838F;
+  --primary-800: #006064;
+  --primary-100: #E0F7FA;
+  --primary-200: #B2EBF2;
 
-  --black:     #0A0A0A;
-  --gray-900:  #111111;
-  --gray-800:  #1A1A1A;
-  --gray-700:  #2D2D2D;
-  --gray-600:  #444444;
-  --gray-500:  #666666;
-  --gray-400:  #888888;
-  --gray-300:  #BBBBBB;
-  --gray-200:  #E5E5E5;
-  --gray-100:  #F5F5F5;
+  --black:     #002B2E;
+  --gray-900:  #003340;
+  --gray-800:  #00474F;
+  --gray-700:  #005F6B;
+  --gray-600:  #007A87;
+  --gray-500:  #5F9EA5;
+  --gray-400:  #8CBDC3;
+  --gray-300:  #BAD8DB;
+  --gray-200:  #D5ECEE;
+  --gray-100:  #EAF6F7;
   --white:     #FFFFFF;
 
   --green-400: #22C55E;
@@ -534,7 +534,7 @@ img { max-width: 100%; }
 
 .msg-out {
   background: #DCF8C6;
-  color: #0A0A0A;
+  color: #002B2E;
   align-self: flex-end;
   text-align: right;
   border-bottom-right-radius: 2px;
@@ -614,10 +614,12 @@ img { max-width: 100%; }
   grid-column: span 1;
 }
 
-.benefit-featured h3 { color: var(--white); }
-.benefit-featured p { color: var(--gray-400); }
-.benefit-featured .benefit-icon { color: var(--primary); }
-.benefit-featured .benefit-number { color: var(--gray-700); }
+.benefit-featured h3,
+.benefit-featured.benefit-card h3 { color: var(--white) !important; }
+.benefit-featured p,
+.benefit-featured.benefit-card p { color: rgba(255,255,255,.82) !important; }
+.benefit-featured .benefit-icon { color: var(--primary-200); }
+.benefit-featured .benefit-number { color: rgba(255,255,255,.5) !important; }
 
 .benefit-number {
   font-size: 11px;
@@ -638,7 +640,7 @@ img { max-width: 100%; }
 }
 
 .benefit-featured .benefit-icon {
-  background: rgba(91,79,219,.18);
+  background: rgba(0,151,167,.22);
 }
 
 .benefit-card h3 {
@@ -1412,7 +1414,7 @@ img { max-width: 100%; }
 
 .wizard-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary), #818CF8);
+  background: linear-gradient(90deg, var(--primary), #00BCD4);
   border-radius: 2px;
   transition: width .4s cubic-bezier(.4,0,.2,1);
 }

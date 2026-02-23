@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reportes · Argus Compliance Back Office</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:      #0097A7;
+      --primary-700:  #00838F;
+      --primary-800:  #006064;
+      --primary-100:  #E0F7FA;
+      --primary-200:  #B2EBF2;
+      --sidebar-w:    240px;
+      --sidebar-collapsed: 64px;
+      --topbar-h:     60px;
+      --black:        #002B2E;
+      --gray-950:     #002126;
+      --gray-900:     #003D44;
+      --gray-800:     #00474F;
+      --gray-700:     #005F6B;
+      --gray-600:     #007A87;
+      --gray-500:     #5F9EA5;
+      --gray-400:     #8CBDC3;
+      --gray-300:     #BAD8DB;
+      --gray-200:     #D5ECEE;
+      --gray-100:     #EAF6F7;
+      --gray-50:      #F3FCFD;
+      --white:        #FFFFFF;
+      --risk-critical:#DC2626;
+      --risk-high:    #EA580C;
+      --risk-medium:  #D97706;
+      --risk-low:     #16A34A;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body { font-family: var(--font); background: var(--gray-50); color: var(--black); }
+
+    /* ── SIDEBAR ── */
+    .bo-sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w); background: var(--gray-900);
+      display: flex; flex-direction: column;
+      transition: width .22s cubic-bezier(.4,0,.2,1);
+      z-index: 200; overflow: hidden;
+    }
+    .bo-sidebar.collapsed { width: var(--sidebar-collapsed); }
+    .bo-sidebar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 16px 14px; border-bottom: 1px solid var(--gray-800);
+      flex-shrink: 0;
+    }
+    .bo-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+    .bo-logo > div { min-width: 0; }
+    .bo-logo-name { font-size: 16px; font-weight: 800; color: var(--white); letter-spacing: -.03em; white-space: nowrap; }
+    .bo-logo-sub { font-size: 10px; font-weight: 500; color: var(--gray-500); text-transform: uppercase; letter-spacing: .06em; margin-top: 1px; white-space: nowrap; }
+    .bo-sidebar-toggle {
+      background: none; border: none; color: var(--gray-500); cursor: pointer;
+      padding: 6px; border-radius: 6px; flex-shrink: 0;
+      transition: background .15s, color .15s;
+    }
+    .bo-sidebar-toggle:hover { background: var(--gray-800); color: var(--white); }
+    .bo-sidebar.collapsed .bo-logo > div,
+    .bo-sidebar.collapsed .bo-nav-label,
+    .bo-sidebar.collapsed .bo-badge-count,
+    .bo-sidebar.collapsed .bo-nav-item span { display: none; }
+    .bo-sidebar.collapsed .bo-nav-item { justify-content: center; padding: 10px; }
+    .bo-sidebar.collapsed .bo-user-info { display: none; }
+
+    .bo-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+    .bo-nav::-webkit-scrollbar { display: none; }
+    .bo-nav-section { padding: 0 8px 8px; }
+    .bo-nav-label {
+      display: block; font-size: 10px; font-weight: 600; color: var(--gray-600);
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 8px 8px 4px; white-space: nowrap;
+    }
+    .bo-nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 10px; border-radius: 8px; margin-bottom: 1px;
+      color: var(--gray-400); text-decoration: none; font-size: 13.5px; font-weight: 500;
+      transition: background .15s, color .15s; position: relative; cursor: pointer;
+    }
+    .bo-nav-item:hover { background: var(--gray-800); color: var(--gray-200); }
+    .bo-nav-item.active { background: rgba(0,151,167,.18); color: var(--primary-200); }
+    .bo-badge-count {
+      margin-left: auto; font-size: 11px; font-weight: 600;
+      background: var(--gray-800); color: var(--gray-400);
+      padding: 1px 6px; border-radius: 20px; white-space: nowrap;
+    }
+    .bo-badge-warn { background: rgba(234,88,12,.2); color: #FB923C; }
+    .bo-badge-danger { background: rgba(220,38,38,.2); color: #F87171; }
+
+    .bo-user {
+      padding: 12px 16px; border-top: 1px solid var(--gray-800);
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .bo-user-avatar {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      background: var(--primary); display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--white);
+    }
+    .bo-user-info { min-width: 0; }
+    .bo-user-name { font-size: 13px; font-weight: 600; color: var(--gray-200); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bo-user-role { font-size: 11px; color: var(--gray-500); white-space: nowrap; }
+
+    /* ── MAIN ── */
+    .bo-main {
+      margin-left: var(--sidebar-w); min-height: 100vh;
+      transition: margin-left .22s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+    }
+    .bo-main.collapsed { margin-left: var(--sidebar-collapsed); }
+
+    /* ── TOPBAR ── */
+    .bo-topbar {
+      height: var(--topbar-h); background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+    }
+    .bo-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-500); }
+    .bo-breadcrumb a { color: var(--gray-500); text-decoration: none; }
+    .bo-breadcrumb a:hover { color: var(--primary); }
+    .bo-breadcrumb span { color: var(--gray-300); }
+    .bo-breadcrumb strong { color: var(--black); font-weight: 600; }
+    .bo-topbar-right { display: flex; align-items: center; gap: 12px; }
+    .bo-topbar-actions { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--font); font-size: 13.5px; font-weight: 600;
+      padding: 8px 16px; border-radius: 8px; cursor: pointer;
+      border: none; text-decoration: none; transition: all .15s;
+    }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-700); }
+    .btn-outline { background: var(--white); color: var(--black); border: 1.5px solid var(--gray-200); }
+    .btn-outline:hover { border-color: var(--gray-300); background: var(--gray-50); }
+    .btn-ghost { background: none; color: var(--gray-600); border: none; padding: 8px 10px; }
+    .btn-ghost:hover { background: var(--gray-100); color: var(--black); }
+    .btn-sm { padding: 6px 12px; font-size: 12.5px; }
+    .bo-notif { position: relative; cursor: pointer; }
+    .bo-notif-dot {
+      position: absolute; top: 2px; right: 2px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--risk-critical);
+      border: 2px solid var(--white);
+    }
+    .bo-topbar-avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--white); cursor: pointer;
+    }
+
+    /* ── PAGE CONTENT ── */
+    .bo-content { flex: 1; padding: 28px; }
+
+    .rep-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+    }
+    .rep-header-left h1 { font-size: 22px; font-weight: 800; letter-spacing: -.03em; color: var(--black); }
+    .rep-header-left p { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+    .rep-header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    /* Period selector */
+    .period-tabs {
+      display: flex; background: var(--gray-100); border-radius: 10px; padding: 3px; gap: 2px;
+    }
+    .period-tab {
+      padding: 6px 14px; border-radius: 7px; font-size: 13px; font-weight: 500;
+      color: var(--gray-500); cursor: pointer; border: none; background: none;
+      font-family: var(--font); transition: all .15s;
+    }
+    .period-tab.active { background: var(--white); color: var(--black); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+    /* Summary KPI row */
+    .rep-kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px; margin-bottom: 24px;
+    }
+    .rep-kpi-card {
+      background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px;
+      padding: 18px 20px; position: relative; overflow: hidden;
+    }
+    .rep-kpi-label { font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+    .rep-kpi-value { font-size: 32px; font-weight: 800; letter-spacing: -.04em; color: var(--black); line-height: 1; }
+    .rep-kpi-sub { font-size: 12.5px; color: var(--gray-400); margin-top: 6px; }
+    .rep-kpi-trend {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 12px; font-weight: 600; margin-top: 8px;
+      padding: 2px 7px; border-radius: 20px;
+    }
+    .trend-up { color: var(--risk-low); background: #DCFCE7; }
+    .trend-down { color: var(--risk-critical); background: #FEE2E2; }
+    .trend-neutral { color: var(--gray-500); background: var(--gray-100); }
+    .rep-kpi-accent { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+
+    /* Charts grid */
+    .rep-charts-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;
+    }
+    .rep-chart-card {
+      background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px;
+      padding: 20px 22px;
+    }
+    .rep-chart-card.wide { grid-column: 1 / -1; }
+    .rep-chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .rep-chart-title { font-size: 14px; font-weight: 700; color: var(--black); letter-spacing: -.02em; }
+    .rep-chart-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+    .chart-legend { display: flex; align-items: center; gap: 16px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-500); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    canvas { width: 100% !important; display: block; }
+
+    /* Donut chart container */
+    .donut-wrap { display: flex; align-items: center; gap: 28px; }
+    .donut-canvas-wrap { position: relative; flex-shrink: 0; }
+    .donut-center {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      text-align: center; pointer-events: none;
+    }
+    .donut-center-val { font-size: 24px; font-weight: 800; letter-spacing: -.04em; color: var(--black); }
+    .donut-center-lab { font-size: 11px; color: var(--gray-400); font-weight: 500; }
+    .donut-legend { flex: 1; min-width: 0; }
+    .donut-legend-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px;
+    }
+    .donut-legend-item:last-child { border-bottom: none; }
+    .donut-legend-left { display: flex; align-items: center; gap: 8px; }
+    .donut-legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .donut-legend-label { color: var(--gray-600); }
+    .donut-legend-count { font-weight: 700; color: var(--black); }
+    .donut-legend-pct { font-size: 11px; color: var(--gray-400); }
+
+    /* Horizontal bar chart */
+    .hbar-list { display: flex; flex-direction: column; gap: 12px; }
+    .hbar-item {}
+    .hbar-meta { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
+    .hbar-label { color: var(--gray-700); font-weight: 500; }
+    .hbar-val { color: var(--black); font-weight: 700; }
+    .hbar-track { height: 8px; background: var(--gray-100); border-radius: 99px; overflow: hidden; }
+    .hbar-fill { height: 100%; border-radius: 99px; transition: width .6s ease; }
+
+    /* SLA analysis table */
+    .rep-table-card {
+      background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px;
+      margin-bottom: 24px; overflow: hidden;
+    }
+    .rep-table-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 22px; border-bottom: 1.5px solid var(--gray-100);
+    }
+    .rep-table-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    table.rep-table { width: 100%; border-collapse: collapse; }
+    .rep-table th {
+      font-size: 11.5px; font-weight: 600; color: var(--gray-400);
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 10px 22px; text-align: left; background: var(--gray-50);
+      border-bottom: 1.5px solid var(--gray-100);
+    }
+    .rep-table td {
+      padding: 14px 22px; font-size: 13.5px; color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .rep-table tr:last-child td { border-bottom: none; }
+    .rep-table tr:hover td { background: var(--gray-50); }
+    .rep-table td strong { color: var(--black); font-weight: 600; }
+
+    /* Score gauge */
+    .gauge-wrap {
+      display: flex; align-items: center; gap: 20px; padding: 20px 0;
+    }
+    .gauge-svg-wrap { position: relative; flex-shrink: 0; }
+    .gauge-info { flex: 1; }
+    .gauge-score { font-size: 48px; font-weight: 900; letter-spacing: -.05em; color: var(--black); line-height: 1; }
+    .gauge-score-max { font-size: 18px; font-weight: 400; color: var(--gray-400); }
+    .gauge-label { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+    .gauge-factors { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .gauge-factor { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .gauge-factor-name { flex: 1; color: var(--gray-600); }
+    .gauge-factor-bar { flex: 2; height: 6px; background: var(--gray-100); border-radius: 99px; overflow: hidden; }
+    .gauge-factor-fill { height: 100%; border-radius: 99px; }
+    .gauge-factor-val { font-weight: 700; color: var(--black); min-width: 30px; text-align: right; }
+
+    /* Bottom row: export + compliance cert */
+    .rep-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+
+    .export-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px; padding: 22px; }
+    .export-title { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+    .export-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 20px; }
+    .export-list { display: flex; flex-direction: column; gap: 10px; }
+    .export-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border: 1.5px solid var(--gray-200); border-radius: 10px;
+      transition: border-color .15s, background .15s;
+    }
+    .export-item:hover { border-color: var(--primary-200); background: var(--primary-100); }
+    .export-item-left { display: flex; align-items: center; gap: 12px; }
+    .export-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .export-icon.pdf { background: #FEE2E2; color: var(--risk-critical); }
+    .export-icon.xls { background: #DCFCE7; color: var(--risk-low); }
+    .export-icon.ppt { background: #FEF3C7; color: var(--risk-medium); }
+    .export-item-name { font-size: 13.5px; font-weight: 600; color: var(--black); }
+    .export-item-meta { font-size: 12px; color: var(--gray-400); }
+
+    .cert-card { background: var(--primary); border-radius: 14px; padding: 28px; color: var(--white); position: relative; overflow: hidden; }
+    .cert-card::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: rgba(255,255,255,.06);
+    }
+    .cert-card::after {
+      content: ''; position: absolute; bottom: -30px; right: 40px;
+      width: 100px; height: 100px; border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+    .cert-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: .06em; }
+    .cert-title { font-size: 20px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 8px; }
+    .cert-desc { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,.75); margin-bottom: 20px; }
+    .cert-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+    .cert-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.85); }
+    .cert-check { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cert-btn { display: inline-flex; align-items: center; gap: 7px; background: var(--white); color: var(--primary); font-family: var(--font); font-size: 13.5px; font-weight: 700; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; transition: opacity .15s; position: relative; z-index: 1; text-decoration: none; }
+    .cert-btn:hover { opacity: .92; }
+
+    /* Scheduled report panel */
+    .sched-card { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px; padding: 22px; margin-bottom: 24px; }
+    .sched-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .sched-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .sched-list { display: flex; flex-direction: column; gap: 0; }
+    .sched-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid var(--gray-100);
+    }
+    .sched-row:last-child { border-bottom: none; }
+    .sched-icon {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sched-info { flex: 1; min-width: 0; }
+    .sched-name { font-size: 13.5px; font-weight: 600; color: var(--black); }
+    .sched-meta { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+    .sched-status { display: flex; align-items: center; gap: 10px; }
+    .status-pill {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+      white-space: nowrap;
+    }
+    .pill-active { background: #DCFCE7; color: #15803D; }
+    .pill-paused { background: var(--gray-100); color: var(--gray-500); }
+
+    /* Tag chips */
+    .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+    .tag-risk-critical { background: #FEE2E2; color: var(--risk-critical); }
+    .tag-risk-high { background: #FFEDD5; color: var(--risk-high); }
+    .tag-risk-medium { background: #FEF3C7; color: var(--risk-medium); }
+    .tag-risk-low { background: #DCFCE7; color: var(--risk-low); }
+
+    /* Alert strip */
+    .alert-strip {
+      display: flex; align-items: center; gap: 12px;
+      background: #FEF3C7; border: 1.5px solid #FDE68A; border-radius: 10px;
+      padding: 12px 16px; margin-bottom: 24px; font-size: 13.5px; color: #92400E;
+    }
+    .alert-strip svg { flex-shrink: 0; }
+
+    /* Comparison row */
+    .rep-compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .compare-card {
+      background: var(--white); border: 1.5px solid var(--gray-200); border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .compare-title { font-size: 12px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px; }
+    .compare-metric { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; font-size: 13px; }
+    .compare-label { color: var(--gray-600); }
+    .compare-val { font-weight: 700; color: var(--black); }
+    .compare-track { height: 6px; background: var(--gray-100); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+    .compare-fill { height: 100%; border-radius: 99px; }
+    .compare-vs { text-align: center; font-size: 11.5px; color: var(--gray-400); margin-top: 4px; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .rep-charts-grid, .rep-bottom-grid, .rep-compare-grid { grid-template-columns: 1fr; }
+      .rep-chart-card.wide { grid-column: 1; }
+      .bo-sidebar { width: var(--sidebar-collapsed); }
+      .bo-sidebar .bo-logo > div, .bo-sidebar .bo-nav-label, .bo-sidebar .bo-badge-count, .bo-sidebar .bo-nav-item span { display: none; }
+      .bo-sidebar .bo-nav-item { justify-content: center; padding: 10px; }
+      .bo-sidebar .bo-user-info { display: none; }
+      .bo-main { margin-left: var(--sidebar-collapsed); }
+      .donut-wrap { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bo-shell" style="display:flex;min-height:100vh;">
+
+  <!-- ═══════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════ -->
+  <aside class="bo-sidebar" id="sidebar">
+    <div class="bo-sidebar-header">
+      <a href="backoffice.html" class="bo-logo">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="#0097A7"/>
+          <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="22" r="4" fill="#fff"/>
+          <path d="M22.5 22l1 1 2-2" stroke="#0097A7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="bo-logo-name">Argus<span style="color:#0097A7">.</span></div>
+          <div class="bo-logo-sub">Back Office</div>
+        </div>
+      </a>
+      <button class="bo-sidebar-toggle" onclick="toggleSidebar()" aria-label="Colapsar">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="bo-nav">
+      <div class="bo-nav-section">
+        <span class="bo-nav-label">Principal</span>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 3H4a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5"/><path d="M6 7h6M6 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Casos</span>
+          <span class="bo-badge-count">24</span>
+        </a>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M14 14l-2.5-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Investigaciones</span>
+          <span class="bo-badge-count bo-badge-warn">7</span>
+        </a>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Mis tareas</span>
+          <span class="bo-badge-count bo-badge-danger">3</span>
+        </a>
+      </div>
+
+      <div class="bo-nav-section">
+        <span class="bo-nav-label">Gestión</span>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3l3 3 3-3h3a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>Comunicaciones</span>
+        </a>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M10 2H5a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6l-4-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 2v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Evidencia</span>
+        </a>
+        <a href="backoffice-reportes.html" class="bo-nav-item active">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V8M7 14V5M11 14V9M15 14V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Reportes</span>
+        </a>
+      </div>
+
+      <div class="bo-nav-section">
+        <span class="bo-nav-label">Sistema</span>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 5v5c0 4 2.8 7.3 6 8 3.2-.7 6-4 6-8V5L9 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>Auditoría / Log</span>
+        </a>
+        <a href="backoffice.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M3 16c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Usuarios y roles</span>
+        </a>
+        <a href="index.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 9h8M12 6l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4H4a1 1 0 00-1 1v8a1 1 0 001 1h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Ir al portal</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="bo-user">
+      <div class="bo-user-avatar">MC</div>
+      <div class="bo-user-info">
+        <div class="bo-user-name">María Castillo</div>
+        <div class="bo-user-role">Compliance Officer</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN
+  ═══════════════════════════════════════════ -->
+  <div class="bo-main" id="mainArea">
+
+    <!-- TOPBAR -->
+    <div class="bo-topbar">
+      <div class="bo-breadcrumb">
+        <a href="backoffice.html">Dashboard</a>
+        <span>›</span>
+        <strong>Reportes y métricas</strong>
+      </div>
+      <div class="bo-topbar-right">
+        <div class="bo-topbar-actions">
+          <button class="btn btn-outline btn-sm" onclick="scheduleReport()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v2M9 1v2M2 6h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Programar reporte
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="exportAll()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Exportar todo
+          </button>
+        </div>
+        <div class="bo-notif">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v2l-1.5 2.5h13L14 9V7a5 5 0 00-5-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 14a2 2 0 004 0" stroke="currentColor" stroke-width="1.5"/></svg>
+          <div class="bo-notif-dot"></div>
+        </div>
+        <div class="bo-topbar-avatar">MC</div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="bo-content">
+
+      <!-- Header -->
+      <div class="rep-header">
+        <div class="rep-header-left">
+          <h1>Reportes y métricas</h1>
+          <p>Visión ejecutiva del programa de denuncias · Periodo activo: Enero–Febrero 2025</p>
+        </div>
+        <div class="rep-header-right">
+          <div class="period-tabs">
+            <button class="period-tab" onclick="setPeriod(this,'7d')">7 días</button>
+            <button class="period-tab" onclick="setPeriod(this,'30d')">30 días</button>
+            <button class="period-tab active" onclick="setPeriod(this,'90d')">Trimestre</button>
+            <button class="period-tab" onclick="setPeriod(this,'1y')">Año</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert strip -->
+      <div class="alert-strip">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L1.5 15h15L9 2z" stroke="#92400E" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 7v4M9 13v.5" stroke="#92400E" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span><strong>3 casos</strong> superaron el límite de SLA este trimestre. Se requiere revisión de proceso para reducir tiempo de respuesta.</span>
+        <a href="backoffice.html" style="margin-left:auto;font-weight:600;color:#92400E;text-decoration:none;white-space:nowrap;font-size:13px;">Ver casos →</a>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="rep-kpi-grid">
+        <div class="rep-kpi-card">
+          <div class="rep-kpi-accent" style="background:var(--primary);"></div>
+          <div class="rep-kpi-label">Total recibidas</div>
+          <div class="rep-kpi-value">47</div>
+          <div class="rep-kpi-sub">este trimestre</div>
+          <div class="rep-kpi-trend trend-up">↑ 23% vs anterior</div>
+        </div>
+        <div class="rep-kpi-card">
+          <div class="rep-kpi-accent" style="background:var(--risk-low);"></div>
+          <div class="rep-kpi-label">Tasa de resolución</div>
+          <div class="rep-kpi-value">72%</div>
+          <div class="rep-kpi-sub">casos cerrados / total</div>
+          <div class="rep-kpi-trend trend-up">↑ 8pts vs Q3</div>
+        </div>
+        <div class="rep-kpi-card">
+          <div class="rep-kpi-accent" style="background:var(--risk-medium);"></div>
+          <div class="rep-kpi-label">SLA promedio</div>
+          <div class="rep-kpi-value">18<span style="font-size:16px;font-weight:500;color:var(--gray-400)"> días</span></div>
+          <div class="rep-kpi-sub">tiempo medio de cierre</div>
+          <div class="rep-kpi-trend trend-neutral">= Sin cambio</div>
+        </div>
+        <div class="rep-kpi-card">
+          <div class="rep-kpi-accent" style="background:var(--risk-high);"></div>
+          <div class="rep-kpi-label">SLA vencidos</div>
+          <div class="rep-kpi-value">3</div>
+          <div class="rep-kpi-sub">casos fuera de plazo</div>
+          <div class="rep-kpi-trend trend-down">↑ 1 vs Q3</div>
+        </div>
+        <div class="rep-kpi-card">
+          <div class="rep-kpi-accent" style="background:#00ACC1;"></div>
+          <div class="rep-kpi-label">Confirmación</div>
+          <div class="rep-kpi-value">62%</div>
+          <div class="rep-kpi-sub">denuncias confirmadas</div>
+          <div class="rep-kpi-trend trend-up">↑ 5pts</div>
+        </div>
+        <div class="rep-kpi-card">
+          <div class="rep-kpi-accent" style="background:#06B6D4;"></div>
+          <div class="rep-kpi-label">Denunciantes anónimos</div>
+          <div class="rep-kpi-value">78%</div>
+          <div class="rep-kpi-sub">del total de denuncias</div>
+          <div class="rep-kpi-trend trend-neutral">— Estable</div>
+        </div>
+      </div>
+
+      <!-- Charts grid row 1 -->
+      <div class="rep-charts-grid">
+
+        <!-- Line/bar chart: evolución mensual -->
+        <div class="rep-chart-card wide">
+          <div class="rep-chart-header">
+            <div>
+              <div class="rep-chart-title">Evolución de denuncias — últimos 12 meses</div>
+              <div class="rep-chart-sub">Recibidas vs cerradas por mes</div>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#0097A7;"></div>Recibidas</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#16A34A;"></div>Cerradas</div>
+            </div>
+          </div>
+          <canvas id="chartEvolucion" height="120"></canvas>
+        </div>
+
+        <!-- Donut: tipo de denuncia -->
+        <div class="rep-chart-card">
+          <div class="rep-chart-header">
+            <div>
+              <div class="rep-chart-title">Tipo de irregularidad</div>
+              <div class="rep-chart-sub">Distribución trimestral</div>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <div class="donut-canvas-wrap">
+              <canvas id="chartTipo" width="160" height="160"></canvas>
+              <div class="donut-center">
+                <div class="donut-center-val">47</div>
+                <div class="donut-center-lab">total</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-legend-item">
+                <div class="donut-legend-left"><div class="donut-legend-dot" style="background:#0097A7;"></div><span class="donut-legend-label">Fraude financiero</span></div>
+                <div><span class="donut-legend-count">14</span> <span class="donut-legend-pct">30%</span></div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-left"><div class="donut-legend-dot" style="background:#EA580C;"></div><span class="donut-legend-label">Acoso laboral</span></div>
+                <div><span class="donut-legend-count">11</span> <span class="donut-legend-pct">23%</span></div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-left"><div class="donut-legend-dot" style="background:#D97706;"></div><span class="donut-legend-label">Corrupción</span></div>
+                <div><span class="donut-legend-count">9</span> <span class="donut-legend-pct">19%</span></div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-left"><div class="donut-legend-dot" style="background:#16A34A;"></div><span class="donut-legend-label">Conflicto interés</span></div>
+                <div><span class="donut-legend-count">7</span> <span class="donut-legend-pct">15%</span></div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-left"><div class="donut-legend-dot" style="background:#8B5CF6;"></div><span class="donut-legend-label">Seguridad datos</span></div>
+                <div><span class="donut-legend-count">4</span> <span class="donut-legend-pct">9%</span></div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-left"><div class="donut-legend-dot" style="background:#6B7280;"></div><span class="donut-legend-label">Otros</span></div>
+                <div><span class="donut-legend-count">2</span> <span class="donut-legend-pct">4%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Risk distribution -->
+        <div class="rep-chart-card">
+          <div class="rep-chart-header">
+            <div>
+              <div class="rep-chart-title">Distribución de riesgo</div>
+              <div class="rep-chart-sub">Casos por nivel de severidad</div>
+            </div>
+          </div>
+          <div class="hbar-list" style="margin-top:8px;">
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">Crítico</span><span class="hbar-val">4 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:8.5%;background:#DC2626;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">Alto</span><span class="hbar-val">13 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:27.6%;background:#EA580C;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">Medio</span><span class="hbar-val">22 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:46.8%;background:#D97706;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">Bajo</span><span class="hbar-val">8 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:17%;background:#16A34A;"></div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;">
+            <div class="rep-chart-title" style="margin-bottom:14px;">Canal de recepción</div>
+            <div class="hbar-list">
+              <div class="hbar-item">
+                <div class="hbar-meta"><span class="hbar-label">Web (portal)</span><span class="hbar-val">26</span></div>
+                <div class="hbar-track"><div class="hbar-fill" style="width:55%;background:#0097A7;"></div></div>
+              </div>
+              <div class="hbar-item">
+                <div class="hbar-meta"><span class="hbar-label">Email directo</span><span class="hbar-val">12</span></div>
+                <div class="hbar-track"><div class="hbar-fill" style="width:25.5%;background:#00ACC1;"></div></div>
+              </div>
+              <div class="hbar-item">
+                <div class="hbar-meta"><span class="hbar-label">WhatsApp</span><span class="hbar-val">7</span></div>
+                <div class="hbar-track"><div class="hbar-fill" style="width:14.9%;background:#25D366;"></div></div>
+              </div>
+              <div class="hbar-item">
+                <div class="hbar-meta"><span class="hbar-label">Teléfono</span><span class="hbar-val">2</span></div>
+                <div class="hbar-track"><div class="hbar-fill" style="width:4.3%;background:#6B7280;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Área / Departamento breakdown -->
+      <div class="rep-charts-grid">
+        <div class="rep-chart-card">
+          <div class="rep-chart-header">
+            <div>
+              <div class="rep-chart-title">Denuncias por área</div>
+              <div class="rep-chart-sub">Comparativa trimestral</div>
+            </div>
+          </div>
+          <canvas id="chartAreas" height="200"></canvas>
+        </div>
+
+        <!-- SLA compliance por investigador -->
+        <div class="rep-chart-card">
+          <div class="rep-chart-header">
+            <div>
+              <div class="rep-chart-title">Performance por investigador</div>
+              <div class="rep-chart-sub">Tiempo promedio de cierre (días)</div>
+            </div>
+          </div>
+          <div class="hbar-list" style="margin-top:8px;">
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">M. Castillo</span><span class="hbar-val">14 días · 8 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:78%;background:#0097A7;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">R. Gómez</span><span class="hbar-val">18 días · 6 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:62%;background:#0097A7;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">L. Herrera</span><span class="hbar-val">22 días · 5 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:50%;background:#D97706;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">P. Sánchez</span><span class="hbar-val">31 días · 3 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:35%;background:#EA580C;"></div></div>
+            </div>
+            <div class="hbar-item">
+              <div class="hbar-meta"><span class="hbar-label">C. Torres</span><span class="hbar-val">12 días · 2 casos</span></div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:84%;background:#16A34A;"></div></div>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;padding-top:20px;border-top:1.5px solid var(--gray-100);">
+            <div class="rep-chart-title" style="margin-bottom:14px;">SLA cumplido por mes</div>
+            <canvas id="chartSla" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Score gauge -->
+      <div class="rep-table-card" style="margin-bottom:24px;">
+        <div class="rep-table-header">
+          <div class="rep-table-title">Índice de compliance del programa</div>
+          <span class="tag tag-risk-low">Saludable</span>
+        </div>
+        <div style="padding:20px 22px;">
+          <div class="gauge-wrap">
+            <div class="gauge-svg-wrap">
+              <canvas id="chartGauge" width="160" height="160"></canvas>
+            </div>
+            <div class="gauge-info">
+              <div class="gauge-score">78<span class="gauge-score-max">/100</span></div>
+              <div class="gauge-label">Índice Argus de efectividad del programa</div>
+              <div class="gauge-factors">
+                <div class="gauge-factor">
+                  <span class="gauge-factor-name">Tasa de resolución</span>
+                  <div class="gauge-factor-bar"><div class="gauge-factor-fill" style="width:72%;background:#0097A7;"></div></div>
+                  <span class="gauge-factor-val">72</span>
+                </div>
+                <div class="gauge-factor">
+                  <span class="gauge-factor-name">Cumplimiento SLA</span>
+                  <div class="gauge-factor-bar"><div class="gauge-factor-fill" style="width:86%;background:#16A34A;"></div></div>
+                  <span class="gauge-factor-val">86</span>
+                </div>
+                <div class="gauge-factor">
+                  <span class="gauge-factor-name">Calidad investigaciones</span>
+                  <div class="gauge-factor-bar"><div class="gauge-factor-fill" style="width:80%;background:#8B5CF6;"></div></div>
+                  <span class="gauge-factor-val">80</span>
+                </div>
+                <div class="gauge-factor">
+                  <span class="gauge-factor-name">Confidencialidad</span>
+                  <div class="gauge-factor-bar"><div class="gauge-factor-fill" style="width:95%;background:#06B6D4;"></div></div>
+                  <span class="gauge-factor-val">95</span>
+                </div>
+                <div class="gauge-factor">
+                  <span class="gauge-factor-name">Comunicación denunciante</span>
+                  <div class="gauge-factor-bar"><div class="gauge-factor-fill" style="width:68%;background:#D97706;"></div></div>
+                  <span class="gauge-factor-val">68</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparativa trimestral -->
+      <div class="rep-compare-grid">
+        <div class="compare-card">
+          <div class="compare-title">Fraude financiero</div>
+          <div class="compare-metric"><span class="compare-label">Q4 2024</span><span class="compare-val">14</span></div>
+          <div class="compare-track"><div class="compare-fill" style="width:100%;background:#0097A7;"></div></div>
+          <div class="compare-metric" style="margin-top:8px;"><span class="compare-label">Q3 2024</span><span class="compare-val">9</span></div>
+          <div class="compare-track"><div class="compare-fill" style="width:64%;background:#B2EBF2;"></div></div>
+          <div class="compare-vs">↑ +56% vs trimestre anterior</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">Acoso laboral</div>
+          <div class="compare-metric"><span class="compare-label">Q4 2024</span><span class="compare-val">11</span></div>
+          <div class="compare-track"><div class="compare-fill" style="width:100%;background:#EA580C;"></div></div>
+          <div class="compare-metric" style="margin-top:8px;"><span class="compare-label">Q3 2024</span><span class="compare-val">13</span></div>
+          <div class="compare-track"><div class="compare-fill" style="width:100%;background:#FFEDD5;"></div></div>
+          <div class="compare-vs">↓ -15% vs trimestre anterior</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-title">Corrupción</div>
+          <div class="compare-metric"><span class="compare-label">Q4 2024</span><span class="compare-val">9</span></div>
+          <div class="compare-track"><div class="compare-fill" style="width:100%;background:#D97706;"></div></div>
+          <div class="compare-metric" style="margin-top:8px;"><span class="compare-label">Q3 2024</span><span class="compare-val">6</span></div>
+          <div class="compare-track"><div class="compare-fill" style="width:67%;background:#FEF3C7;"></div></div>
+          <div class="compare-vs">↑ +50% vs trimestre anterior</div>
+        </div>
+      </div>
+
+      <!-- SLA detail table -->
+      <div class="rep-table-card">
+        <div class="rep-table-header">
+          <div class="rep-table-title">Análisis de SLA por tipo de caso</div>
+          <button class="btn btn-outline btn-sm" onclick="exportTable()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v7M3.5 5.5L6.5 9l3-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10.5h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Exportar CSV
+          </button>
+        </div>
+        <table class="rep-table">
+          <thead>
+            <tr>
+              <th>Tipo de irregularidad</th>
+              <th>Total</th>
+              <th>SLA objetivo</th>
+              <th>Promedio real</th>
+              <th>Cumplimiento SLA</th>
+              <th>Riesgo predominante</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Fraude financiero</strong></td>
+              <td>14</td>
+              <td>30 días</td>
+              <td>22 días</td>
+              <td><span class="tag tag-risk-low">✓ 93%</span></td>
+              <td><span class="tag tag-risk-critical">Crítico</span></td>
+            </tr>
+            <tr>
+              <td><strong>Acoso laboral</strong></td>
+              <td>11</td>
+              <td>21 días</td>
+              <td>18 días</td>
+              <td><span class="tag tag-risk-low">✓ 91%</span></td>
+              <td><span class="tag tag-risk-high">Alto</span></td>
+            </tr>
+            <tr>
+              <td><strong>Corrupción</strong></td>
+              <td>9</td>
+              <td>30 días</td>
+              <td>28 días</td>
+              <td><span class="tag tag-risk-medium">⚠ 78%</span></td>
+              <td><span class="tag tag-risk-critical">Crítico</span></td>
+            </tr>
+            <tr>
+              <td><strong>Conflicto de interés</strong></td>
+              <td>7</td>
+              <td>21 días</td>
+              <td>14 días</td>
+              <td><span class="tag tag-risk-low">✓ 100%</span></td>
+              <td><span class="tag tag-risk-medium">Medio</span></td>
+            </tr>
+            <tr>
+              <td><strong>Seguridad de datos</strong></td>
+              <td>4</td>
+              <td>14 días</td>
+              <td>19 días</td>
+              <td><span class="tag tag-risk-critical">✗ 50%</span></td>
+              <td><span class="tag tag-risk-high">Alto</span></td>
+            </tr>
+            <tr>
+              <td><strong>Otros</strong></td>
+              <td>2</td>
+              <td>30 días</td>
+              <td>10 días</td>
+              <td><span class="tag tag-risk-low">✓ 100%</span></td>
+              <td><span class="tag tag-risk-low">Bajo</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottom grid: exports + certificate -->
+      <div class="rep-bottom-grid">
+
+        <!-- Export options -->
+        <div class="export-card">
+          <div class="export-title">Exportar reportes</div>
+          <div class="export-sub">Descargá informes listos para presentar a dirección, auditoría o reguladores.</div>
+          <div class="export-list">
+            <div class="export-item">
+              <div class="export-item-left">
+                <div class="export-icon pdf">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M10 2H5a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6l-4-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 2v4h4" stroke="currentColor" stroke-width="1.5"/></svg>
+                </div>
+                <div>
+                  <div class="export-item-name">Reporte ejecutivo trimestral</div>
+                  <div class="export-item-meta">PDF · Resumen general para directivos</div>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="downloadReport('exec')">Descargar</button>
+            </div>
+            <div class="export-item">
+              <div class="export-item-left">
+                <div class="export-icon pdf">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M10 2H5a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V6l-4-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 2v4h4" stroke="currentColor" stroke-width="1.5"/></svg>
+                </div>
+                <div>
+                  <div class="export-item-name">Informe de auditoría interna</div>
+                  <div class="export-item-meta">PDF · Log completo + evidencias</div>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="downloadReport('audit')">Descargar</button>
+            </div>
+            <div class="export-item">
+              <div class="export-item-left">
+                <div class="export-icon xls">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 7h14M7 7v9" stroke="currentColor" stroke-width="1.3"/></svg>
+                </div>
+                <div>
+                  <div class="export-item-name">Dataset completo de casos</div>
+                  <div class="export-item-meta">XLSX · Todos los campos, anonimizado</div>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="downloadReport('xlsx')">Descargar</button>
+            </div>
+            <div class="export-item">
+              <div class="export-item-left">
+                <div class="export-icon ppt">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 15v2M6 17h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <div class="export-item-name">Presentación para Directorio</div>
+                  <div class="export-item-meta">PPT · Slides listas con gráficos</div>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="downloadReport('ppt')">Descargar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance certificate card -->
+        <div class="cert-card">
+          <div class="cert-badge">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L2 3v3c0 2.8 1.8 5.1 4 5.5 2.2-.4 4-2.7 4-5.5V3L6 1z" fill="rgba(255,255,255,0.9)"/></svg>
+            Certificación
+          </div>
+          <div class="cert-title">Certificado de operación conforme</div>
+          <div class="cert-desc">Tu programa de denuncias opera dentro de los estándares definidos por Argus. Este certificado valida la operación transparente del canal de ética.</div>
+          <div class="cert-items">
+            <div class="cert-item">
+              <div class="cert-check">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Canal activo y multicanal
+            </div>
+            <div class="cert-item">
+              <div class="cert-check">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Tasa de resolución &gt; 70%
+            </div>
+            <div class="cert-item">
+              <div class="cert-check">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Log de auditoría completo
+            </div>
+            <div class="cert-item">
+              <div class="cert-check">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              Capacitación anual completada
+            </div>
+          </div>
+          <a href="#" class="cert-btn" onclick="downloadCert(event)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Descargar certificado PDF
+          </a>
+        </div>
+      </div>
+
+      <!-- Scheduled reports -->
+      <div class="sched-card">
+        <div class="sched-header">
+          <div class="sched-title">Reportes programados</div>
+          <button class="btn btn-outline btn-sm" onclick="scheduleReport()">+ Nuevo</button>
+        </div>
+        <div class="sched-list">
+          <div class="sched-row">
+            <div class="sched-icon" style="background:#E0F7FA;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V8M7 14V5M11 14V9M15 14V3" stroke="#0097A7" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <div class="sched-info">
+              <div class="sched-name">Reporte ejecutivo mensual</div>
+              <div class="sched-meta">Cada 1° del mes · Destinatarios: Dirección General, RRHH · PDF</div>
+            </div>
+            <div class="sched-status">
+              <span class="status-pill pill-active">Activo</span>
+              <button class="btn btn-ghost btn-sm">Editar</button>
+            </div>
+          </div>
+          <div class="sched-row">
+            <div class="sched-icon" style="background:#FEF3C7;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V8M7 14V5M11 14V9M15 14V3" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <div class="sched-info">
+              <div class="sched-name">Reporte semanal de SLA</div>
+              <div class="sched-meta">Cada lunes · Destinatarios: Compliance Officer, Legal · Email</div>
+            </div>
+            <div class="sched-status">
+              <span class="status-pill pill-active">Activo</span>
+              <button class="btn btn-ghost btn-sm">Editar</button>
+            </div>
+          </div>
+          <div class="sched-row">
+            <div class="sched-icon" style="background:#F3F4F6;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V8M7 14V5M11 14V9M15 14V3" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <div class="sched-info">
+              <div class="sched-name">Informe trimestral para Directorio</div>
+              <div class="sched-meta">Cada trimestre · Destinatarios: Directorio · PPT + PDF</div>
+            </div>
+            <div class="sched-status">
+              <span class="status-pill pill-paused">Pausado</span>
+              <button class="btn btn-ghost btn-sm">Editar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /bo-content -->
+  </div><!-- /bo-main -->
+</div>
+
+<script>
+  /* ── Sidebar toggle ── */
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+    document.getElementById('mainArea').classList.toggle('collapsed');
+  }
+
+  /* ── Period tabs ── */
+  function setPeriod(el, period) {
+    document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    // In production: re-fetch data for selected period
+  }
+
+  /* ── Dummy actions ── */
+  function scheduleReport() { alert('Programar reporte: funcionalidad disponible en la versión conectada.'); }
+  function exportAll()       { alert('Exportando todos los reportes del trimestre...'); }
+  function exportTable()     { alert('Exportando tabla de SLA como CSV...'); }
+  function downloadReport(type) {
+    const labels = { exec:'Reporte ejecutivo', audit:'Informe de auditoría', xlsx:'Dataset completo', ppt:'Presentación Directorio' };
+    alert(`Descargando: ${labels[type]} (demo — versión conectada genera PDF real)`);
+  }
+  function downloadCert(e) { e.preventDefault(); alert('Descargando certificado de operación conforme (PDF)...'); }
+
+  /* ══════════════════════════════════════
+     CHARTS
+  ══════════════════════════════════════ */
+  window.addEventListener('load', () => {
+    drawEvolucion();
+    drawTipo();
+    drawAreas();
+    drawSla();
+    drawGauge();
+  });
+
+  /* ── Evolución line chart (canvas) ── */
+  function drawEvolucion() {
+    const canvas = document.getElementById('chartEvolucion');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width  = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = 120 * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const W = canvas.offsetWidth, H = 120;
+
+    const meses    = ['Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb'];
+    const recibidas = [5, 7, 4, 9, 6, 11, 8, 13, 7, 14, 10, 12];
+    const cerradas  = [4, 5, 4, 7, 6,  9, 7, 10, 7, 11,  8, 10];
+    const maxV = 16;
+    const padL = 28, padR = 16, padT = 10, padB = 30;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+    const n = meses.length;
+
+    const xOf = (i) => padL + (i / (n-1)) * chartW;
+    const yOf = (v) => padT + chartH - (v / maxV) * chartH;
+
+    // Grid lines
+    ctx.strokeStyle = '#E2E2E8'; ctx.lineWidth = 1;
+    [0, 4, 8, 12, 16].forEach(v => {
+      const y = yOf(v);
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + chartW, y); ctx.stroke();
+      ctx.fillStyle = '#8E8E9A'; ctx.font = '10px Inter'; ctx.textAlign = 'right';
+      ctx.fillText(v, padL - 4, y + 3.5);
+    });
+
+    // X axis labels
+    ctx.fillStyle = '#8E8E9A'; ctx.font = '10px Inter'; ctx.textAlign = 'center';
+    meses.forEach((m, i) => ctx.fillText(m, xOf(i), H - padB + 16));
+
+    // Draw line helper
+    function drawLine(data, color) {
+      ctx.beginPath();
+      data.forEach((v, i) => {
+        const x = xOf(i), y = yOf(v);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+      ctx.stroke();
+      // dots
+      data.forEach((v, i) => {
+        ctx.beginPath(); ctx.arc(xOf(i), yOf(v), 3.5, 0, Math.PI*2);
+        ctx.fillStyle = color; ctx.fill();
+        ctx.beginPath(); ctx.arc(xOf(i), yOf(v), 2, 0, Math.PI*2);
+        ctx.fillStyle = '#fff'; ctx.fill();
+      });
+    }
+
+    drawLine(recibidas, '#0097A7');
+    drawLine(cerradas,  '#16A34A');
+  }
+
+  /* ── Donut chart: tipos ── */
+  function drawTipo() {
+    const canvas = document.getElementById('chartTipo');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio;
+    canvas.width = 160 * dpr; canvas.height = 160 * dpr;
+    ctx.scale(dpr, dpr);
+    const cx = 80, cy = 80, R = 68, r = 46;
+    const data = [
+      { pct: .30, color: '#0097A7' },
+      { pct: .23, color: '#EA580C' },
+      { pct: .19, color: '#D97706' },
+      { pct: .15, color: '#16A34A' },
+      { pct: .09, color: '#8B5CF6' },
+      { pct: .04, color: '#6B7280' }
+    ];
+    let start = -Math.PI / 2;
+    const gap = 0.025;
+    data.forEach(d => {
+      const arc = d.pct * Math.PI * 2 - gap;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, start, start + arc);
+      ctx.arc(cx, cy, r, start + arc, start, true);
+      ctx.closePath();
+      ctx.fillStyle = d.color;
+      ctx.fill();
+      start += arc + gap;
+    });
+  }
+
+  /* ── Bar chart: áreas ── */
+  function drawAreas() {
+    const canvas = document.getElementById('chartAreas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width  = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = 200 * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const W = canvas.offsetWidth, H = 200;
+
+    const areas   = ['Finanzas','Operaciones','RRHH','Ventas','TI','Legal','Compras'];
+    const q4      = [12, 9, 7, 6, 5, 4, 4];
+    const q3      = [8,  7, 9, 4, 3, 2, 5];
+    const maxV = 14;
+    const padL = 74, padR = 16, padT = 10, padB = 10;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+    const barH = (chartH / areas.length) * 0.36;
+    const rowH = chartH / areas.length;
+
+    // Grid
+    ctx.strokeStyle = '#E2E2E8'; ctx.lineWidth = 1;
+    [0,4,8,12].forEach(v => {
+      const x = padL + (v / maxV) * chartW;
+      ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + chartH); ctx.stroke();
+    });
+
+    areas.forEach((area, i) => {
+      const y0 = padT + i * rowH;
+      const yMid = y0 + rowH / 2;
+
+      // Label
+      ctx.fillStyle = '#3E3E44'; ctx.font = '12px Inter'; ctx.textAlign = 'right';
+      ctx.fillText(area, padL - 8, yMid + 3);
+
+      // Q4 bar
+      const w4 = (q4[i] / maxV) * chartW;
+      ctx.fillStyle = '#0097A7';
+      const r4 = 3;
+      ctx.beginPath();
+      ctx.moveTo(padL + r4, yMid - barH - 1);
+      ctx.lineTo(padL + w4 - r4, yMid - barH - 1);
+      ctx.arcTo(padL + w4, yMid - barH - 1, padL + w4, yMid - 1, r4);
+      ctx.lineTo(padL + w4, yMid - 1);
+      ctx.lineTo(padL, yMid - 1);
+      ctx.closePath();
+      ctx.fill();
+
+      // Q3 bar
+      const w3 = (q3[i] / maxV) * chartW;
+      ctx.fillStyle = '#B2EBF2';
+      ctx.beginPath();
+      ctx.moveTo(padL + r4, yMid + 1);
+      ctx.lineTo(padL + w3 - r4, yMid + 1);
+      ctx.arcTo(padL + w3, yMid + 1, padL + w3, yMid + barH + 1, r4);
+      ctx.lineTo(padL + w3, yMid + barH + 1);
+      ctx.lineTo(padL, yMid + barH + 1);
+      ctx.closePath();
+      ctx.fill();
+
+      // Val labels
+      ctx.fillStyle = '#0097A7'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'left';
+      ctx.fillText(q4[i], padL + w4 + 4, yMid - 1);
+      ctx.fillStyle = '#9CA3AF';
+      ctx.fillText(q3[i], padL + w3 + 4, yMid + barH + 1);
+    });
+  }
+
+  /* ── SLA mini bar chart ── */
+  function drawSla() {
+    const canvas = document.getElementById('chartSla');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width  = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = 100 * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const W = canvas.offsetWidth, H = 100;
+
+    const meses   = ['Sep','Oct','Nov','Dic','Ene','Feb'];
+    const cumpl   = [88, 85, 90, 80, 92, 86]; // %
+    const padL = 10, padR = 10, padT = 10, padB = 22;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+    const barW = (chartW / meses.length) * 0.55;
+    const gap  = chartW / meses.length;
+
+    meses.forEach((m, i) => {
+      const x = padL + i * gap + (gap - barW) / 2;
+      const barH2 = (cumpl[i] / 100) * chartH;
+      const y = padT + chartH - barH2;
+      const clr = cumpl[i] >= 90 ? '#16A34A' : cumpl[i] >= 80 ? '#0097A7' : '#D97706';
+      const rr = 3;
+      ctx.fillStyle = clr;
+      ctx.beginPath();
+      ctx.moveTo(x + rr, y); ctx.lineTo(x + barW - rr, y);
+      ctx.arcTo(x + barW, y, x + barW, y + rr, rr);
+      ctx.lineTo(x + barW, y + barH2); ctx.lineTo(x, y + barH2);
+      ctx.lineTo(x, y + rr); ctx.arcTo(x, y, x + rr, y, rr);
+      ctx.closePath(); ctx.fill();
+
+      // label
+      ctx.fillStyle = '#6B6B75'; ctx.font = '10px Inter'; ctx.textAlign = 'center';
+      ctx.fillText(m, x + barW/2, H - 6);
+      ctx.fillStyle = clr; ctx.font = 'bold 10px Inter';
+      ctx.fillText(cumpl[i]+'%', x + barW/2, y - 4);
+    });
+  }
+
+  /* ── Gauge arc ── */
+  function drawGauge() {
+    const canvas = document.getElementById('chartGauge');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio;
+    canvas.width = 160 * dpr; canvas.height = 160 * dpr;
+    ctx.scale(dpr, dpr);
+    const cx = 80, cy = 90, R = 65, thick = 14;
+    const startA = Math.PI * 0.75;
+    const endA   = Math.PI * 2.25;
+    const score  = 78;
+
+    // Track
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, startA, endA);
+    ctx.strokeStyle = '#E2E2E8'; ctx.lineWidth = thick; ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Fill
+    const fillEnd = startA + (score / 100) * (endA - startA);
+    const grad = ctx.createLinearGradient(cx - R, cy, cx + R, cy);
+    grad.addColorStop(0, '#8B5CF6');
+    grad.addColorStop(0.5, '#0097A7');
+    grad.addColorStop(1, '#16A34A');
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, startA, fillEnd);
+    ctx.strokeStyle = grad; ctx.lineWidth = thick; ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Center text
+    ctx.fillStyle = '#002B2E'; ctx.font = 'bold 28px Inter';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('78', cx, cy - 4);
+    ctx.fillStyle = '#8E8E9A'; ctx.font = '11px Inter';
+    ctx.fillText('/ 100', cx, cy + 18);
+  }
+</script>
+
+</body>
+</html>

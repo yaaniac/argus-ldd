@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Back Office · Argus Compliance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div class="bo-shell">
+
+  <!-- ═══════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════ -->
+  <aside class="bo-sidebar" id="sidebar">
+    <div class="bo-sidebar-header">
+      <div class="bo-logo">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="#0097A7"/>
+          <path d="M8 10h16M8 16h10M8 22h13" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="22" r="4" fill="#fff"/>
+          <path d="M22.5 22l1 1 2-2" stroke="#0097A7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="bo-logo-name">Argus<span style="color:#0097A7">.</span></div>
+          <div class="bo-logo-sub">Back Office</div>
+        </div>
+      </div>
+      <button class="bo-sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidebar()" aria-label="Colapsar o expandir menú">
+        <svg class="sidebar-icon-collapse" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="sidebar-icon-expand" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="bo-nav">
+      <div class="bo-nav-section">
+        <span class="bo-nav-label">Principal</span>
+        <a href="backoffice.html" class="bo-nav-item active">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('casos')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 3H4a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5"/><path d="M6 7h6M6 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Casos</span>
+          <span class="bo-badge-count">24</span>
+        </a>
+        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('tareas')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 9l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="2" width="14" height="14" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Mis tareas</span>
+          <span class="bo-badge-count bo-badge-danger">3</span>
+        </a>
+      </div>
+
+      <div class="bo-nav-section">
+        <span class="bo-nav-label">Gestión</span>
+        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('comunicaciones')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3l3 3 3-3h3a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>Comunicaciones</span>
+        </a>
+        <a href="backoffice-reportes.html" class="bo-nav-item">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V8M7 14V5M11 14V9M15 14V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Reportes</span>
+        </a>
+      </div>
+
+      <div class="bo-nav-section">
+        <span class="bo-nav-label">Sistema</span>
+        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('auditoria')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 5v5c0 4 2.8 7.3 6 8 3.2-.7 6-4 6-8V5L9 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span>Auditoría / Log</span>
+        </a>
+        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('usuarios')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M1 16c0-3.3 2.7-6 6-6h0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="13" cy="11" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M10 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 13.5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Usuarios y roles</span>
+        </a>
+        <a href="index.html" class="bo-nav-item" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3H3a1 1 0 00-1 1v11a1 1 0 001 1h11a1 1 0 001-1v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 2h5v5M16 2l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Ir al portal</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="bo-sidebar-user">
+      <div class="bo-user-avatar">MA</div>
+      <div class="bo-user-info">
+        <strong>María Álvarez</strong>
+        <span>Compliance Officer</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
+  <main class="bo-main" id="boMain">
+
+    <!-- TOP BAR -->
+    <header class="bo-topbar">
+      <div class="bo-topbar-left">
+        <button class="bo-mobile-menu" onclick="toggleSidebar()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="bo-breadcrumb">
+          <span>Argus Back Office</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="currentView">Dashboard</span>
+        </div>
+      </div>
+      <div class="bo-topbar-right">
+        <button class="bo-topbar-btn" onclick="showNewCase()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Nuevo caso
+        </button>
+        <div class="bo-notif-btn" onclick="toggleNotifs()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 015 5v3l2 2H2l2-2V7a5 5 0 015-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span class="bo-notif-dot"></span>
+        </div>
+        <div class="bo-topbar-avatar">MA</div>
+      </div>
+    </header>
+
+    <!-- ═══ VIEW: DASHBOARD ═══ -->
+    <div class="bo-view active" id="view-dashboard">
+
+      <!-- DASHBOARD HERO HEADER -->
+      <div class="dash-hero">
+        <div class="dash-hero-left">
+          <div class="dash-hero-greeting" id="dashGreeting">Buen día</div>
+          <h1 class="dash-hero-title">María Álvarez <span class="dash-hero-role">— Compliance Officer</span></h1>
+          <p class="dash-hero-sub"><span id="dashDate"></span> · Resumen ejecutivo del sistema</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-shrink:0">
+          <select class="bo-select" onchange="updateDashboard(this.value)">
+            <option value="30">Últimos 30 días</option>
+            <option value="90">Últimos 90 días</option>
+            <option value="365">Este año</option>
+          </select>
+          <button class="bo-btn bo-btn-outline">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M2 3h10M2 11h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Exportar PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="bo-kpi-grid">
+        <div class="bo-kpi-card">
+          <div class="bo-kpi-header">
+            <span class="bo-kpi-label">Casos abiertos</span>
+            <div class="bo-kpi-icon" style="background:#E0F7FA;color:#0097A7">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 3H4a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5"/><path d="M6 9h6M6 6h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="bo-kpi-value">24</div>
+          <div class="bo-kpi-delta up">+3 vs mes anterior</div>
+        </div>
+        <div class="bo-kpi-card">
+          <div class="bo-kpi-header">
+            <span class="bo-kpi-label">En investigación</span>
+            <div class="bo-kpi-icon" style="background:#FFF7ED;color:#EA580C">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M14 14l-2.5-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="bo-kpi-value">7</div>
+          <div class="bo-kpi-delta">Sin variación</div>
+        </div>
+        <div class="bo-kpi-card">
+          <div class="bo-kpi-header">
+            <span class="bo-kpi-label">Vencidos / SLA roto</span>
+            <div class="bo-kpi-icon" style="background:#FEF2F2;color:#DC2626">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="bo-kpi-value danger">3</div>
+          <div class="bo-kpi-delta down">Requieren atención inmediata</div>
+        </div>
+        <div class="bo-kpi-card">
+          <div class="bo-kpi-header">
+            <span class="bo-kpi-label">Cerrados este mes</span>
+            <div class="bo-kpi-icon" style="background:#F0FDF4;color:#16A34A">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9l4 4 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="bo-kpi-value">11</div>
+          <div class="bo-kpi-delta up">+4 vs mes anterior</div>
+        </div>
+        <div class="bo-kpi-card">
+          <div class="bo-kpi-header">
+            <span class="bo-kpi-label">SLA promedio</span>
+            <div class="bo-kpi-icon" style="background:#F5F3FF;color:#7C3AED">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="bo-kpi-value">18<span style="font-size:18px;font-weight:500;color:#888"> días</span></div>
+          <div class="bo-kpi-delta up">-2 días vs anterior</div>
+        </div>
+        <div class="bo-kpi-card">
+          <div class="bo-kpi-header">
+            <span class="bo-kpi-label">Tasa de confirmación</span>
+            <div class="bo-kpi-icon" style="background:#ECFDF5;color:#059669">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.6 3.3L14 6.1l-2.5 2.5.6 3.7L9 10.6l-3.1 1.7.6-3.7L4 6.1l3.4-.8L9 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="bo-kpi-value">62<span style="font-size:18px;font-weight:500;color:#888">%</span></div>
+          <div class="bo-kpi-delta up">Denuncias confirmadas</div>
+        </div>
+      </div>
+
+      <!-- CHARTS + TABLE ROW -->
+      <div class="bo-dash-grid">
+
+        <!-- Monthly chart -->
+        <div class="bo-card bo-card-chart">
+          <div class="bo-card-header">
+            <h3>Evolución de casos</h3>
+            <div style="display:flex;gap:16px;align-items:center">
+              <span class="bo-legend"><span style="background:#0097A7"></span>Recibidos</span>
+              <span class="bo-legend"><span style="background:#16A34A"></span>Cerrados</span>
+            </div>
+          </div>
+          <div class="bo-chart-area">
+            <canvas id="casesChart" height="200"></canvas>
+          </div>
+        </div>
+
+        <!-- Risk distribution -->
+        <div class="bo-card">
+          <div class="bo-card-header"><h3>Distribución por riesgo</h3></div>
+          <div class="bo-risk-bars">
+            <div class="bo-risk-row">
+              <span class="risk-tag risk-critical">CRÍTICO</span>
+              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:15%;background:#DC2626"></div></div>
+              <span class="bo-risk-n">4</span>
+            </div>
+            <div class="bo-risk-row">
+              <span class="risk-tag risk-high">ALTO</span>
+              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:30%;background:#EA580C"></div></div>
+              <span class="bo-risk-n">8</span>
+            </div>
+            <div class="bo-risk-row">
+              <span class="risk-tag risk-medium">MEDIO</span>
+              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:42%;background:#D97706"></div></div>
+              <span class="bo-risk-n">11</span>
+            </div>
+            <div class="bo-risk-row">
+              <span class="risk-tag risk-low">BAJO</span>
+              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:13%;background:#16A34A"></div></div>
+              <span class="bo-risk-n">1</span>
+            </div>
+          </div>
+
+          <div class="bo-card-divider"></div>
+          <div class="bo-card-header"><h3>Por tipo de denuncia</h3></div>
+          <div class="bo-type-pills">
+            <span class="bo-type-pill">Fraude · <strong>7</strong></span>
+            <span class="bo-type-pill">Acoso laboral · <strong>5</strong></span>
+            <span class="bo-type-pill">Corrupción · <strong>4</strong></span>
+            <span class="bo-type-pill">Conflicto interés · <strong>3</strong></span>
+            <span class="bo-type-pill">AML · <strong>3</strong></span>
+            <span class="bo-type-pill">Acoso sexual · <strong>2</strong></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ALERTS + CASES TABLE -->
+      <div class="bo-dash-grid bo-dash-grid-32">
+
+        <!-- Alerts -->
+        <div class="bo-card">
+          <div class="bo-card-header"><h3>⚠️ Alertas activas</h3></div>
+          <div class="bo-alerts-list">
+            <div class="bo-alert bo-alert-danger">
+              <div class="bo-alert-icon">🔴</div>
+              <div>
+                <strong>ARG-2025-0041</strong>
+                <p>Vencido hace 5 días · Fraude financiero · Sin investigador asignado</p>
+              </div>
+              <a href="backoffice-caso.html?id=ARG-2025-0041" class="bo-alert-link">Ver →</a>
+            </div>
+            <div class="bo-alert bo-alert-danger">
+              <div class="bo-alert-icon">🔴</div>
+              <div>
+                <strong>ARG-2025-0038</strong>
+                <p>Vencido hace 2 días · Acoso laboral · Pendiente de evaluación</p>
+              </div>
+              <a href="backoffice-caso.html?id=ARG-2025-0038" class="bo-alert-link">Ver →</a>
+            </div>
+            <div class="bo-alert bo-alert-warn">
+              <div class="bo-alert-icon">🟡</div>
+              <div>
+                <strong>ARG-2025-0039</strong>
+                <p>Vence en 2 días · Corrupción · Investigación en curso</p>
+              </div>
+              <a href="backoffice-caso.html?id=ARG-2025-0039" class="bo-alert-link">Ver →</a>
+            </div>
+            <div class="bo-alert bo-alert-warn">
+              <div class="bo-alert-icon">🟡</div>
+              <div>
+                <strong>ARG-2025-0042</strong>
+                <p>Sin movimiento hace 8 días · AML · Asignado a R. Mendoza</p>
+              </div>
+              <a href="backoffice-caso.html?id=ARG-2025-0042" class="bo-alert-link">Ver →</a>
+            </div>
+            <div class="bo-alert bo-alert-info">
+              <div class="bo-alert-icon">🔵</div>
+              <div>
+                <strong>ARG-2025-0044</strong>
+                <p>Nuevo mensaje del denunciante · Pendiente de respuesta</p>
+              </div>
+              <a href="backoffice-caso.html?id=ARG-2025-0044" class="bo-alert-link">Ver →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Area breakdown -->
+        <div class="bo-card">
+          <div class="bo-card-header"><h3>Casos por área</h3></div>
+          <div class="bo-area-list">
+            <div class="bo-area-row">
+              <div class="bo-area-label">
+                <span class="bo-area-dot" style="background:#0097A7"></span>
+                Finanzas / Contabilidad
+              </div>
+              <div class="bo-area-bar-wrap">
+                <div class="bo-area-bar" style="width:35%;background:#0097A7"></div>
+              </div>
+              <span class="bo-area-n">8</span>
+            </div>
+            <div class="bo-area-row">
+              <div class="bo-area-label">
+                <span class="bo-area-dot" style="background:#EA580C"></span>
+                Recursos Humanos
+              </div>
+              <div class="bo-area-bar-wrap">
+                <div class="bo-area-bar" style="width:25%;background:#EA580C"></div>
+              </div>
+              <span class="bo-area-n">6</span>
+            </div>
+            <div class="bo-area-row">
+              <div class="bo-area-label">
+                <span class="bo-area-dot" style="background:#D97706"></span>
+                Compras / Proveedores
+              </div>
+              <div class="bo-area-bar-wrap">
+                <div class="bo-area-bar" style="width:20%;background:#D97706"></div>
+              </div>
+              <span class="bo-area-n">5</span>
+            </div>
+            <div class="bo-area-row">
+              <div class="bo-area-label">
+                <span class="bo-area-dot" style="background:#7C3AED"></span>
+                Dirección General
+              </div>
+              <div class="bo-area-bar-wrap">
+                <div class="bo-area-bar" style="width:15%;background:#7C3AED"></div>
+              </div>
+              <span class="bo-area-n">3</span>
+            </div>
+            <div class="bo-area-row">
+              <div class="bo-area-label">
+                <span class="bo-area-dot" style="background:#0284C7"></span>
+                Operaciones
+              </div>
+              <div class="bo-area-bar-wrap">
+                <div class="bo-area-bar" style="width:8%;background:#0284C7"></div>
+              </div>
+              <span class="bo-area-n">2</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CASES TABLE -->
+      <div class="bo-card" style="margin-top:0">
+        <div class="bo-card-header">
+          <h3>Casos recientes</h3>
+          <a href="#" onclick="showView('casos')" class="bo-link">Ver todos →</a>
+        </div>
+
+        <div class="bo-table-wrap">
+          <table class="bo-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Área</th>
+                <th>Riesgo</th>
+                <th>Estado</th>
+                <th>Investigador</th>
+                <th>SLA</th>
+                <th>Recibido</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="goToCase('ARG-2025-0044')" class="bo-table-row">
+                <td><code class="bo-code">ARG-2025-0044</code></td>
+                <td>Acoso laboral</td>
+                <td>RRHH</td>
+                <td><span class="risk-tag risk-high">ALTO</span></td>
+                <td><span class="status-tag status-new">Nuevo</span></td>
+                <td><span class="bo-unassigned">Sin asignar</span></td>
+                <td><span class="sla-tag sla-ok">23 días</span></td>
+                <td>22/02/2025</td>
+                <td><a href="backoffice-caso.html?id=ARG-2025-0044" class="bo-table-link">Abrir</a></td>
+              </tr>
+              <tr onclick="goToCase('ARG-2025-0043')" class="bo-table-row">
+                <td><code class="bo-code">ARG-2025-0043</code></td>
+                <td>Fraude financiero</td>
+                <td>Finanzas</td>
+                <td><span class="risk-tag risk-critical">CRÍTICO</span></td>
+                <td><span class="status-tag status-investigating">Investigando</span></td>
+                <td>R. Mendoza</td>
+                <td><span class="sla-tag sla-warn">8 días</span></td>
+                <td>18/02/2025</td>
+                <td><a href="backoffice-caso.html?id=ARG-2025-0043" class="bo-table-link">Abrir</a></td>
+              </tr>
+              <tr onclick="goToCase('ARG-2025-0042')" class="bo-table-row">
+                <td><code class="bo-code">ARG-2025-0042</code></td>
+                <td>AML / Lavado</td>
+                <td>Compras</td>
+                <td><span class="risk-tag risk-critical">CRÍTICO</span></td>
+                <td><span class="status-tag status-investigating">Investigando</span></td>
+                <td>R. Mendoza</td>
+                <td><span class="sla-tag sla-warn">5 días</span></td>
+                <td>14/02/2025</td>
+                <td><a href="backoffice-caso.html?id=ARG-2025-0042" class="bo-table-link">Abrir</a></td>
+              </tr>
+              <tr onclick="goToCase('ARG-2025-0041')" class="bo-table-row">
+                <td><code class="bo-code">ARG-2025-0041</code></td>
+                <td>Fraude financiero</td>
+                <td>Finanzas</td>
+                <td><span class="risk-tag risk-high">ALTO</span></td>
+                <td><span class="status-tag status-new">Nuevo</span></td>
+                <td><span class="bo-unassigned">Sin asignar</span></td>
+                <td><span class="sla-tag sla-over">Vencido</span></td>
+                <td>10/02/2025</td>
+                <td><a href="backoffice-caso.html?id=ARG-2025-0041" class="bo-table-link">Abrir</a></td>
+              </tr>
+              <tr onclick="goToCase('ARG-2025-0040')" class="bo-table-row">
+                <td><code class="bo-code">ARG-2025-0040</code></td>
+                <td>Conflicto interés</td>
+                <td>Dirección</td>
+                <td><span class="risk-tag risk-medium">MEDIO</span></td>
+                <td><span class="status-tag status-review">En revisión</span></td>
+                <td>M. Álvarez</td>
+                <td><span class="sla-tag sla-ok">16 días</span></td>
+                <td>08/02/2025</td>
+                <td><a href="backoffice-caso.html?id=ARG-2025-0040" class="bo-table-link">Abrir</a></td>
+              </tr>
+              <tr onclick="goToCase('ARG-2025-0039')" class="bo-table-row">
+                <td><code class="bo-code">ARG-2025-0039</code></td>
+                <td>Corrupción</td>
+                <td>Compras</td>
+                <td><span class="risk-tag risk-critical">CRÍTICO</span></td>
+                <td><span class="status-tag status-investigating">Investigando</span></td>
+                <td>J. Torres</td>
+                <td><span class="sla-tag sla-warn">2 días</span></td>
+                <td>05/02/2025</td>
+                <td><a href="backoffice-caso.html?id=ARG-2025-0039" class="bo-table-link">Abrir</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /view-dashboard -->
+
+    <!-- ═══ VIEW: CASOS (lista completa) ═══ -->
+    <div class="bo-view" id="view-casos">
+      <div class="bo-page-header">
+        <div>
+          <h1 class="bo-page-title">Repositorio de casos</h1>
+          <p class="bo-page-sub">24 casos activos · 87 totales</p>
+        </div>
+        <button class="bo-btn bo-btn-primary" onclick="showNewCase()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M7 4v6M4 7h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Ingresar caso manual
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="bo-filters">
+        <div class="bo-search-wrap">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="#9CA3AF" stroke-width="1.5"/><path d="M11 11l2.5 2.5" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" class="bo-search" id="casoBusqueda" placeholder="Buscar por ID, tipo, área, persona..." oninput="filterCasos()" />
+        </div>
+        <div class="bo-filter-row">
+          <select class="bo-select-sm" id="filterEstado" onchange="filterCasos()"><option value="">Todos los estados</option><option value="new">Nuevo</option><option value="eval">En evaluación</option><option value="investigating">Investigando</option><option value="review">En revisión</option><option value="closed-ok">Cerrado</option></select>
+          <select class="bo-select-sm" id="filterRiesgo" onchange="filterCasos()"><option value="">Todos los riesgos</option><option value="critical">Crítico</option><option value="high">Alto</option><option value="medium">Medio</option><option value="low">Bajo</option></select>
+          <select class="bo-select-sm" id="filterArea" onchange="filterCasos()"><option value="">Todas las áreas</option><option value="Finanzas">Finanzas</option><option value="RRHH">RRHH</option><option value="Compras">Compras</option><option value="Dirección">Dirección</option><option value="Operaciones">Operaciones</option></select>
+          <select class="bo-select-sm" id="filterTipo" onchange="filterCasos()"><option value="">Todos los tipos</option><option value="Fraude">Fraude</option><option value="Acoso">Acoso</option><option value="Corrupción">Corrupción</option><option value="AML">AML</option><option value="Conflicto interés">Conflicto interés</option></select>
+          <button class="bo-btn bo-btn-ghost" id="btnFiltrosAvanzados" onclick="toggleFiltrosAvanzados()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M4 7h6M6 10h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            Filtros avanzados
+          </button>
+        </div>
+        <div class="bo-filtros-avanzados-panel" id="filtrosAvanzadosPanel" style="display:none">
+          <div class="bo-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:12px;padding:16px;background:var(--gray-50);border-radius:8px;border:1px solid var(--gray-200)">
+            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha desde</label><input type="date" class="bo-select-sm" style="width:100%"/></div>
+            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha hasta</label><input type="date" class="bo-select-sm" style="width:100%"/></div>
+            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Investigador</label><select class="bo-select-sm" style="width:100%"><option>Todos</option><option>M. Álvarez</option><option>R. Mendoza</option><option>J. Torres</option></select></div>
+            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Canal</label><select class="bo-select-sm" style="width:100%"><option>Todos</option><option>Web</option><option>Email</option><option>WhatsApp</option><option>Teléfono</option></select></div>
+            <div style="align-self:end"><button type="button" class="bo-btn bo-btn-primary" onclick="aplicarFiltrosAvanzados()">Aplicar</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bo-card">
+        <div class="bo-table-wrap">
+          <table class="bo-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="bo-checkbox" /></th>
+                <th>ID <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 4l2-2 2 2M3 6l2 2 2-2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></th>
+                <th>Tipo</th>
+                <th>Área</th>
+                <th>Canal</th>
+                <th>Riesgo</th>
+                <th>Estado</th>
+                <th>Anónimo</th>
+                <th>Investigador</th>
+                <th>SLA</th>
+                <th>Ingreso</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="casosTableBody">
+              <!-- Generado por JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="bo-table-footer">
+          <span class="bo-table-info">Mostrando 1–10 de 24 casos activos</span>
+          <div class="bo-pagination">
+            <button class="bo-page-btn" disabled>←</button>
+            <button class="bo-page-btn active">1</button>
+            <button class="bo-page-btn">2</button>
+            <button class="bo-page-btn">3</button>
+            <button class="bo-page-btn">→</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-casos -->
+
+    <!-- ═══ VIEW: AUDITORÍA ═══ -->
+    <div class="bo-view" id="view-auditoria">
+      <div class="bo-page-header">
+        <h1 class="bo-page-title">Log de auditoría</h1>
+        <button class="bo-btn bo-btn-outline">Exportar log completo</button>
+      </div>
+      <div class="bo-card">
+        <div class="bo-card-header">
+          <span style="font-size:13px;color:#666">Registro inmutable de todas las acciones del sistema</span>
+        </div>
+        <div class="bo-log-list">
+          <div class="bo-log-item">
+            <div class="bo-log-time">22/02/2025 14:32</div>
+            <div class="bo-log-user"><span class="bo-log-avatar">MA</span> M. Álvarez</div>
+            <div class="bo-log-action">Abrió caso <code class="bo-code">ARG-2025-0044</code></div>
+            <div class="bo-log-ip">IP: 192.168.1.45</div>
+          </div>
+          <div class="bo-log-item">
+            <div class="bo-log-time">22/02/2025 13:18</div>
+            <div class="bo-log-user"><span class="bo-log-avatar" style="background:#059669">JT</span> J. Torres</div>
+            <div class="bo-log-action">Cambió estado <code class="bo-code">ARG-2025-0039</code> → Investigando</div>
+            <div class="bo-log-ip">IP: 192.168.1.71</div>
+          </div>
+          <div class="bo-log-item">
+            <div class="bo-log-time">22/02/2025 11:05</div>
+            <div class="bo-log-user"><span class="bo-log-avatar" style="background:#D97706">RM</span> R. Mendoza</div>
+            <div class="bo-log-action">Subió documento a <code class="bo-code">ARG-2025-0043</code> (contrato_proveedor.pdf)</div>
+            <div class="bo-log-ip">IP: 10.0.0.12</div>
+          </div>
+          <div class="bo-log-item">
+            <div class="bo-log-time">21/02/2025 17:44</div>
+            <div class="bo-log-user"><span class="bo-log-avatar">MA</span> M. Álvarez</div>
+            <div class="bo-log-action">Asignó investigador en <code class="bo-code">ARG-2025-0042</code> → R. Mendoza</div>
+            <div class="bo-log-ip">IP: 192.168.1.45</div>
+          </div>
+          <div class="bo-log-item">
+            <div class="bo-log-time">21/02/2025 16:20</div>
+            <div class="bo-log-user"><span class="bo-log-avatar" style="background:#7C3AED">LG</span> L. García</div>
+            <div class="bo-log-action">Descargó reporte ejecutivo mensual (febrero 2025)</div>
+            <div class="bo-log-ip">IP: 10.0.0.8</div>
+          </div>
+          <div class="bo-log-item">
+            <div class="bo-log-time">20/02/2025 09:11</div>
+            <div class="bo-log-user"><span class="bo-log-avatar">MA</span> M. Álvarez</div>
+            <div class="bo-log-action">Cerró caso <code class="bo-code">ARG-2025-0037</code> — Decisión: Confirmado · Sanción: Suspensión</div>
+            <div class="bo-log-ip">IP: 192.168.1.45</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ VIEW: USUARIOS ═══ -->
+    <div class="bo-view" id="view-usuarios">
+      <div class="bo-page-header">
+        <h1 class="bo-page-title">Usuarios y roles</h1>
+        <button class="bo-btn bo-btn-primary" onclick="showInviteModal()">+ Invitar usuario</button>
+      </div>
+      <div class="bo-card">
+        <div class="bo-table-wrap">
+          <table class="bo-table">
+            <thead>
+              <tr><th>Usuario</th><th>Rol</th><th>Jurisdicción</th><th>Casos accesibles</th><th>Último acceso</th><th>Estado</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr class="bo-table-row">
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar">MA</div><div><strong>María Álvarez</strong><br/><span style="font-size:12px;color:var(--gray-500)">maria@empresa.com</span></div></div></td>
+                <td><span class="role-tag role-compliance">Compliance Officer</span></td>
+                <td>Argentina · Uruguay</td>
+                <td>Todos</td>
+                <td>Hoy, 14:32</td>
+                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
+                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('María Álvarez','maria@empresa.com','Compliance Officer','Argentina · Uruguay','Todos','activo')">Editar</button></td>
+              </tr>
+              <tr class="bo-table-row">
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#D97706">RM</div><div><strong>Rodrigo Mendoza</strong><br/><span style="font-size:12px;color:var(--gray-500)">rodrigo@empresa.com</span></div></div></td>
+                <td><span class="role-tag role-investigator">Investigador</span></td>
+                <td>Argentina</td>
+                <td>Asignados</td>
+                <td>Hoy, 11:05</td>
+                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
+                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Rodrigo Mendoza','rodrigo@empresa.com','Investigador','Argentina','Asignados','activo')">Editar</button></td>
+              </tr>
+              <tr class="bo-table-row">
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#059669">JT</div><div><strong>Julia Torres</strong><br/><span style="font-size:12px;color:var(--gray-500)">julia@empresa.com</span></div></div></td>
+                <td><span class="role-tag role-legal">Legal Reviewer</span></td>
+                <td>Argentina</td>
+                <td>Legal / Alto riesgo</td>
+                <td>Hoy, 13:18</td>
+                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
+                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Julia Torres','julia@empresa.com','Legal Reviewer','Argentina','Legal / Alto riesgo','activo')">Editar</button></td>
+              </tr>
+              <tr class="bo-table-row">
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#7C3AED">LG</div><div><strong>Laura García</strong><br/><span style="font-size:12px;color:var(--gray-500)">laura@empresa.com</span></div></div></td>
+                <td><span class="role-tag role-auditor">Auditor Interno</span></td>
+                <td>Multi-región</td>
+                <td>Solo lectura</td>
+                <td>Ayer, 16:20</td>
+                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
+                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Laura García','laura@empresa.com','Auditor Interno','Multi-región','Solo lectura','activo')">Editar</button></td>
+              </tr>
+              <tr class="bo-table-row">
+                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#DC2626">CP</div><div><strong>Carlos Pérez</strong><br/><span style="font-size:12px;color:var(--gray-500)">carlos@empresa.com</span></div></div></td>
+                <td><span class="role-tag role-rrhh">RRHH</span></td>
+                <td>Argentina</td>
+                <td>Acoso / Laboral</td>
+                <td>20/02/2025</td>
+                <td><span class="status-tag" style="background:#FEF9C3;color:#854D0E">Inactivo</span></td>
+                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Carlos Pérez','carlos@empresa.com','RRHH','Argentina','Acoso / Laboral','inactivo')">Editar</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ OTRAS VISTAS (placeholder) ═══ -->
+    <div class="bo-view" id="view-tareas">
+      <div class="bo-page-header"><h1 class="bo-page-title">Mis tareas</h1></div>
+      <div class="bo-card"><p style="padding:40px;text-align:center;color:var(--gray-500)">Vista de tareas asignadas.</p></div>
+    </div>
+    <div class="bo-view" id="view-comunicaciones">
+      <div class="bo-page-header"><h1 class="bo-page-title">Comunicaciones seguras</h1></div>
+      <div class="bo-card"><p style="padding:40px;text-align:center;color:var(--gray-500)">Canal bidireccional cifrado con denunciantes.</p></div>
+    </div>
+
+  </main><!-- /bo-main -->
+
+</div><!-- /bo-shell -->
+
+<!-- MODAL: Nuevo caso -->
+<div class="bo-modal-overlay" id="newCaseModal" style="display:none" onclick="closeModal(event)">
+  <div class="bo-modal">
+    <div class="bo-modal-header">
+      <h3>Ingresar caso manual</h3>
+      <button onclick="document.getElementById('newCaseModal').style.display='none'" class="bo-modal-close">✕</button>
+    </div>
+    <div class="bo-modal-body">
+      <div class="bo-form-grid">
+        <div class="bo-form-group bo-span2">
+          <label>Canal de ingreso</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label class="bo-radio-pill"><input type="radio" name="canal" value="web" checked /> Web</label>
+            <label class="bo-radio-pill"><input type="radio" name="canal" value="email" /> Email</label>
+            <label class="bo-radio-pill"><input type="radio" name="canal" value="whatsapp" /> WhatsApp</label>
+            <label class="bo-radio-pill"><input type="radio" name="canal" value="tel" /> Teléfono</label>
+            <label class="bo-radio-pill"><input type="radio" name="canal" value="presencial" /> Presencial</label>
+          </div>
+        </div>
+        <div class="bo-form-group">
+          <label>Tipo de denuncia *</label>
+          <select class="bo-select-full" id="newCaseTipo">
+            <option>— Seleccioná —</option>
+            <option>Fraude / Malversación</option>
+            <option>Corrupción / Soborno</option>
+            <option>Acoso laboral</option>
+            <option>Acoso / violencia sexual</option>
+            <option>Conflicto de intereses</option>
+            <option>AML / Lavado de activos</option>
+            <option>Seguridad laboral</option>
+            <option>Privacidad / datos</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Nivel de riesgo inicial *</label>
+          <select class="bo-select-full" id="newCaseRiesgo">
+            <option>— Evaluar —</option>
+            <option>Bajo</option>
+            <option>Medio</option>
+            <option>Alto</option>
+            <option>Crítico</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Área involucrada</label>
+          <select class="bo-select-full" id="newCaseArea">
+            <option>— Seleccioná —</option>
+            <option>Dirección General</option>
+            <option>Recursos Humanos</option>
+            <option>Finanzas / Contabilidad</option>
+            <option>Compras / Proveedores</option>
+            <option>Operaciones</option>
+            <option>Legal / Compliance</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Jurisdicción</label>
+          <select class="bo-select-full">
+            <option>Argentina</option>
+            <option>Uruguay</option>
+            <option>Chile</option>
+            <option>Brasil</option>
+            <option>España</option>
+            <option>Multi-jurisdicción</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>¿Es anónima?</label>
+          <select class="bo-select-full">
+            <option>Sí — anónima</option>
+            <option>No — con datos</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Nivel de confidencialidad</label>
+          <select class="bo-select-full">
+            <option>Estándar</option>
+            <option>Restringido</option>
+            <option>Confidencial</option>
+            <option>Alta dirección</option>
+          </select>
+        </div>
+        <div class="bo-form-group bo-span2">
+          <label>Descripción del hecho *</label>
+          <textarea class="bo-textarea" rows="5" placeholder="Describí los hechos, personas involucradas, período, evidencias disponibles..."></textarea>
+        </div>
+        <div class="bo-form-group">
+          <label>Asignar investigador</label>
+          <select class="bo-select-full" id="newCaseInv">
+            <option>Sin asignar</option>
+            <option>M. Álvarez (Compliance)</option>
+            <option>R. Mendoza (Investigador)</option>
+            <option>J. Torres (Legal)</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Adjuntar evidencia</label>
+          <div class="bo-upload-mini">Clic para subir archivos · PDF, imágenes, audio</div>
+        </div>
+      </div>
+    </div>
+    <div class="bo-modal-footer">
+      <button onclick="document.getElementById('newCaseModal').style.display='none'" class="bo-btn bo-btn-ghost">Cancelar</button>
+      <button onclick="createCase()" class="bo-btn bo-btn-primary">Crear caso</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ════════════════════════════════════════════════════════════════
+   ARGUS BACK OFFICE — Design System
+   Shell: sidebar + main · Palette: teal #0097A7
+   ════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary:     #0097A7;
+  --primary-100: #E0F7FA;
+  --primary-200: #B2EBF2;
+  --primary-700: #00838F;
+  --black:     #002B2E;
+  --gray-900:  #003D44;
+  --gray-800:  #00474F;
+  --gray-700:  #005F6B;
+  --gray-600:  #007A87;
+  --gray-500:  #5F9EA5;
+  --gray-400:  #8CBDC3;
+  --gray-300:  #BAD8DB;
+  --gray-200:  #D5ECEE;
+  --gray-100:  #EAF6F7;
+  --gray-50:   #F3FCFD;
+  --white:     #FFFFFF;
+  --sidebar-w: 240px;
+  --sidebar-collapsed: 64px;
+  --topbar-h: 60px;
+  --font: 'Inter', sans-serif;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--gray-50);
+  color: var(--gray-800);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ── Shell ── */
+.bo-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.bo-sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--gray-900);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 200;
+  transition: width .25s ease;
+  overflow: hidden;
+}
+.bo-sidebar.collapsed { width: var(--sidebar-collapsed); }
+.bo-sidebar.collapsed .sidebar-icon-collapse { display: none !important; }
+.bo-sidebar.collapsed .sidebar-icon-expand { display: block !important; }
+.bo-sidebar:not(.collapsed) .sidebar-icon-expand { display: none !important; }
+
+.bo-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  gap: 10px;
+}
+.bo-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.bo-logo-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -.03em;
+}
+.bo-logo-sub {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,.35);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.bo-sidebar-toggle {
+  background: rgba(255,255,255,.06);
+  border: none;
+  border-radius: 6px;
+  color: rgba(255,255,255,.4);
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.bo-sidebar-toggle:hover { background: rgba(255,255,255,.12); color: var(--white); }
+
+/* Nav */
+.bo-nav { flex: 1; padding: 16px 0; overflow-y: auto; overflow-x: hidden; }
+.bo-nav-section { margin-bottom: 8px; }
+.bo-nav-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,.25);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: 8px 16px 4px;
+  display: block;
+  white-space: nowrap;
+}
+.bo-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  margin: 2px 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,.55);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.bo-nav-item:hover { background: rgba(255,255,255,.07); color: var(--white); }
+.bo-nav-item.active { background: var(--primary); color: var(--white); }
+.bo-nav-item svg { flex-shrink: 0; }
+.bo-badge-count {
+  margin-left: auto;
+  background: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.7);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+.bo-badge-warn { background: rgba(234,88,12,.25); color: #FB923C; }
+.bo-badge-danger { background: rgba(220,38,38,.25); color: #F87171; }
+
+.bo-sidebar-user {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.bo-user-avatar {
+  width: 32px; height: 32px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--white);
+  flex-shrink: 0;
+}
+.bo-user-info { overflow: hidden; }
+.bo-user-info strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+}
+.bo-user-info span { font-size: 11px; color: rgba(255,255,255,.4); }
+
+/* ── Main ── */
+.bo-main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left .25s ease;
+}
+.bo-main.expanded { margin-left: var(--sidebar-collapsed); }
+
+/* Topbar */
+.bo-topbar {
+  height: var(--topbar-h);
+  background: var(--white);
+  border-bottom: 1.5px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.bo-topbar-left { display: flex; align-items: center; gap: 12px; }
+.bo-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gray-400);
+}
+.bo-breadcrumb span:last-child { color: var(--black); font-weight: 600; }
+.bo-topbar-right { display: flex; align-items: center; gap: 10px; }
+.bo-topbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background .2s;
+}
+.bo-topbar-btn:hover { background: var(--primary-700); }
+.bo-notif-btn {
+  width: 36px; height: 36px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  position: relative;
+  color: var(--gray-600);
+  transition: background .2s;
+}
+.bo-notif-btn:hover { background: var(--gray-200); }
+.bo-notif-dot {
+  position: absolute;
+  top: 7px; right: 7px;
+  width: 7px; height: 7px;
+  background: #DC2626;
+  border-radius: 50%;
+  border: 1.5px solid var(--white);
+}
+.bo-topbar-avatar {
+  width: 32px; height: 32px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--white);
+  cursor: pointer;
+}
+.bo-mobile-menu {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--gray-600);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ── Views ── */
+.bo-view { display: none; padding: 24px; flex-direction: column; gap: 20px; flex: 1; }
+.bo-view.active { display: flex; }
+
+.bo-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.bo-page-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -.03em;
+}
+.bo-page-sub {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-top: 2px;
+}
+
+/* ── Dashboard Hero Header ── */
+.dash-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: linear-gradient(120deg, var(--gray-900) 0%, #005F6B 100%);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.dash-hero::after {
+  content: '';
+  position: absolute;
+  right: -40px; top: -40px;
+  width: 220px; height: 220px;
+  background: rgba(255,255,255,.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.dash-hero-greeting {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 6px;
+}
+.dash-hero-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: #fff;
+  line-height: 1.15;
+  margin: 0;
+}
+.dash-hero-role {
+  font-weight: 400;
+  font-size: 18px;
+  color: rgba(255,255,255,.65);
+}
+.dash-hero-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  margin-top: 8px;
+}
+.dash-hero .bo-select {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.2);
+  color: #fff;
+}
+.dash-hero .bo-btn-outline {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.3);
+  color: #fff;
+}
+.dash-hero .bo-btn-outline:hover {
+  background: rgba(255,255,255,.22);
+}
+
+/* ── Cards ── */
+.bo-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.bo-card-chart { overflow: visible; }
+.bo-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1.5px solid var(--gray-100);
+}
+.bo-card-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--black);
+  letter-spacing: -.01em;
+}
+.bo-card-divider { height: 1px; background: var(--gray-100); margin: 0; }
+.bo-link { font-size: 13px; color: var(--primary); font-weight: 600; }
+
+/* ── KPI Grid ── */
+.bo-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+@media (max-width: 1200px) { .bo-kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px) { .bo-kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+.bo-kpi-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+.bo-kpi-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.bo-kpi-label { font-size: 12px; font-weight: 600; color: var(--gray-500); }
+.bo-kpi-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bo-kpi-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--black);
+  letter-spacing: -.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.bo-kpi-value.danger { color: #DC2626; }
+.bo-kpi-delta { font-size: 11px; color: var(--gray-400); font-weight: 500; }
+.bo-kpi-delta.up { color: #16A34A; }
+.bo-kpi-delta.down { color: #DC2626; }
+
+/* ── Dash grid ── */
+.bo-dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.bo-dash-grid-32 { grid-template-columns: 1.2fr 1fr; }
+@media (max-width: 900px) { .bo-dash-grid, .bo-dash-grid-32 { grid-template-columns: 1fr; } }
+
+/* Chart area */
+.bo-chart-area {
+  padding: 20px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.bo-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gray-500);
+}
+.bo-legend span {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Risk bars */
+.bo-risk-bars { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+.bo-risk-row { display: flex; align-items: center; gap: 12px; }
+.bo-risk-bar-wrap { flex: 1; background: var(--gray-100); border-radius: 100px; height: 6px; }
+.bo-risk-bar { height: 6px; border-radius: 100px; transition: width .6s ease; }
+.bo-risk-n { font-size: 13px; font-weight: 700; color: var(--black); min-width: 20px; text-align: right; }
+
+/* Type pills */
+.bo-type-pills { padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+.bo-type-pill {
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+/* Area bars */
+.bo-area-list { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.bo-area-row { display: flex; align-items: center; gap: 10px; }
+.bo-area-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+.bo-area-label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-600); min-width: 160px; }
+.bo-area-bar-wrap { flex: 1; background: var(--gray-100); border-radius: 100px; height: 5px; }
+.bo-area-bar { height: 5px; border-radius: 100px; }
+.bo-area-n { font-size: 12px; font-weight: 700; color: var(--black); min-width: 18px; text-align: right; }
+
+/* Alerts */
+.bo-alerts-list { padding: 8px 16px; display: flex; flex-direction: column; gap: 6px; }
+.bo-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+.bo-alert-danger { background: #FEF2F2; border: 1px solid #FECACA; }
+.bo-alert-warn { background: #FFFBEB; border: 1px solid #FDE68A; }
+.bo-alert-info { background: #EFF6FF; border: 1px solid #BFDBFE; }
+.bo-alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.bo-alert strong { font-size: 13px; font-weight: 700; color: var(--black); display: block; }
+.bo-alert p { font-size: 12px; color: var(--gray-500); margin: 0; line-height: 1.5; }
+.bo-alert-link { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--primary); white-space: nowrap; align-self: center; }
+
+/* ── Tables ── */
+.bo-table-wrap { overflow-x: auto; }
+.bo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.bo-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border-bottom: 1.5px solid var(--gray-100);
+  white-space: nowrap;
+  background: var(--gray-50);
+}
+.bo-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--gray-700);
+  vertical-align: middle;
+}
+.bo-table-row { cursor: pointer; transition: background .15s; }
+.bo-table-row:hover { background: var(--gray-50); }
+.bo-table-row:last-child td { border-bottom: none; }
+.bo-table-link { color: var(--primary); font-weight: 600; font-size: 13px; }
+.bo-code {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  background: var(--primary-100);
+  color: var(--primary);
+  padding: 3px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.bo-unassigned { color: var(--gray-400); font-size: 12px; font-style: italic; }
+.bo-checkbox { cursor: pointer; }
+
+.bo-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1.5px solid var(--gray-100);
+}
+.bo-table-info { font-size: 12px; color: var(--gray-400); }
+.bo-pagination { display: flex; gap: 4px; }
+.bo-page-btn {
+  width: 30px; height: 30px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 6px;
+  background: var(--white);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: var(--font);
+  color: var(--gray-600);
+  transition: all .15s;
+}
+.bo-page-btn:hover:not([disabled]) { border-color: var(--primary); color: var(--primary); }
+.bo-page-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+.bo-page-btn:disabled { opacity: .35; cursor: default; }
+
+/* ── Risk / Status / Role tags ── */
+.risk-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.risk-critical { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+.risk-high     { background: #FFF7ED; color: #EA580C; border: 1px solid #FED7AA; }
+.risk-medium   { background: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+.risk-low      { background: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; }
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-new          { background: #E0F7FA; color: #0097A7; }
+.status-review       { background: #FFF7ED; color: #EA580C; }
+.status-investigating { background: #FEF3C7; color: #B45309; }
+.status-closed-ok    { background: #F0FDF4; color: #16A34A; }
+.status-closed-no    { background: #F5F5F5; color: #6B7280; }
+.status-closed-no    { background: var(--gray-100); color: var(--gray-500); }
+
+.sla-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 100px;
+}
+.sla-ok   { background: #F0FDF4; color: #16A34A; }
+.sla-warn { background: #FFF7ED; color: #EA580C; }
+.sla-over { background: #FEF2F2; color: #DC2626; }
+
+.role-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.role-compliance  { background: #E0F7FA; color: #0097A7; }
+.role-investigator { background: #FFF7ED; color: #EA580C; }
+.role-legal       { background: #F0FDF4; color: #16A34A; }
+.role-auditor     { background: #F5F3FF; color: #7C3AED; }
+.role-rrhh        { background: #FEF2F2; color: #DC2626; }
+
+/* ── Filters ── */
+.bo-filters { display: flex; flex-direction: column; gap: 10px; }
+.bo-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 0 16px;
+  height: 40px;
+}
+.bo-search {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--black);
+  background: none;
+}
+.bo-filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Selects / Buttons ── */
+.bo-select, .bo-select-sm, .bo-select-full {
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--gray-700);
+  background: var(--white);
+  outline: none;
+  cursor: pointer;
+}
+.bo-select-sm { padding: 5px 10px; font-size: 12px; }
+.bo-select-full { width: 100%; }
+.bo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  border: none;
+  transition: all .2s;
+}
+.bo-btn-primary { background: var(--primary); color: var(--white); }
+.bo-btn-primary:hover { background: var(--primary-700); }
+.bo-btn-outline { background: var(--white); color: var(--gray-700); border: 1.5px solid var(--gray-200); }
+.bo-btn-outline:hover { border-color: var(--gray-400); }
+.bo-btn-ghost { background: transparent; color: var(--gray-600); border: 1.5px solid transparent; }
+.bo-btn-ghost:hover { background: var(--gray-100); }
+.bo-btn-active { background: var(--gray-200) !important; color: var(--primary); }
+
+/* ── Log ── */
+.bo-log-list { padding: 8px 0; }
+.bo-log-item {
+  display: grid;
+  grid-template-columns: 130px 160px 1fr 120px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 13px;
+  transition: background .15s;
+}
+.bo-log-item:hover { background: var(--gray-50); }
+.bo-log-item:last-child { border-bottom: none; }
+.bo-log-time { color: var(--gray-400); font-size: 12px; }
+.bo-log-user { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--black); }
+.bo-log-avatar {
+  width: 26px; height: 26px;
+  background: var(--primary);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--white);
+  flex-shrink: 0;
+}
+.bo-log-action { color: var(--gray-700); }
+.bo-log-ip { color: var(--gray-400); font-size: 11px; font-family: monospace; }
+
+/* ── Modal ── */
+.bo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.bo-modal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,.2);
+}
+.bo-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1.5px solid var(--gray-100);
+}
+.bo-modal-header h3 { font-size: 17px; font-weight: 800; color: var(--black); letter-spacing: -.02em; }
+.bo-modal-close {
+  background: var(--gray-100);
+  border: none;
+  border-radius: 6px;
+  width: 28px; height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--gray-600);
+  display: flex; align-items: center; justify-content: center;
+}
+.bo-modal-body { padding: 24px; }
+.bo-modal-footer {
+  padding: 16px 24px;
+  border-top: 1.5px solid var(--gray-100);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ── Form (modal) ── */
+.bo-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.bo-span2 { grid-column: span 2; }
+.bo-form-group { display: flex; flex-direction: column; gap: 6px; }
+.bo-form-group label { font-size: 12px; font-weight: 700; color: var(--gray-600); text-transform: uppercase; letter-spacing: .04em; }
+.bo-textarea {
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--black);
+  outline: none;
+  resize: vertical;
+  transition: border-color .2s;
+}
+.bo-textarea:focus { border-color: var(--primary); }
+.bo-radio-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all .15s;
+}
+.bo-radio-pill:has(input:checked) { background: var(--primary-100); border-color: var(--primary); color: var(--primary); }
+.bo-radio-pill input { display: none; }
+.bo-upload-mini {
+  border: 1.5px dashed var(--gray-300);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--gray-400);
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.bo-upload-mini:hover { border-color: var(--primary); color: var(--primary); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .bo-sidebar { transform: translateX(-100%); }
+  .bo-sidebar.mobile-open { transform: translateX(0); }
+  .bo-main { margin-left: 0; }
+  .bo-mobile-menu { display: block; }
+  .bo-log-item { grid-template-columns: 1fr; gap: 4px; }
+  .bo-log-ip { display: none; }
+}
+</style>
+
+<!-- MODAL: Editar usuario -->
+<div class="bo-modal-overlay" id="editUserModal" style="display:none" onclick="if(event.target.id==='editUserModal')event.target.style.display='none'">
+  <div class="bo-modal">
+    <div class="bo-modal-header">
+      <h3>Editar usuario</h3>
+      <button onclick="document.getElementById('editUserModal').style.display='none'" class="bo-modal-close">✕</button>
+    </div>
+    <div class="bo-modal-body">
+      <div class="bo-form-grid">
+        <div class="bo-form-group">
+          <label>Nombre completo</label>
+          <input type="text" class="bo-select-full" id="euNombre" />
+        </div>
+        <div class="bo-form-group">
+          <label>Email</label>
+          <input type="email" class="bo-select-full" id="euEmail" />
+        </div>
+        <div class="bo-form-group">
+          <label>Rol</label>
+          <select class="bo-select-full" id="euRol">
+            <option>Compliance Officer</option>
+            <option>Investigador</option>
+            <option>Legal Reviewer</option>
+            <option>Auditor Interno</option>
+            <option>RRHH</option>
+            <option>Solo lectura</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Jurisdicción</label>
+          <input type="text" class="bo-select-full" id="euJuris" />
+        </div>
+        <div class="bo-form-group">
+          <label>Estado</label>
+          <select class="bo-select-full" id="euEstado">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="bo-modal-footer">
+      <button onclick="document.getElementById('editUserModal').style.display='none'" class="bo-btn bo-btn-ghost">Cancelar</button>
+      <button onclick="saveEditUser()" class="bo-btn bo-btn-primary">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Invitar usuario -->
+<div class="bo-modal-overlay" id="inviteUserModal" style="display:none" onclick="if(event.target.id==='inviteUserModal')event.target.style.display='none'">
+  <div class="bo-modal">
+    <div class="bo-modal-header">
+      <h3>Invitar nuevo usuario</h3>
+      <button onclick="document.getElementById('inviteUserModal').style.display='none'" class="bo-modal-close">✕</button>
+    </div>
+    <div class="bo-modal-body">
+      <div class="bo-form-grid">
+        <div class="bo-form-group">
+          <label>Nombre completo *</label>
+          <input type="text" class="bo-select-full" id="invNombre" placeholder="Nombre y apellido" />
+        </div>
+        <div class="bo-form-group">
+          <label>Email corporativo *</label>
+          <input type="email" class="bo-select-full" id="invEmail" placeholder="usuario@empresa.com" />
+        </div>
+        <div class="bo-form-group">
+          <label>Rol *</label>
+          <select class="bo-select-full" id="invRol">
+            <option>— Seleccioná —</option>
+            <option>Compliance Officer</option>
+            <option>Investigador</option>
+            <option>Legal Reviewer</option>
+            <option>Auditor Interno</option>
+            <option>RRHH</option>
+            <option>Solo lectura</option>
+          </select>
+        </div>
+        <div class="bo-form-group">
+          <label>Jurisdicción</label>
+          <input type="text" class="bo-select-full" id="invJuris" placeholder="Ej: Argentina, Multi-región" />
+        </div>
+        <div class="bo-form-group bo-span2">
+          <label style="font-size:12px;color:var(--gray-500)">Se enviará un email de invitación con las instrucciones para crear la contraseña.</label>
+        </div>
+      </div>
+    </div>
+    <div class="bo-modal-footer">
+      <button onclick="document.getElementById('inviteUserModal').style.display='none'" class="bo-btn bo-btn-ghost">Cancelar</button>
+      <button onclick="sendInvite()" class="bo-btn bo-btn-primary">Enviar invitación</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="boToast" style="display:none;position:fixed;bottom:28px;right:28px;z-index:9999;background:#002B2E;color:#fff;padding:14px 20px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);align-items:center;gap:10px;max-width:360px">
+  <span id="boToastIcon">✅</span>
+  <span id="boToastMsg">Acción realizada</span>
+</div>
+
+<script>
+// ── Date ──────────────────────────────────────────────────────
+document.getElementById('dashDate').textContent = new Date().toLocaleDateString('es-AR', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+});
+setDashGreeting();
+
+// ── Sidebar toggle ────────────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const main = document.getElementById('boMain');
+  if (!sb || !main) return;
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    sb.classList.toggle('mobile-open');
+    document.body.style.overflow = sb.classList.contains('mobile-open') ? 'hidden' : '';
+  } else {
+    sb.classList.toggle('collapsed');
+    main.classList.toggle('expanded');
+  }
+}
+
+// ── Filtros avanzados ─────────────────────────────────────────
+function toggleFiltrosAvanzados() {
+  const panel = document.getElementById('filtrosAvanzadosPanel');
+  const btn = document.getElementById('btnFiltrosAvanzados');
+  if (!panel || !btn) return;
+  const isOpen = panel.style.display === 'block';
+  panel.style.display = isOpen ? 'none' : 'block';
+  btn.classList.toggle('bo-btn-active', !isOpen);
+}
+function aplicarFiltrosAvanzados() {
+  if (document.getElementById('casosTableBody')) renderCasosTable();
+  toggleFiltrosAvanzados();
+}
+
+// ── View switching ────────────────────────────────────────────
+const viewTitles = {
+  dashboard: 'Dashboard',
+  casos: 'Casos',
+  tareas: 'Mis tareas',
+  comunicaciones: 'Comunicaciones',
+  auditoria: 'Auditoría / Log',
+  usuarios: 'Usuarios y roles'
+};
+
+function showView(name) {
+  document.querySelectorAll('.bo-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.bo-nav-item').forEach(n => n.classList.remove('active'));
+  const view = document.getElementById('view-' + name);
+  if (view) view.classList.add('active');
+  document.getElementById('currentView').textContent = viewTitles[name] || name;
+
+  // Activate nav item (match by showView('name') or preventDefault + showView('name'))
+  document.querySelectorAll('.bo-nav-item').forEach(n => {
+    const onclick = n.getAttribute('onclick') || '';
+    if (onclick.indexOf("showView('" + name + "')") !== -1 || onclick.indexOf('"' + name + '"') !== -1) n.classList.add('active');
+  });
+
+  if (name === 'casos') renderCasosTable();
+}
+
+// ── Generate cases table ──────────────────────────────────────
+const CASOS_DATA = [
+  { id:'ARG-2025-0044', tipo:'Acoso laboral', area:'RRHH', canal:'Web', riesgo:'high', estado:'new', anon:'Sí', inv:'—', sla:'23', sla_s:'ok', fecha:'22/02/2025' },
+  { id:'ARG-2025-0043', tipo:'Fraude financiero', area:'Finanzas', canal:'Email', riesgo:'critical', estado:'investigating', anon:'No', inv:'R. Mendoza', sla:'8', sla_s:'warn', fecha:'18/02/2025' },
+  { id:'ARG-2025-0042', tipo:'AML / Lavado', area:'Compras', canal:'Web', riesgo:'critical', estado:'investigating', anon:'Sí', inv:'R. Mendoza', sla:'5', sla_s:'warn', fecha:'14/02/2025' },
+  { id:'ARG-2025-0041', tipo:'Fraude financiero', area:'Finanzas', canal:'WhatsApp', riesgo:'high', estado:'new', anon:'Sí', inv:'—', sla:'VENCIDO', sla_s:'over', fecha:'10/02/2025' },
+  { id:'ARG-2025-0040', tipo:'Conflicto interés', area:'Dirección', canal:'Web', riesgo:'medium', estado:'review', anon:'No', inv:'M. Álvarez', sla:'16', sla_s:'ok', fecha:'08/02/2025' },
+  { id:'ARG-2025-0039', tipo:'Corrupción', area:'Compras', canal:'Email', riesgo:'critical', estado:'investigating', anon:'Sí', inv:'J. Torres', sla:'2', sla_s:'warn', fecha:'05/02/2025' },
+  { id:'ARG-2025-0038', tipo:'Acoso laboral', area:'RRHH', canal:'Teléfono', riesgo:'high', estado:'new', anon:'No', inv:'—', sla:'VENCIDO', sla_s:'over', fecha:'01/02/2025' },
+  { id:'ARG-2025-0037', tipo:'Discriminación', area:'RRHH', canal:'Web', riesgo:'medium', estado:'review', anon:'Sí', inv:'M. Álvarez', sla:'12', sla_s:'ok', fecha:'28/01/2025' },
+  { id:'ARG-2025-0036', tipo:'Acoso sexual', area:'Operaciones', canal:'Web', riesgo:'high', estado:'investigating', anon:'Sí', inv:'J. Torres', sla:'9', sla_s:'warn', fecha:'25/01/2025' },
+  { id:'ARG-2025-0035', tipo:'Seguridad laboral', area:'Operaciones', canal:'WhatsApp', riesgo:'medium', estado:'review', anon:'No', inv:'R. Mendoza', sla:'20', sla_s:'ok', fecha:'20/01/2025' },
+];
+
+const riskLabels = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' };
+
+function buildRow(c) {
+  return `<tr class="bo-table-row" onclick="goToCase('${c.id}')">
+    <td><input type="checkbox" class="bo-checkbox" onclick="event.stopPropagation()" /></td>
+    <td><code class="bo-code">${c.id}</code></td>
+    <td>${c.tipo}</td>
+    <td>${c.area}</td>
+    <td><span style="font-size:11px;color:var(--gray-500)">${c.canal}</span></td>
+    <td><span class="risk-tag risk-${c.riesgo}">${riskLabels[c.riesgo]}</span></td>
+    <td><span class="status-tag status-${c.estado}">${statusLabel(c.estado)}</span></td>
+    <td><span style="font-size:12px;color:${c.anon==='Sí'?'var(--gray-400)':'var(--black)'}">${c.anon}</span></td>
+    <td>${c.inv === '—' ? '<span class="bo-unassigned">Sin asignar</span>' : c.inv}</td>
+    <td><span class="sla-tag sla-${c.sla_s}">${c.sla_s==='over'?'Vencido':c.sla+' días'}</span></td>
+    <td>${c.fecha}</td>
+    <td><a href="backoffice-caso.html?id=${c.id}" class="bo-table-link" onclick="event.stopPropagation()">Abrir</a></td>
+  </tr>`;
+}
+
+function renderCasosTable(data) {
+  const tbody = document.getElementById('casosTableBody');
+  if (!tbody) return;
+  var rows = (data || CASOS_DATA);
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" style="padding:40px;text-align:center;color:var(--gray-500)">No se encontraron casos con los filtros seleccionados.</td></tr>';
+  } else {
+    tbody.innerHTML = rows.map(buildRow).join('');
+  }
+  var info = document.querySelector('.bo-table-info');
+  if (info) info.textContent = 'Mostrando ' + rows.length + ' de ' + CASOS_DATA.length + ' casos';
+}
+
+function filterCasos() {
+  var q = (document.getElementById('casoBusqueda') || {}).value.toLowerCase().trim();
+  var estado = (document.getElementById('filterEstado') || {}).value;
+  var riesgo = (document.getElementById('filterRiesgo') || {}).value;
+  var area   = (document.getElementById('filterArea') || {}).value;
+  var tipo   = (document.getElementById('filterTipo') || {}).value;
+  var result = CASOS_DATA.filter(function(c) {
+    var matchQ = !q || [c.id, c.tipo, c.area, c.canal, c.inv].join(' ').toLowerCase().includes(q);
+    var matchE = !estado || c.estado === estado;
+    var matchR = !riesgo || c.riesgo === riesgo;
+    var matchA = !area   || c.area.toLowerCase().includes(area.toLowerCase());
+    var matchT = !tipo   || c.tipo.toLowerCase().includes(tipo.toLowerCase());
+    return matchQ && matchE && matchR && matchA && matchT;
+  });
+  renderCasosTable(result);
+}
+
+function statusLabel(s) {
+  return { new:'Nuevo', eval:'En evaluación', review:'En revisión', investigating:'Investigando', 'closed-ok':'Cerrado', 'closed-no':'Desestimado' }[s] || s;
+}
+
+function goToCase(id) {
+  window.location.href = 'backoffice-caso.html?id=' + id;
+}
+
+// ── Usuarios ─────────────────────────────────────────────────
+function editUser(nombre, email, rol, juris, acceso, estado) {
+  document.getElementById('euNombre').value = nombre;
+  document.getElementById('euEmail').value = email;
+  var rolSel = document.getElementById('euRol');
+  for (var i = 0; i < rolSel.options.length; i++) { if (rolSel.options[i].text === rol) rolSel.selectedIndex = i; }
+  document.getElementById('euJuris').value = juris;
+  document.getElementById('euEstado').value = estado;
+  document.getElementById('editUserModal').style.display = 'flex';
+}
+function saveEditUser() {
+  var nombre = document.getElementById('euNombre').value.trim();
+  if (!nombre) { alert('El nombre es requerido.'); return; }
+  document.getElementById('editUserModal').style.display = 'none';
+  showToast('Usuario «' + nombre + '» actualizado correctamente', '✅');
+}
+function showInviteModal() {
+  document.getElementById('invNombre').value = '';
+  document.getElementById('invEmail').value = '';
+  document.getElementById('invRol').selectedIndex = 0;
+  document.getElementById('invJuris').value = '';
+  document.getElementById('inviteUserModal').style.display = 'flex';
+}
+function sendInvite() {
+  var nombre = document.getElementById('invNombre').value.trim();
+  var email  = document.getElementById('invEmail').value.trim();
+  var rol    = document.getElementById('invRol').value;
+  if (!nombre || !email) { alert('Nombre y email son requeridos.'); return; }
+  if (rol === '— Seleccioná —') { alert('Seleccioná un rol.'); return; }
+  document.getElementById('inviteUserModal').style.display = 'none';
+  showToast('Invitación enviada a ' + email, '📧');
+}
+
+// ── Dashboard greeting ────────────────────────────────────────
+function setDashGreeting() {
+  var h = new Date().getHours();
+  var g = h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches';
+  var el = document.getElementById('dashGreeting');
+  if (el) el.textContent = g;
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg, icon) {
+  var t = document.getElementById('boToast');
+  if (!t) return;
+  document.getElementById('boToastMsg').textContent = msg;
+  document.getElementById('boToastIcon').textContent = icon || '✅';
+  t.style.display = 'flex';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(function() { t.style.display = 'none'; }, 4000);
+}
+
+// ── Modal ─────────────────────────────────────────────────────
+function showNewCase() {
+  document.getElementById('newCaseModal').style.display = 'flex';
+}
+function closeModal(e) {
+  if (e.target.id === 'newCaseModal') e.target.style.display = 'none';
+}
+function createCase() {
+  var tipo = document.getElementById('newCaseTipo');
+  var riesgo = document.getElementById('newCaseRiesgo');
+  var area = document.getElementById('newCaseArea');
+  var inv = document.getElementById('newCaseInv');
+
+  if (!tipo || tipo.value === '— Seleccioná —') { alert('Seleccioná el tipo de denuncia.'); return; }
+  if (!riesgo || riesgo.value === '— Evaluar —') { alert('Seleccioná el nivel de riesgo.'); return; }
+
+  var riesgoMap = { 'Bajo':'low', 'Medio':'medium', 'Alto':'high', 'Crítico':'critical' };
+  var riesgoCss = riesgoMap[riesgo.value] || 'medium';
+  var invValue = inv && inv.value !== 'Sin asignar' ? inv.value.split(' (')[0] : '—';
+  var areaVal = area && area.value !== '— Seleccioná —' ? area.value : 'Sin especificar';
+
+  var lastId = parseInt((CASOS_DATA[0]?.id || 'ARG-2025-0044').split('-')[2]);
+  var newId = 'ARG-2025-' + String(lastId + 1).padStart(4, '0');
+  var today = new Date();
+  var dateStr = String(today.getDate()).padStart(2,'0') + '/' + String(today.getMonth()+1).padStart(2,'0') + '/' + today.getFullYear();
+
+  CASOS_DATA.unshift({
+    id: newId,
+    tipo: tipo.value,
+    area: areaVal,
+    canal: 'Manual',
+    riesgo: riesgoCss,
+    estado: 'new',
+    anon: 'No',
+    inv: invValue,
+    sla: '60',
+    sla_s: 'ok',
+    fecha: dateStr
+  });
+
+  document.getElementById('newCaseModal').style.display = 'none';
+  tipo.selectedIndex = 0;
+  riesgo.selectedIndex = 0;
+  if (area) area.selectedIndex = 0;
+  if (inv) inv.selectedIndex = 0;
+
+  showView('casos');
+  showToast('Caso ' + newId + ' creado correctamente', '✅');
+}
+
+// ── Notifications ─────────────────────────────────────────────
+function toggleNotifs() { /* placeholder */ }
+
+// ── Canvas chart (simple bars) ────────────────────────────────
+window.addEventListener('load', () => {
+  const canvas = document.getElementById('casesChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth - 40;
+  const H = 180;
+  canvas.width = W;
+  canvas.height = H;
+
+  const months = ['Sep','Oct','Nov','Dic','Ene','Feb'];
+  const received = [8, 12, 7, 15, 11, 9];
+  const closed =   [5,  9, 6, 12,  8, 11];
+  const maxV = Math.max(...received, ...closed);
+  const barW = 18;
+  const gap = W / months.length;
+  const padTop = 20;
+  const padBot = 24;
+  const chartH = H - padTop - padBot;
+
+  ctx.font = '11px Inter, sans-serif';
+  ctx.fillStyle = '#8CBDC3';
+  ctx.textAlign = 'center';
+
+  months.forEach((m, i) => {
+    const x = gap * i + gap / 2;
+    const rH = (received[i] / maxV) * chartH;
+    const cH = (closed[i] / maxV) * chartH;
+
+    // Received bar
+    ctx.fillStyle = '#0097A7';
+    ctx.beginPath();
+    ctx.roundRect(x - barW - 2, H - padBot - rH, barW, rH, [4, 4, 0, 0]);
+    ctx.fill();
+
+    // Closed bar
+    ctx.fillStyle = '#16A34A';
+    ctx.beginPath();
+    ctx.roundRect(x + 2, H - padBot - cH, barW, cH, [4, 4, 0, 0]);
+    ctx.fill();
+
+    // Label
+    ctx.fillStyle = '#007A87';
+    ctx.fillText(m, x, H - 4);
+  });
+});
+
+function updateDashboard(days) { /* live filter — placeholder */ }
+</script>
+
+</body>
+</html>
