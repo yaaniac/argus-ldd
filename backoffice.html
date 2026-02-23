@@ -3199,13 +3199,12 @@ var PRINT_CSS = [
 ].join('');
 
 function _printViaIframe(html) {
-  // Elimina iframe previo si existe
   var old = document.getElementById('__print_frame');
   if (old) old.remove();
 
   var iframe = document.createElement('iframe');
   iframe.id = '__print_frame';
-  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none';
+  iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;opacity:0;pointer-events:none';
   document.body.appendChild(iframe);
 
   var doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -3213,13 +3212,11 @@ function _printViaIframe(html) {
   doc.write(html);
   doc.close();
 
-  // Esperar a que cargue antes de imprimir
-  iframe.onload = function() {
-    setTimeout(function() {
-      try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
-      catch(e) { showToast('No se pudo abrir el diálogo de impresión', '⚠️'); }
-    }, 200);
-  };
+  // setTimeout más confiable que onload con doc.write
+  setTimeout(function() {
+    try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+    catch(e) { showToast('No se pudo abrir el diálogo de impresión', '⚠️'); }
+  }, 600);
 }
 
 function _buildPrintHeader(empresa, fecha, titulo, subtitulo) {
