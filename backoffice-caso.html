@@ -151,9 +151,13 @@
             <option value="review">En revisión legal</option>
             <option value="closed">Cerrar caso</option>
           </select>
-          <button class="bo-btn bo-btn-outline">
+          <button class="bo-btn bo-btn-outline" onclick="exportCasoPdf()">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v9M3 6l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 11h12v2H1z" fill="currentColor" opacity=".3"/></svg>
             Exportar PDF
+          </button>
+          <button class="bo-btn bo-btn-outline" onclick="exportCasoCsv()" style="border-color:var(--primary-700);color:var(--primary-700)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h6l4 4v6a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.3"/><path d="M8 2v4h4M4 8h6M4 10.5h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Exportar CSV
           </button>
           <button class="bo-btn bo-btn-primary" onclick="openCloseModal()">Resolver caso</button>
         </div>
@@ -1320,6 +1324,307 @@ document.title = 'Caso ' + caseId + ' · Argus Back Office';
 })();
 
 function triggerUpload() { /* placeholder */ }
+
+/* ═══════════════════════════════════════════════
+   EXPORTACIÓN — CASO INDIVIDUAL
+   ═══════════════════════════════════════════════ */
+
+var CASO_PRINT_CSS = [
+  'body{font-family:system-ui,sans-serif;color:#111;margin:0;padding:24px 28px;font-size:12px}',
+  '.ph{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2.5px solid #0097A7;padding-bottom:12px;margin-bottom:18px}',
+  '.logo{font-size:20px;font-weight:900;color:#0097A7;letter-spacing:-.03em}',
+  '.meta{font-size:11px;color:#666;text-align:right;line-height:1.7}',
+  '.sec{font-size:11px;font-weight:700;color:#002B2E;text-transform:uppercase;letter-spacing:.06em;margin:18px 0 8px;border-left:3px solid #0097A7;padding-left:7px}',
+  /* Header del caso */
+  '.case-h{background:#f0f7f8;border-radius:8px;padding:14px 16px;margin-bottom:4px}',
+  '.case-h h2{margin:0 0 4px;font-size:16px;color:#002B2E}',
+  '.case-h-meta{font-size:10.5px;color:#5F9EA5;margin-top:4px}',
+  /* Tags */
+  '.risk-tag,.status-tag,.bo-tag{display:inline-block;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;margin:0 2px}',
+  '.risk-critical{background:#fef2f2;color:#dc2626}.risk-high{background:#fff7ed;color:#ea580c}',
+  '.risk-medium{background:#fefce8;color:#ca8a04}.risk-low{background:#f0fdf4;color:#16a34a}',
+  '.status-investigating{background:#fff7ed;color:#ea580c}.status-new{background:#e0f7fa;color:#0097a7}',
+  '.status-review{background:#f5f3ff;color:#7c3aed}.status-closed-ok{background:#f0fdf4;color:#16a34a}',
+  '.status-closed-no{background:#eaf6f7;color:#5f9ea5}',
+  '.bo-tag{background:#e0f7fa;color:#006064}',
+  /* Grilla de 2 columnas */
+  '.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:4px}',
+  '.col{}',
+  '.card{border:1px solid #dde8ea;border-radius:8px;padding:12px 14px;margin-bottom:10px;background:#fafefe}',
+  '.card h3{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#5F9EA5;margin:0 0 8px}',
+  /* Info rows */
+  '.info-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0f7f8;font-size:11px}',
+  '.info-row span:first-child{color:#5F9EA5;font-weight:500}',
+  'code{font-family:monospace;font-size:9px;background:#e0f7fa;padding:1px 5px;border-radius:3px;color:#006064}',
+  /* Asignación */
+  '.assign-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f0f7f8;font-size:11px}',
+  '.assign-label{color:#5F9EA5;font-weight:500}',
+  /* Timeline */
+  '.tl-item{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid #f0f7f8}',
+  '.tl-dot{width:8px;height:8px;border-radius:50%;background:#0097A7;flex-shrink:0;margin-top:3px}',
+  '.tl-body{font-size:11px}',
+  '.tl-time{font-size:9px;color:#9ca3af;margin-left:6px}',
+  /* Notas */
+  '.nota{padding:8px 0;border-bottom:1px solid #f0f7f8}',
+  '.nota-meta{font-size:9px;color:#9ca3af;margin-bottom:3px}',
+  '.nota-body{font-size:11px;color:#374151;margin:0}',
+  /* Descripción */
+  '.desc{font-size:11.5px;color:#374151;line-height:1.6;margin:0}',
+  /* Personas involucradas */
+  '.inv-item{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid #f0f7f8;align-items:center}',
+  '.inv-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}',
+  '.inv-info{flex:1;font-size:11px}',
+  '.inv-info strong{display:block}',
+  '.inv-info span{color:#6B7280;font-size:10px}',
+  /* Riesgo */
+  '.risk-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}',
+  '.risk-bar-label{font-size:10px;width:150px;color:#374151}',
+  '.risk-bar-track{flex:1;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden}',
+  '.risk-bar-fill{height:100%;border-radius:3px}',
+  '.risk-bar-val{font-size:9px;width:40px;text-align:right;color:#374151}',
+  /* Pie */
+  '.print-footer{margin-top:18px;font-size:9px;color:#9ca3af;text-align:center;border-top:1px solid #eee;padding-top:8px}',
+  'button{display:none}input{display:none}',
+  '@media print{body{padding:10px}@page{size:A4 portrait;margin:14mm}}',
+].join('');
+
+function _casoPrintViaIframe(html) {
+  var old = document.getElementById('__print_frame_caso');
+  if (old) old.remove();
+  var iframe = document.createElement('iframe');
+  iframe.id = '__print_frame_caso';
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none';
+  document.body.appendChild(iframe);
+  var doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open();
+  doc.write(html);
+  doc.close();
+  iframe.onload = function() {
+    setTimeout(function() {
+      try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+      catch(e) { showToast('No se pudo abrir el diálogo de impresión', '⚠️'); }
+    }, 300);
+  };
+}
+
+function exportCasoPdf() {
+  var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
+  var fecha   = new Date().toLocaleDateString('es-AR', {year:'numeric', month:'long', day:'numeric'});
+
+  // Header de página
+  var header = '<div class="ph">' +
+    '<div><span class="logo">Argus<span style="color:#0097A7">.</span></span>' +
+      '<div style="font-size:11px;color:#666;margin-top:2px">' + empresa + ' · Back Office</div></div>' +
+    '<div class="meta">Reporte de Caso<br>' + caseId + '<br>' + fecha + ' · <strong>Confidencial</strong></div>' +
+  '</div>';
+
+  // Encabezado del caso
+  var casoHeader = '<div class="case-h">' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">' +
+      '<code>' + caseId + '</code>' +
+      (document.querySelector('.risk-tag') ? document.querySelector('.risk-tag').outerHTML : '') +
+      (document.getElementById('caseStatusBadge') ? document.getElementById('caseStatusBadge').outerHTML : '') +
+    '</div>' +
+    '<h2>' + (document.querySelector('.case-title') ? document.querySelector('.case-title').textContent : '') + '</h2>' +
+    '<div class="case-h-meta">' + (document.querySelector('.case-meta') ? document.querySelector('.case-meta').innerText : '') + '</div>' +
+  '</div>';
+
+  // SLA
+  var slaText = document.querySelector('.sla-bar-info') ? document.querySelector('.sla-bar-info').innerText : '';
+  var slaHtml = '<div style="font-size:11px;background:#fff7ed;color:#92400e;border-radius:6px;padding:6px 10px;margin:8px 0">' + slaText + '</div>';
+
+  // Grilla principal
+  var body = header + casoHeader + slaHtml;
+
+  body += '<div class="grid2">';
+
+  // Columna izquierda: descripción + personas + riesgo
+  body += '<div class="col">';
+
+  // Descripción
+  var descEl = document.querySelector('#tab-resumen .case-description');
+  if (descEl) {
+    body += '<div class="sec">Descripción del hecho</div><div class="card">';
+    body += '<p class="desc">' + (descEl.querySelector('p') ? descEl.querySelector('p').textContent : '') + '</p>';
+    var tagsHtml = Array.from(descEl.querySelectorAll('.bo-tag')).map(function(t){ return '<span class="bo-tag">' + t.textContent.replace(' ×','') + '</span>'; }).join(' ');
+    if (tagsHtml) body += '<div style="margin-top:8px">' + tagsHtml + '</div>';
+    body += '</div>';
+  }
+
+  // Personas involucradas
+  var invEl = document.querySelector('.involved-list');
+  if (invEl) {
+    body += '<div class="sec">Personas involucradas</div><div class="card">';
+    Array.from(invEl.querySelectorAll('.involved-item')).forEach(function(item) {
+      var nombre = item.querySelector('strong') ? item.querySelector('strong').textContent : '';
+      var rol    = item.querySelector('span') ? item.querySelector('span').textContent : '';
+      var tag    = item.querySelector('.risk-tag') ? item.querySelector('.risk-tag').outerHTML : '';
+      body += '<div class="inv-item">' +
+        '<div class="inv-info"><strong>' + nombre + '</strong><span>' + rol + '</span></div>' + tag + '</div>';
+    });
+    body += '</div>';
+  }
+
+  // Evaluación de riesgo
+  var riskEl = document.querySelector('.risk-eval-grid');
+  if (riskEl) {
+    body += '<div class="sec">Evaluación de riesgo</div><div class="card">';
+    Array.from(riskEl.querySelectorAll('.risk-eval-item')).forEach(function(row) {
+      var lbl = row.querySelector('.risk-eval-label') ? row.querySelector('.risk-eval-label').textContent : '';
+      var val = row.querySelector('.risk-eval-val') ? row.querySelector('.risk-eval-val').textContent : '';
+      var fillStyle = row.querySelector('.risk-eval-bar div') ? row.querySelector('.risk-eval-bar div').getAttribute('style') : '';
+      var w   = (fillStyle.match(/width:(\d+%)/) || [])[1] || '50%';
+      var bg  = (fillStyle.match(/background:(#[0-9a-fA-F]+)/) || [])[1] || '#0097A7';
+      body += '<div class="risk-bar-row">' +
+        '<span class="risk-bar-label">' + lbl + '</span>' +
+        '<div class="risk-bar-track"><div class="risk-bar-fill" style="width:' + w + ';background:' + bg + '"></div></div>' +
+        '<span class="risk-bar-val">' + val + '</span>' +
+      '</div>';
+    });
+    body += '</div>';
+  }
+
+  body += '</div>'; // /col izquierda
+
+  // Columna derecha: asignación + info del caso + notas
+  body += '<div class="col">';
+
+  // Asignación
+  body += '<div class="sec">Asignación</div><div class="card">';
+  var assignRows = [
+    { label: 'Investigador principal', id: 'assignName-inv' },
+    { label: 'Revisión legal',         id: 'assignName-legal' },
+    { label: 'Supervisor',             text: 'M. Álvarez' },
+    { label: 'Equipo RRHH',            id: 'assignName-rrhh' }
+  ];
+  assignRows.forEach(function(r) {
+    var val = r.text || (document.getElementById(r.id) ? document.getElementById(r.id).textContent : '—');
+    body += '<div class="assign-row"><span class="assign-label">' + r.label + '</span><span>' + val + '</span></div>';
+  });
+  body += '</div>';
+
+  // Información del caso
+  body += '<div class="sec">Información del caso</div><div class="card">';
+  var infoRows = document.querySelectorAll('.case-info-row');
+  infoRows.forEach(function(row) {
+    var spans = row.querySelectorAll('span, code');
+    if (spans.length >= 2) {
+      body += '<div class="info-row"><span>' + spans[0].textContent + '</span><span>' + spans[spans.length-1].textContent + '</span></div>';
+    }
+  });
+  body += '</div>';
+
+  // Notas internas
+  var notasEl = document.getElementById('notasList');
+  if (notasEl && notasEl.querySelectorAll('.nota-item').length > 0) {
+    body += '<div class="sec">Notas internas</div><div class="card">';
+    notasEl.querySelectorAll('.nota-item').forEach(function(nota) {
+      var meta = nota.querySelector('.nota-meta') ? nota.querySelector('.nota-meta').textContent : '';
+      var texto = nota.querySelector('.nota-body, p') ? nota.querySelector('.nota-body, p').textContent : '';
+      body += '<div class="nota"><div class="nota-meta">' + meta + '</div><p class="nota-body">' + texto + '</p></div>';
+    });
+    body += '</div>';
+  }
+
+  body += '</div>'; // /col derecha
+  body += '</div>'; // /grid2
+
+  // Timeline / Log
+  var tlEl = document.querySelector('.case-timeline');
+  if (tlEl) {
+    body += '<div class="sec">Log de actividad</div><div class="card">';
+    Array.from(tlEl.querySelectorAll('.timeline-item, .tl-entry, li, [class*="timeline"]')).slice(0,12).forEach(function(item) {
+      body += '<div class="tl-item"><div class="tl-dot"></div><div class="tl-body">' + item.innerText + '</div></div>';
+    });
+    body += '</div>';
+  }
+
+  body += '<div class="print-footer">Generado por Argus Compliance · ' + fecha + ' · Documento confidencial — uso interno exclusivo</div>';
+
+  _casoPrintViaIframe('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Caso ' + caseId + ' · ' + empresa + '</title>' +
+    '<style>' + CASO_PRINT_CSS + '</style></head><body>' + body + '</body></html>');
+  showToast('Preparando PDF del caso…', '🖨️');
+}
+
+function exportCasoCsv() {
+  // Recopilar datos del caso
+  var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : '') || 'Argus';
+  var fecha   = new Date().toISOString().slice(0,10);
+
+  var status  = document.getElementById('caseStatusBadge') ? document.getElementById('caseStatusBadge').textContent.trim() : '';
+  var titulo  = document.querySelector('.case-title') ? document.querySelector('.case-title').textContent.trim() : '';
+  var caseMeta = document.querySelector('.case-meta') ? document.querySelector('.case-meta').innerText : '';
+
+  // Info del caso desde el panel lateral
+  var infoMap = {};
+  document.querySelectorAll('.case-info-row').forEach(function(row) {
+    var spans = row.querySelectorAll('span, code');
+    if (spans.length >= 2) {
+      infoMap[spans[0].textContent.trim()] = spans[spans.length-1].textContent.trim();
+    }
+  });
+
+  // Asignaciones
+  var invNombre   = document.getElementById('assignName-inv')   ? document.getElementById('assignName-inv').textContent.trim()   : '';
+  var legalNombre = document.getElementById('assignName-legal') ? document.getElementById('assignName-legal').textContent.trim() : '';
+  var rrhhNombre  = document.getElementById('assignName-rrhh')  ? document.getElementById('assignName-rrhh').textContent.trim()  : '';
+
+  // Tags
+  var tags = Array.from(document.querySelectorAll('#tagsList .bo-tag'))
+    .map(function(t){ return t.textContent.replace(/\s*×\s*$/, '').trim(); }).join('; ');
+
+  // Notas
+  var notas = Array.from(document.querySelectorAll('#notasList .nota-item'))
+    .map(function(n){
+      var meta  = n.querySelector('.nota-meta') ? n.querySelector('.nota-meta').textContent.trim() : '';
+      var texto = n.querySelector('.nota-body, p') ? n.querySelector('.nota-body, p').textContent.trim() : '';
+      return meta + ': ' + texto;
+    }).join(' | ');
+
+  // Personas involucradas
+  var personas = Array.from(document.querySelectorAll('.involved-item'))
+    .map(function(p){
+      var nombre = p.querySelector('strong') ? p.querySelector('strong').textContent.trim() : '';
+      var rol    = p.querySelector('span')   ? p.querySelector('span').textContent.trim()   : '';
+      return nombre + ' (' + rol + ')';
+    }).join('; ');
+
+  function esc(v){ return '"' + String(v||'').replace(/"/g,'""') + '"'; }
+
+  var headers = [
+    'ID Caso','Título','Canal','Tipo','Área','Jurisdicción',
+    'Riesgo','Estado','Anónima','Confidencialidad',
+    'Investigador principal','Revisión legal','Equipo RRHH',
+    'SLA objetivo','Vencimiento SLA',
+    'Etiquetas','Personas involucradas','Notas internas',
+    'Fecha ingreso','Exportado'
+  ];
+
+  var row = [
+    caseId, titulo,
+    infoMap['Canal'] || '', infoMap['Tipo'] || '', infoMap['Área'] || '', infoMap['Jurisdicción'] || '',
+    infoMap['Riesgo'] || '', status,
+    infoMap['Anónima'] || '', infoMap['Confidencialidad'] || '',
+    invNombre, legalNombre, rrhhNombre,
+    infoMap['SLA objetivo'] || '', infoMap['Vencimiento'] || '',
+    tags, personas, notas,
+    infoMap['Fecha ingreso'] || '', new Date().toLocaleDateString('es-AR')
+  ];
+
+  var csv = headers.map(esc).join(',') + '\r\n' + row.map(esc).join(',');
+  var filename = 'caso_' + caseId + '_' + fecha + '.csv';
+
+  var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1000);
+  showToast('CSV descargado: ' + filename, '📄');
+}
 
 function gateLogout() {
   var sesionKey = 'argus_session_' + TENANT_CASO;
