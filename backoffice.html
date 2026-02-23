@@ -650,62 +650,110 @@
     <div class="bo-view" id="view-usuarios">
       <div class="bo-page-header">
         <h1 class="bo-page-title">Usuarios y roles</h1>
-        <button class="bo-btn bo-btn-primary" onclick="showInviteModal()">+ Invitar usuario</button>
+        <div style="display:flex;gap:10px" id="usr-header-actions">
+          <button class="bo-btn bo-btn-primary" onclick="showInviteModal()">+ Invitar usuario</button>
+        </div>
       </div>
-      <div class="bo-card">
-        <div class="bo-table-wrap">
-          <table class="bo-table">
-            <thead>
-              <tr><th>Usuario</th><th>Rol</th><th>Jurisdicción</th><th>Casos accesibles</th><th>Último acceso</th><th>Estado</th><th></th></tr>
-            </thead>
-            <tbody>
-              <tr class="bo-table-row">
-                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar">MA</div><div><strong>María Álvarez</strong><br/><span style="font-size:12px;color:var(--gray-500)">maria@empresa.com</span></div></div></td>
-                <td><span class="role-tag role-compliance">Compliance Officer</span></td>
-                <td>Argentina · Uruguay</td>
-                <td>Todos</td>
-                <td>Hoy, 14:32</td>
-                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
-                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('María Álvarez','maria@empresa.com','Compliance Officer','Argentina · Uruguay','Todos','activo')">Editar</button></td>
-              </tr>
-              <tr class="bo-table-row">
-                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#D97706">RM</div><div><strong>Rodrigo Mendoza</strong><br/><span style="font-size:12px;color:var(--gray-500)">rodrigo@empresa.com</span></div></div></td>
-                <td><span class="role-tag role-investigator">Investigador</span></td>
-                <td>Argentina</td>
-                <td>Asignados</td>
-                <td>Hoy, 11:05</td>
-                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
-                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Rodrigo Mendoza','rodrigo@empresa.com','Investigador','Argentina','Asignados','activo')">Editar</button></td>
-              </tr>
-              <tr class="bo-table-row">
-                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#059669">JT</div><div><strong>Julia Torres</strong><br/><span style="font-size:12px;color:var(--gray-500)">julia@empresa.com</span></div></div></td>
-                <td><span class="role-tag role-legal">Legal Reviewer</span></td>
-                <td>Argentina</td>
-                <td>Legal / Alto riesgo</td>
-                <td>Hoy, 13:18</td>
-                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
-                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Julia Torres','julia@empresa.com','Legal Reviewer','Argentina','Legal / Alto riesgo','activo')">Editar</button></td>
-              </tr>
-              <tr class="bo-table-row">
-                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#7C3AED">LG</div><div><strong>Laura García</strong><br/><span style="font-size:12px;color:var(--gray-500)">laura@empresa.com</span></div></div></td>
-                <td><span class="role-tag role-auditor">Auditor Interno</span></td>
-                <td>Multi-región</td>
-                <td>Solo lectura</td>
-                <td>Ayer, 16:20</td>
-                <td><span class="status-tag" style="background:#F0FDF4;color:#16A34A">Activo</span></td>
-                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Laura García','laura@empresa.com','Auditor Interno','Multi-región','Solo lectura','activo')">Editar</button></td>
-              </tr>
-              <tr class="bo-table-row">
-                <td><div style="display:flex;align-items:center;gap:10px"><div class="bo-log-avatar" style="background:#DC2626">CP</div><div><strong>Carlos Pérez</strong><br/><span style="font-size:12px;color:var(--gray-500)">carlos@empresa.com</span></div></div></td>
-                <td><span class="role-tag role-rrhh">RRHH</span></td>
-                <td>Argentina</td>
-                <td>Acoso / Laboral</td>
-                <td>20/02/2025</td>
-                <td><span class="status-tag" style="background:#FEF9C3;color:#854D0E">Inactivo</span></td>
-                <td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser('Carlos Pérez','carlos@empresa.com','RRHH','Argentina','Acoso / Laboral','inactivo')">Editar</button></td>
-              </tr>
-            </tbody>
-          </table>
+
+      <!-- Sub-tabs -->
+      <div class="usr-tabs">
+        <button class="usr-tab active" id="usrtab-users" onclick="showUsrTab('users',this)">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-2.8 2.2-5 5-5h0" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="11" cy="9" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M8.5 13h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 11v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Usuarios
+        </button>
+        <button class="usr-tab" id="usrtab-roles" onclick="showUsrTab('roles',this)">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1L2 3.5v4c0 3.3 2.3 6.1 5.5 6.7C10.7 13.6 13 10.8 13 7.5v-4L7.5 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 7.5l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Roles y permisos
+        </button>
+      </div>
+
+      <!-- ── Panel: Usuarios ── -->
+      <div id="usrpanel-users" class="usr-panel">
+        <div class="bo-card">
+          <div class="bo-table-wrap">
+            <table class="bo-table">
+              <thead>
+                <tr><th>Usuario</th><th>Rol</th><th>Jurisdicción</th><th>Casos accesibles</th><th>Último acceso</th><th>Estado</th><th></th></tr>
+              </thead>
+              <tbody id="users-table-body">
+                <!-- Renderizado por renderUsersTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Panel: Roles y permisos ── -->
+      <div id="usrpanel-roles" class="usr-panel" style="display:none">
+
+        <!-- Roles existentes -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <p style="font-size:13px;color:var(--gray-500);margin:0">Definí qué puede hacer cada rol dentro del back office. Los roles del sistema no se pueden eliminar.</p>
+          <button class="bo-btn bo-btn-primary" style="white-space:nowrap" onclick="openRoleModal()">+ Nuevo rol</button>
+        </div>
+
+        <div id="roles-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px"></div>
+
+        <!-- Tabla de permisos completa (toggle) -->
+        <div style="margin-top:28px">
+          <button class="bo-btn bo-btn-ghost" style="font-size:12px;margin-bottom:14px" onclick="togglePermsMatrix()">
+            Ver matriz completa de permisos ↕
+          </button>
+          <div id="perms-matrix-wrap" style="display:none">
+            <div class="bo-card" style="overflow-x:auto">
+              <table class="bo-table" id="perms-matrix-table">
+                <thead><tr id="perms-matrix-head"></tr></thead>
+                <tbody id="perms-matrix-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MODAL: Editar / Crear Rol ── -->
+    <div id="roleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center">
+      <div style="background:var(--white);border-radius:16px;padding:32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+          <h2 style="font-size:18px;font-weight:800;color:var(--black);margin:0" id="roleModalTitle">Nuevo rol</h2>
+          <button onclick="closeRoleModal()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--gray-400)">✕</button>
+        </div>
+
+        <input type="hidden" id="roleModalId" />
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="bo-form-group">
+            <label>Nombre del rol *</label>
+            <input type="text" class="bo-select-full" id="roleModalNombre" placeholder="Ej: Compliance Manager" />
+          </div>
+          <div class="bo-form-group">
+            <label>Descripción</label>
+            <input type="text" class="bo-select-full" id="roleModalDesc" placeholder="Ej: Gestiona todos los casos de compliance" />
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="bo-form-group" style="flex:1;margin:0">
+              <label>Color del badge</label>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+                <input type="color" id="roleModalColor" value="#0097A7" style="width:40px;height:32px;border-radius:6px;border:1px solid var(--gray-200);cursor:pointer" />
+                <input type="text" id="roleModalColorHex" class="bo-select-full" value="#0097A7" placeholder="#0097A7" style="flex:1" oninput="this.previousElementSibling.value=this.value" />
+              </div>
+            </div>
+            <div class="bo-form-group" style="margin:0">
+              <label>Vista previa</label>
+              <div style="margin-top:6px"><span id="roleModalPreview" style="display:inline-flex;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:700;background:#E0F7FA;color:#0097A7">Rol</span></div>
+            </div>
+          </div>
+
+          <!-- Permisos -->
+          <div>
+            <label style="font-size:13px;font-weight:600;color:var(--black);display:block;margin-bottom:12px">Permisos</label>
+            <div id="roleModalPerms" style="display:flex;flex-direction:column;gap:0;border:1px solid var(--gray-200);border-radius:10px;overflow:hidden"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:24px;justify-content:flex-end">
+          <button class="bo-btn bo-btn-ghost" onclick="closeRoleModal()">Cancelar</button>
+          <button class="bo-btn bo-btn-primary" onclick="saveRole()">Guardar rol</button>
         </div>
       </div>
     </div>
@@ -1700,6 +1748,43 @@ a { text-decoration: none; color: inherit; }
 .role-auditor     { background: #F5F3FF; color: #7C3AED; }
 .role-rrhh        { background: #FEF2F2; color: #DC2626; }
 
+/* ── Usuario / Roles sub-tabs ── */
+.usr-tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--gray-100); border-radius:10px; padding:4px; width:fit-content; }
+.usr-tab  { display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; border:none; background:none; cursor:pointer; color:var(--gray-500); transition:all .15s; }
+.usr-tab.active  { background:var(--white); color:var(--primary); box-shadow:0 1px 4px rgba(0,0,0,.10); }
+.usr-tab:hover:not(.active) { color:var(--black); }
+
+/* ── Rol card ── */
+.role-card { background:var(--white); border:1.5px solid var(--gray-200); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:14px; transition:border-color .15s; }
+.role-card:hover { border-color:var(--gray-300); }
+.role-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.role-card-info  { display:flex; flex-direction:column; gap:4px; }
+.role-card-name  { font-size:15px; font-weight:700; color:var(--black); }
+.role-card-desc  { font-size:12px; color:var(--gray-500); line-height:1.5; }
+.role-card-actions { display:flex; gap:6px; flex-shrink:0; }
+.role-perm-list  { display:flex; flex-wrap:wrap; gap:6px; }
+.role-perm-chip  { display:inline-flex; align-items:center; gap:4px; padding:3px 9px; background:var(--gray-100); border-radius:100px; font-size:11px; color:var(--gray-600); font-weight:500; }
+.role-perm-chip.on  { background:var(--primary-100); color:var(--primary-700); }
+.role-sys-badge { font-size:10px; font-weight:600; padding:2px 7px; background:var(--gray-100); color:var(--gray-500); border-radius:100px; text-transform:uppercase; letter-spacing:.05em; }
+
+/* ── Perms matrix ── */
+.perm-matrix-th { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); padding:10px 16px; text-align:left; white-space:nowrap; }
+.perm-matrix-td { padding:10px 16px; border-top:1px solid var(--gray-100); }
+.perm-check     { width:16px; height:16px; accent-color:var(--primary); cursor:pointer; }
+.perm-check:disabled { cursor:not-allowed; opacity:.5; }
+
+/* ── Perms modal rows ── */
+.perm-modal-row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid var(--gray-100); }
+.perm-modal-row:last-child { border-bottom:none; }
+.perm-modal-label { font-size:13px; color:var(--black); font-weight:500; }
+.perm-modal-hint  { font-size:11px; color:var(--gray-400); margin-top:2px; }
+.perm-toggle      { position:relative; display:inline-flex; width:36px; height:20px; flex-shrink:0; }
+.perm-toggle input { opacity:0; width:0; height:0; }
+.perm-toggle-slider { position:absolute; inset:0; background:var(--gray-300); border-radius:100px; cursor:pointer; transition:.2s; }
+.perm-toggle-slider::before { content:''; position:absolute; width:14px; height:14px; background:#fff; border-radius:50%; left:3px; top:3px; transition:.2s; }
+.perm-toggle input:checked + .perm-toggle-slider { background:var(--primary); }
+.perm-toggle input:checked + .perm-toggle-slider::before { transform:translateX(16px); }
+
 /* ── Filters ── */
 .bo-filters { display: flex; flex-direction: column; gap: 10px; }
 .bo-search-wrap {
@@ -1908,12 +1993,7 @@ a { text-decoration: none; color: inherit; }
         <div class="bo-form-group">
           <label>Rol</label>
           <select class="bo-select-full" id="euRol">
-            <option>Compliance Officer</option>
-            <option>Investigador</option>
-            <option>Legal Reviewer</option>
-            <option>Auditor Interno</option>
-            <option>RRHH</option>
-            <option>Solo lectura</option>
+            <!-- Rellenado dinámicamente por populateRoleSelects() -->
           </select>
         </div>
         <div class="bo-form-group">
@@ -1956,13 +2036,7 @@ a { text-decoration: none; color: inherit; }
         <div class="bo-form-group">
           <label>Rol *</label>
           <select class="bo-select-full" id="invRol">
-            <option>— Seleccioná —</option>
-            <option>Compliance Officer</option>
-            <option>Investigador</option>
-            <option>Legal Reviewer</option>
-            <option>Auditor Interno</option>
-            <option>RRHH</option>
-            <option>Solo lectura</option>
+            <!-- Rellenado dinámicamente por populateRoleSelects() -->
           </select>
         </div>
         <div class="bo-form-group">
@@ -2229,34 +2303,69 @@ function goToCase(id) {
 }
 
 // ── Usuarios ─────────────────────────────────────────────────
+function populateRoleSelects(selectedRolId) {
+  var roles = loadRoles();
+  var opts = roles.map(function(r) {
+    return '<option value="' + escHtml(r.id) + '"' + (r.id === selectedRolId ? ' selected' : '') + '>' + escHtml(r.nombre) + '</option>';
+  }).join('');
+  ['euRol', 'invRol'].forEach(function(id) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    var prefix = id === 'invRol' ? '<option value="">— Seleccioná —</option>' : '';
+    sel.innerHTML = prefix + opts;
+  });
+}
+
 function editUser(nombre, email, rol, juris, acceso, estado) {
+  populateRoleSelects(rol);
   document.getElementById('euNombre').value = nombre;
-  document.getElementById('euEmail').value = email;
-  var rolSel = document.getElementById('euRol');
-  for (var i = 0; i < rolSel.options.length; i++) { if (rolSel.options[i].text === rol) rolSel.selectedIndex = i; }
-  document.getElementById('euJuris').value = juris;
+  document.getElementById('euEmail').value  = email;
+  document.getElementById('euJuris').value  = juris;
   document.getElementById('euEstado').value = estado;
   document.getElementById('editUserModal').style.display = 'flex';
 }
 function saveEditUser() {
   var nombre = document.getElementById('euNombre').value.trim();
-  if (!nombre) { alert('El nombre es requerido.'); return; }
+  if (!nombre) { showToast('El nombre es requerido', '⚠️'); return; }
+  var email  = document.getElementById('euEmail').value.trim();
+  var rolId  = document.getElementById('euRol').value;
+  var juris  = document.getElementById('euJuris').value.trim();
+  var estado = document.getElementById('euEstado').value;
+  var users  = loadUsers();
+  var idx = users.findIndex(function(u){ return u.email === email; });
+  if (idx !== -1) {
+    users[idx].nombre      = nombre;
+    users[idx].rol         = rolId;
+    users[idx].jurisdiccion = juris;
+    users[idx].estado      = estado;
+    saveUsers(users);
+    renderUsersTable();
+  }
   document.getElementById('editUserModal').style.display = 'none';
-  showToast('Usuario «' + nombre + '» actualizado correctamente', '✅');
+  showToast('Usuario «' + nombre + '» actualizado', '✅');
 }
 function showInviteModal() {
+  populateRoleSelects('');
   document.getElementById('invNombre').value = '';
-  document.getElementById('invEmail').value = '';
-  document.getElementById('invRol').selectedIndex = 0;
-  document.getElementById('invJuris').value = '';
+  document.getElementById('invEmail').value  = '';
+  document.getElementById('invJuris').value  = '';
   document.getElementById('inviteUserModal').style.display = 'flex';
 }
 function sendInvite() {
   var nombre = document.getElementById('invNombre').value.trim();
   var email  = document.getElementById('invEmail').value.trim();
-  var rol    = document.getElementById('invRol').value;
-  if (!nombre || !email) { alert('Nombre y email son requeridos.'); return; }
-  if (rol === '— Seleccioná —') { alert('Seleccioná un rol.'); return; }
+  var rolId  = document.getElementById('invRol').value;
+  var juris  = document.getElementById('invJuris').value.trim();
+  if (!nombre || !email) { showToast('Nombre y email son requeridos', '⚠️'); return; }
+  if (!rolId) { showToast('Seleccioná un rol', '⚠️'); return; }
+  var roles = loadRoles();
+  var role  = roles.find(function(r){ return r.id === rolId; }) || { nombre: rolId, color: '#5F9EA5' };
+  var initials = nombre.split(' ').map(function(n){ return n[0]; }).slice(0,2).join('').toUpperCase();
+  var users = loadUsers();
+  users.push({ nombre: nombre, email: email, rol: rolId, jurisdiccion: juris || 'Sin especificar',
+                acceso: 'Según rol', ultimo: 'Nunca', estado: 'activo', color: role.color });
+  saveUsers(users);
+  renderUsersTable();
   document.getElementById('inviteUserModal').style.display = 'none';
   showToast('Invitación enviada a ' + email, '📧');
 }
@@ -2568,6 +2677,338 @@ function setVal(id, v) { var el = document.getElementById(id); if (el) el.value 
 function setCheck(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
 function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+// ══════════════════════════════════════════════════════════════
+//  ROLES Y PERMISOS
+// ══════════════════════════════════════════════════════════════
+var ROLES_KEY = 'argus_roles_' + (TENANT || 'default');
+
+var PERMISOS_DEF = [
+  { id:'ver_casos',          label:'Ver casos',              hint:'Acceder al listado y detalle de casos',              grupo:'Casos' },
+  { id:'gestionar_casos',    label:'Crear / editar casos',   hint:'Crear casos manualmente y editar sus datos',         grupo:'Casos' },
+  { id:'asignar_casos',      label:'Asignar investigadores', hint:'Cambiar el investigador responsable de un caso',     grupo:'Casos' },
+  { id:'cerrar_casos',       label:'Resolver / cerrar casos',hint:'Registrar resolución y cerrar casos',                grupo:'Casos' },
+  { id:'ver_comunicaciones', label:'Ver comunicaciones',     hint:'Leer el historial de mensajes de cada caso',         grupo:'Casos' },
+  { id:'ver_reportes',       label:'Ver reportes',           hint:'Acceder al módulo de reportes y estadísticas',       grupo:'Reportes' },
+  { id:'exportar_datos',     label:'Exportar datos',         hint:'Descargar reportes en PDF / Excel',                  grupo:'Reportes' },
+  { id:'ver_auditoria',      label:'Ver auditoría / log',    hint:'Acceder al log de actividad del sistema',            grupo:'Sistema' },
+  { id:'gestionar_usuarios', label:'Gestionar usuarios',     hint:'Invitar, editar y desactivar usuarios',              grupo:'Sistema' },
+  { id:'configurar_portal',  label:'Configurar portal',      hint:'Editar textos, categorías, FAQ y apariencia',        grupo:'Sistema' },
+];
+
+var DEFAULT_ROLES = [
+  {
+    id: 'admin', nombre: 'Administrador', color: '#0097A7',
+    descripcion: 'Acceso completo a todas las funciones del sistema.',
+    sistema: true,
+    permisos: { ver_casos:true, gestionar_casos:true, asignar_casos:true, cerrar_casos:true,
+                ver_comunicaciones:true, ver_reportes:true, exportar_datos:true,
+                ver_auditoria:true, gestionar_usuarios:true, configurar_portal:true }
+  },
+  {
+    id: 'compliance', nombre: 'Compliance Officer', color: '#0097A7',
+    descripcion: 'Gestiona todos los casos y accede a reportes. No configura el portal.',
+    sistema: true,
+    permisos: { ver_casos:true, gestionar_casos:true, asignar_casos:true, cerrar_casos:true,
+                ver_comunicaciones:true, ver_reportes:true, exportar_datos:true,
+                ver_auditoria:false, gestionar_usuarios:false, configurar_portal:false }
+  },
+  {
+    id: 'investigador', nombre: 'Investigador', color: '#EA580C',
+    descripcion: 'Trabaja sobre casos asignados. Sin acceso a configuración ni usuarios.',
+    sistema: true,
+    permisos: { ver_casos:true, gestionar_casos:false, asignar_casos:false, cerrar_casos:false,
+                ver_comunicaciones:true, ver_reportes:false, exportar_datos:false,
+                ver_auditoria:false, gestionar_usuarios:false, configurar_portal:false }
+  },
+  {
+    id: 'legal', nombre: 'Legal Reviewer', color: '#16A34A',
+    descripcion: 'Solo lectura de casos de alto riesgo y legales. Puede exportar.',
+    sistema: true,
+    permisos: { ver_casos:true, gestionar_casos:false, asignar_casos:false, cerrar_casos:false,
+                ver_comunicaciones:true, ver_reportes:true, exportar_datos:true,
+                ver_auditoria:false, gestionar_usuarios:false, configurar_portal:false }
+  },
+  {
+    id: 'auditor', nombre: 'Auditor Interno', color: '#7C3AED',
+    descripcion: 'Solo lectura: casos, reportes y auditoría. Sin gestión.',
+    sistema: true,
+    permisos: { ver_casos:true, gestionar_casos:false, asignar_casos:false, cerrar_casos:false,
+                ver_comunicaciones:false, ver_reportes:true, exportar_datos:true,
+                ver_auditoria:true, gestionar_usuarios:false, configurar_portal:false }
+  },
+  {
+    id: 'rrhh', nombre: 'RRHH', color: '#DC2626',
+    descripcion: 'Visualiza casos de acoso y laborales. Sin exportar ni configurar.',
+    sistema: true,
+    permisos: { ver_casos:true, gestionar_casos:false, asignar_casos:false, cerrar_casos:false,
+                ver_comunicaciones:true, ver_reportes:false, exportar_datos:false,
+                ver_auditoria:false, gestionar_usuarios:false, configurar_portal:false }
+  },
+];
+
+function loadRoles() {
+  try {
+    var s = localStorage.getItem(ROLES_KEY);
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_ROLES));
+}
+function saveRoles(roles) { localStorage.setItem(ROLES_KEY, JSON.stringify(roles)); }
+var ROLES_DATA = loadRoles();
+
+/* ── Sub-tabs usuarios/roles ── */
+function showUsrTab(tab, btn) {
+  document.querySelectorAll('.usr-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.usr-panel').forEach(function(p){ p.style.display = 'none'; });
+  if (btn) btn.classList.add('active');
+  var panel = document.getElementById('usrpanel-' + tab);
+  if (panel) panel.style.display = 'block';
+
+  var headerActions = document.getElementById('usr-header-actions');
+  if (headerActions) {
+    headerActions.innerHTML = tab === 'users'
+      ? '<button class="bo-btn bo-btn-primary" onclick="showInviteModal()">+ Invitar usuario</button>'
+      : '<button class="bo-btn bo-btn-primary" onclick="openRoleModal()">+ Nuevo rol</button>';
+  }
+
+  if (tab === 'roles') renderRolesGrid();
+  if (tab === 'users') renderUsersTable();
+}
+
+/* ── Render roles ── */
+function renderRolesGrid() {
+  var grid = document.getElementById('roles-grid');
+  if (!grid) return;
+  ROLES_DATA = loadRoles();
+
+  grid.innerHTML = ROLES_DATA.map(function(r) {
+    var bgLight = hexToLight(r.color);
+    var permsOn = PERMISOS_DEF.filter(function(p){ return r.permisos[p.id]; });
+    var permsOff = PERMISOS_DEF.filter(function(p){ return !r.permisos[p.id]; });
+
+    var chipsOn  = permsOn.map(function(p){
+      return '<span class="role-perm-chip on">✓ ' + p.label + '</span>';
+    }).join('');
+    var chipsOff = permsOff.map(function(p){
+      return '<span class="role-perm-chip">✗ ' + p.label + '</span>';
+    }).join('');
+
+    return '<div class="role-card">' +
+      '<div class="role-card-head">' +
+        '<div class="role-card-info">' +
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + r.color + ';flex-shrink:0"></span>' +
+            '<span class="role-card-name">' + escHtml(r.nombre) + '</span>' +
+            (r.sistema ? '<span class="role-sys-badge">Sistema</span>' : '') +
+          '</div>' +
+          '<div class="role-card-desc">' + escHtml(r.descripcion || '') + '</div>' +
+        '</div>' +
+        '<div class="role-card-actions">' +
+          '<button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="openRoleModal(\'' + r.id + '\')">Editar</button>' +
+          (!r.sistema ? '<button class="bo-btn bo-btn-ghost" style="font-size:12px;color:#DC2626" onclick="deleteRole(\'' + r.id + '\')">Eliminar</button>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="role-perm-list">' + chipsOn + chipsOff + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function hexToLight(hex) {
+  return hex + '1A'; // fallback; sólo para bg
+}
+
+/* ── Matriz de permisos ── */
+function togglePermsMatrix() {
+  var wrap = document.getElementById('perms-matrix-wrap');
+  if (!wrap) return;
+  var isHidden = wrap.style.display === 'none';
+  wrap.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) renderPermsMatrix();
+}
+
+function renderPermsMatrix() {
+  var head = document.getElementById('perms-matrix-head');
+  var body = document.getElementById('perms-matrix-body');
+  if (!head || !body) return;
+  ROLES_DATA = loadRoles();
+
+  // Header: permiso + un th por cada rol
+  head.innerHTML = '<th class="perm-matrix-th">Permiso</th>' +
+    ROLES_DATA.map(function(r) {
+      return '<th class="perm-matrix-th"><span style="color:' + r.color + '">' + escHtml(r.nombre) + '</span></th>';
+    }).join('');
+
+  // Body: una fila por permiso
+  body.innerHTML = PERMISOS_DEF.map(function(p) {
+    var cells = ROLES_DATA.map(function(r) {
+      var checked = r.permisos[p.id] ? ' checked' : '';
+      return '<td class="perm-matrix-td"><input type="checkbox" class="perm-check" disabled' + checked + ' /></td>';
+    }).join('');
+    return '<tr><td class="perm-matrix-td" style="font-size:13px;color:var(--black);font-weight:500">' + p.label +
+      '<br><span style="font-size:11px;color:var(--gray-400)">' + p.grupo + '</span></td>' + cells + '</tr>';
+  }).join('');
+}
+
+/* ── Modal rol ── */
+function openRoleModal(roleId) {
+  var modal = document.getElementById('roleModal');
+  var permsContainer = document.getElementById('roleModalPerms');
+  if (!modal || !permsContainer) return;
+
+  var role = roleId ? ROLES_DATA.find(function(r){ return r.id === roleId; }) : null;
+  document.getElementById('roleModalTitle').textContent = role ? 'Editar rol: ' + role.nombre : 'Nuevo rol';
+  document.getElementById('roleModalId').value = roleId || '';
+  setVal('roleModalNombre', role ? role.nombre : '');
+  setVal('roleModalDesc',   role ? role.descripcion : '');
+  var color = (role && role.color) ? role.color : '#0097A7';
+  document.getElementById('roleModalColor').value = color;
+  setVal('roleModalColorHex', color);
+  updateRolePreview(color, role ? role.nombre : 'Rol');
+
+  // Agrupar permisos
+  var grupos = {};
+  PERMISOS_DEF.forEach(function(p) {
+    if (!grupos[p.grupo]) grupos[p.grupo] = [];
+    grupos[p.grupo].push(p);
+  });
+
+  var html = '';
+  Object.keys(grupos).forEach(function(g) {
+    html += '<div style="padding:8px 14px;background:var(--gray-100);font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em">' + g + '</div>';
+    grupos[g].forEach(function(p) {
+      var checked = role ? !!role.permisos[p.id] : false;
+      html += '<div class="perm-modal-row">' +
+        '<div>' +
+          '<div class="perm-modal-label">' + escHtml(p.label) + '</div>' +
+          '<div class="perm-modal-hint">' + escHtml(p.hint) + '</div>' +
+        '</div>' +
+        '<label class="perm-toggle">' +
+          '<input type="checkbox" data-perm="' + p.id + '"' + (checked ? ' checked' : '') + ' />' +
+          '<span class="perm-toggle-slider"></span>' +
+        '</label>' +
+      '</div>';
+    });
+  });
+  permsContainer.innerHTML = html;
+
+  // Actualizar preview al cambiar nombre
+  document.getElementById('roleModalNombre').oninput = function() {
+    updateRolePreview(document.getElementById('roleModalColor').value, this.value || 'Rol');
+  };
+  document.getElementById('roleModalColor').oninput = function() {
+    setVal('roleModalColorHex', this.value);
+    updateRolePreview(this.value, getVal('roleModalNombre') || 'Rol');
+  };
+
+  modal.style.display = 'flex';
+}
+
+function updateRolePreview(color, nombre) {
+  var preview = document.getElementById('roleModalPreview');
+  if (!preview) return;
+  preview.textContent = nombre || 'Rol';
+  preview.style.color = color;
+  preview.style.background = color + '22';
+}
+
+function closeRoleModal() { document.getElementById('roleModal').style.display = 'none'; }
+
+function saveRole() {
+  var nombre = getVal('roleModalNombre');
+  if (!nombre) { showToast('El nombre del rol es obligatorio', '⚠️'); return; }
+
+  var roleId = getVal('roleModalId');
+  var color  = getVal('roleModalColorHex') || '#0097A7';
+  var desc   = getVal('roleModalDesc');
+
+  var permisos = {};
+  document.querySelectorAll('#roleModalPerms input[type=checkbox][data-perm]').forEach(function(cb) {
+    permisos[cb.dataset.perm] = cb.checked;
+  });
+
+  ROLES_DATA = loadRoles();
+
+  if (roleId) {
+    var idx = ROLES_DATA.findIndex(function(r){ return r.id === roleId; });
+    if (idx !== -1) {
+      // Los roles de sistema conservan nombre fijo pero sí se editan permisos y color
+      ROLES_DATA[idx].descripcion = desc;
+      ROLES_DATA[idx].color       = color;
+      ROLES_DATA[idx].permisos    = permisos;
+      if (!ROLES_DATA[idx].sistema) ROLES_DATA[idx].nombre = nombre;
+    }
+  } else {
+    var newId = 'rol_' + Date.now();
+    ROLES_DATA.push({ id: newId, nombre: nombre, color: color, descripcion: desc, sistema: false, permisos: permisos });
+  }
+
+  saveRoles(ROLES_DATA);
+  closeRoleModal();
+  renderRolesGrid();
+  var matrixWrap = document.getElementById('perms-matrix-wrap');
+  if (matrixWrap && matrixWrap.style.display !== 'none') renderPermsMatrix();
+  showToast('Rol guardado correctamente', '✅');
+}
+
+function deleteRole(roleId) {
+  if (!confirm('¿Eliminar este rol? Esta acción no se puede deshacer.')) return;
+  ROLES_DATA = loadRoles().filter(function(r){ return r.id !== roleId; });
+  saveRoles(ROLES_DATA);
+  renderRolesGrid();
+  showToast('Rol eliminado', '🗑️');
+}
+
+/* ── Usuarios table (dinámica) ── */
+var USERS_DATA_KEY = 'argus_users_' + (TENANT || 'default');
+var DEMO_USERS = [
+  { nombre:'María Álvarez',  email:'maria@empresa.com',   rol:'compliance',  jurisdiccion:'Argentina · Uruguay', acceso:'Todos',           ultimo:'Hoy, 14:32',    estado:'activo',   color:'#0097A7' },
+  { nombre:'Rodrigo Mendoza',email:'rodrigo@empresa.com', rol:'investigador',jurisdiccion:'Argentina',           acceso:'Asignados',       ultimo:'Hoy, 11:05',    estado:'activo',   color:'#D97706' },
+  { nombre:'Julia Torres',   email:'julia@empresa.com',   rol:'legal',       jurisdiccion:'Argentina',           acceso:'Legal / Riesgo',  ultimo:'Hoy, 13:18',    estado:'activo',   color:'#059669' },
+  { nombre:'Laura García',   email:'laura@empresa.com',   rol:'auditor',     jurisdiccion:'Multi-región',        acceso:'Solo lectura',    ultimo:'Ayer, 16:20',   estado:'activo',   color:'#7C3AED' },
+  { nombre:'Carlos Pérez',   email:'carlos@empresa.com',  rol:'rrhh',        jurisdiccion:'Argentina',           acceso:'Acoso / Laboral', ultimo:'20/02/2025',    estado:'inactivo', color:'#DC2626' },
+];
+function loadUsers() {
+  try { var s = localStorage.getItem(USERS_DATA_KEY); if (s) return JSON.parse(s); } catch(e) {}
+  localStorage.setItem(USERS_DATA_KEY, JSON.stringify(DEMO_USERS));
+  return JSON.parse(JSON.stringify(DEMO_USERS));
+}
+function saveUsers(u) { localStorage.setItem(USERS_DATA_KEY, JSON.stringify(u)); }
+
+function renderUsersTable() {
+  var tbody = document.getElementById('users-table-body');
+  if (!tbody) return;
+  var users = loadUsers();
+  var roles = loadRoles();
+
+  tbody.innerHTML = users.map(function(u) {
+    var role = roles.find(function(r){ return r.id === u.rol; }) || { nombre: u.rol, color: '#5F9EA5' };
+    var initials = u.nombre.split(' ').map(function(n){ return n[0]; }).slice(0,2).join('').toUpperCase();
+    var estadoBg = u.estado === 'activo' ? '#F0FDF4' : '#FEF9C3';
+    var estadoCol = u.estado === 'activo' ? '#16A34A' : '#854D0E';
+    return '<tr class="bo-table-row">' +
+      '<td><div style="display:flex;align-items:center;gap:10px">' +
+        '<div class="bo-log-avatar" style="background:' + u.color + '">' + initials + '</div>' +
+        '<div><strong>' + escHtml(u.nombre) + '</strong><br/>' +
+        '<span style="font-size:12px;color:var(--gray-500)">' + escHtml(u.email) + '</span></div>' +
+      '</div></td>' +
+      '<td><span class="role-tag" style="background:' + role.color + '22;color:' + role.color + '">' + escHtml(role.nombre) + '</span></td>' +
+      '<td>' + escHtml(u.jurisdiccion) + '</td>' +
+      '<td>' + escHtml(u.acceso) + '</td>' +
+      '<td>' + escHtml(u.ultimo) + '</td>' +
+      '<td><span class="status-tag" style="background:' + estadoBg + ';color:' + estadoCol + '">' + (u.estado === 'activo' ? 'Activo' : 'Inactivo') + '</span></td>' +
+      '<td><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="editUser(' +
+        JSON.stringify(u.nombre) + ',' + JSON.stringify(u.email) + ',' + JSON.stringify(u.rol) + ',' +
+        JSON.stringify(u.jurisdiccion) + ',' + JSON.stringify(u.acceso) + ',' + JSON.stringify(u.estado) +
+        ')">Editar</button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+// Inicializar tabla de usuarios al cargar la vista
+document.addEventListener('DOMContentLoaded', function() {
+  renderUsersTable();
+});
+
 // Cargar config cuando el usuario abre la vista
 var _origShowView = showView;
 showView = function(name) {
@@ -2578,6 +3019,9 @@ showView = function(name) {
     cfgRenderCategorias();
     cfgRenderFaq();
     cfgRenderCampos();
+  }
+  if (name === 'usuarios') {
+    renderUsersTable();
   }
 };
 
