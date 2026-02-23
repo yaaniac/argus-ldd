@@ -1,21 +1,35 @@
 /**
  * client-config.js
- * Config centralizada del cliente. Se guarda en localStorage.
- * Cada página pública la incluye y llama a ArgusConfig.apply().
+ * Config centralizada, aislada por tenant (?t=slug en la URL).
+ * Cada empresa tiene su propio espacio en localStorage.
+ * Incluido en todas las páginas del portal y back office.
  */
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'argus_client_config';
+  /* ── Tenant ────────────────────────────────────────────────── */
+  function getTenant() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      var t = (p.get('t') || p.get('tenant') || '').replace(/[^a-zA-Z0-9_-]/g, '');
+      return t || 'default';
+    } catch (e) {
+      return 'default';
+    }
+  }
 
+  var TENANT      = getTenant();
+  var STORAGE_KEY = 'argus_config_' + TENANT;
+
+  /* ── Defaults ──────────────────────────────────────────────── */
   var DEFAULTS = {
     empresa: {
-      nombre:    'Argus',
+      nombre:    'Mi Empresa',
       slogan:    'Línea de denuncias confidencial',
       logoUrl:   '',
       email:     'denuncias@empresa.com',
-      telefono:  '0800-ARGUS',
-      website:   'https://argus.com.ar'
+      telefono:  '0800-000-0000',
+      website:   ''
     },
     landing: {
       heroTitle:    'Tu denuncia importa.<br/>Tu identidad, protegida.',
@@ -57,25 +71,21 @@
       {
         q: '¿Puedo hacer un seguimiento de mi caso?',
         a: 'Sí. Con el código que recibís podés consultar el estado de tu denuncia en cualquier momento, de forma completamente anónima.'
-      },
-      {
-        q: '¿En qué países opera Argus?',
-        a: 'Argentina, Uruguay, Chile, Brasil y España. Para otros países, consultanos: operamos bajo los estándares OCDE y GAFI aplicables en cada jurisdicción.'
       }
     ],
-    formulario: {
-      camposExtra: []   // {id, label, tipo: 'text'|'select'|'textarea', opciones: []}
-    },
     apariencia: {
       colorPrimario: '#0097A7',
       colorSidebar:  '#003D44'
+    },
+    acceso: {
+      pin: ''   // PIN opcional del back office (vacío = sin PIN)
     }
   };
 
-  /* ────────────────────────────────────────────────────────────
-     API pública
-  ──────────────────────────────────────────────────────────── */
+  /* ── API pública ───────────────────────────────────────────── */
   var ArgusConfig = {
+
+    tenant: TENANT,
 
     /** Devuelve la config completa (merge de defaults + guardado) */
     get: function () {
@@ -114,7 +124,7 @@
     apply: function () {
       var cfg = this.get();
 
-      /* Nombre de empresa */
+      /* Nombre / slogan */
       each('[data-cfg="empresa.nombre"]',    function (el) { el.textContent = cfg.empresa.nombre; });
       each('[data-cfg="empresa.slogan"]',    function (el) { el.textContent = cfg.empresa.slogan; });
       each('[data-cfg="empresa.email"]',     function (el) {
@@ -137,34 +147,29 @@
         });
       }
 
-      /* Categorías en selects del formulario */
-      each('[data-cfg="categorias-select"]', function (sel) {
-        var first = sel.options[0];
-        sel.innerHTML = '';
-        if (first) sel.appendChild(first);
-        cfg.categorias.forEach(function (cat) {
-          var opt = document.createElement('option');
-          opt.value = cat;
-          opt.textContent = cat;
-          sel.appendChild(opt);
-        });
-      });
-
-      /* Canales: ocultar si está desactivado */
-      ['web','email','telefono','whatsapp'].forEach(function (ch) {
-        if (!cfg.canales[ch]) {
-          each('[data-cfg-canal="' + ch + '"]', function (el) {
-            el.style.display = 'none';
-          });
-        }
-      });
-
-      /* Color primario (CSS variable) */
+      /* Color primario */
       if (cfg.apariencia.colorPrimario) {
         document.documentElement.style.setProperty('--primary', cfg.apariencia.colorPrimario);
       }
       if (cfg.apariencia.colorSidebar) {
         document.documentElement.style.setProperty('--gray-900', cfg.apariencia.colorSidebar);
+      }
+
+      /* Canales: ocultar si está desactivado */
+      ['web','email','telefono','whatsapp'].forEach(function (ch) {
+        if (!cfg.canales[ch]) {
+          each('[data-cfg-canal="' + ch + '"]', function (el) { el.style.display = 'none'; });
+        }
+      });
+
+      /* Propagar ?t= en todos los links internos */
+      if (TENANT && TENANT !== 'default') {
+        document.querySelectorAll('a[href]').forEach(function (a) {
+          var href = a.getAttribute('href');
+          if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
+          if (href.indexOf('?t=') !== -1 || href.indexOf('&t=') !== -1) return;
+          a.href = href + (href.indexOf('?') !== -1 ? '&' : '?') + 't=' + TENANT;
+        });
       }
     }
   };

@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="client-config.js"></script>
 </head>
 <body>
 
@@ -1261,10 +1262,23 @@ function registrarResolucion() {
   document.querySelector('.bo-btn.bo-btn-primary[onclick="openCloseModal()"]') && (document.querySelector('.bo-btn.bo-btn-primary[onclick="openCloseModal()"]').disabled = true);
 }
 
-// Read case ID from URL
-const caseId = new URLSearchParams(window.location.search).get('id') || 'ARG-2025-0043';
+// Read case ID and tenant from URL
+var _urlParams = new URLSearchParams(window.location.search);
+const caseId = _urlParams.get('id') || 'ARG-2025-0043';
+var TENANT_CASO = (_urlParams.get('t') || '').replace(/[^a-zA-Z0-9_-]/g, '') || 'default';
+
 document.getElementById('caseIdBreadcrumb').textContent = caseId;
 document.title = 'Caso ' + caseId + ' · Argus Back Office';
+
+// Actualizar links "Volver" con tenant
+(function() {
+  var tParam = TENANT_CASO !== 'default' ? '?t=' + TENANT_CASO : '';
+  document.querySelectorAll('a[href="backoffice.html"]').forEach(function(a) {
+    a.href = 'backoffice.html' + tParam;
+  });
+  // Aplicar config del tenant (nombre empresa, colores, etc.)
+  if (window.ArgusConfig) ArgusConfig.apply();
+})();
 
 function triggerUpload() { /* placeholder */ }
 </script>
