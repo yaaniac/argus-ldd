@@ -721,6 +721,10 @@
         <p class="step-hint">Describí con detalle el hecho y/o incumplimiento denunciado. Mientras más específico, mejor podemos actuar.</p>
         <textarea class="wizard-textarea" id="descriptionText" maxlength="4000" placeholder="Describí qué ocurrió, cuándo, dónde y en qué contexto..." oninput="updateCounter()"></textarea>
         <div class="char-counter"><span id="charCount">0</span> / 4000 caracteres</div>
+
+        <!-- Campos extra configurables por el cliente -->
+        <div id="campos-extra-container" style="display:flex;flex-direction:column;gap:18px;margin-top:24px"></div>
+
         <div class="wizard-footer">
           <button class="wizard-back" onclick="goToStep(2)">← Anterior</button>
           <button class="wizard-next" id="next-3" onclick="goToStep(4)" disabled>Siguiente →</button>
@@ -1308,8 +1312,63 @@
     });
   }
 
+  /* ── Campos extra desde ArgusConfig ── */
+  function renderCamposExtra() {
+    var container = document.getElementById('campos-extra-container');
+    if (!container) return;
+    var campos = (window.ArgusConfig ? ArgusConfig.get().formulario.camposExtra : null) || [];
+    container.innerHTML = '';
+    if (campos.length === 0) return;
+
+    // Separador
+    var sep = document.createElement('div');
+    sep.style.cssText = 'height:1px;background:var(--gray-200);margin:4px 0 8px';
+    container.appendChild(sep);
+
+    campos.forEach(function(c) {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex;flex-direction:column;gap:6px';
+
+      var lbl = document.createElement('label');
+      lbl.style.cssText = 'font-size:15px;font-weight:600;color:var(--black)';
+      lbl.textContent = c.label + (c.requerido ? ' *' : '');
+      wrap.appendChild(lbl);
+
+      var input;
+      if (c.tipo === 'textarea') {
+        input = document.createElement('textarea');
+        input.className = 'wizard-textarea';
+        input.style.cssText = 'min-height:100px;margin-top:0';
+        input.rows = 3;
+      } else if (c.tipo === 'select') {
+        input = document.createElement('select');
+        input.className = 'wizard-select';
+        var defOpt = document.createElement('option');
+        defOpt.value = ''; defOpt.textContent = '— Seleccioná una opción —';
+        input.appendChild(defOpt);
+        (c.opciones || []).forEach(function(op) {
+          var opt = document.createElement('option');
+          opt.value = op; opt.textContent = op;
+          input.appendChild(opt);
+        });
+      } else {
+        input = document.createElement('input');
+        input.type  = c.tipo || 'text';
+        input.className = 'wizard-input';
+      }
+
+      input.id          = 'campo_extra_' + c.id;
+      input.placeholder = c.placeholder || '';
+      if (c.requerido)  input.required = true;
+      input.dataset.campoId = c.id;
+      wrap.appendChild(input);
+      container.appendChild(wrap);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     renderCatGrid();
+    renderCamposExtra();
     if (window.ArgusConfig) ArgusConfig.apply();
   });
 </script>
@@ -1752,6 +1811,27 @@
   .seg-lost-code { background: var(--gray-100); border-radius: 12px; padding: 24px; }
   .seg-lost-code strong { font-size: 15px; font-weight: 700; color: var(--black); display: block; margin-bottom: 8px; }
   .seg-lost-code p { font-size: 14px; color: var(--gray-500); line-height: 1.7; margin-bottom: 12px; }
+
+  /* Campos extra del formulario */
+  .wizard-input, .wizard-select {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 15px;
+    font-family: var(--font-body);
+    color: var(--black);
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color .2s, box-shadow .2s;
+    appearance: none;
+  }
+  .wizard-input:focus, .wizard-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-100);
+  }
+  .wizard-select { cursor: pointer; }
 </style>
 
 </body>

@@ -733,6 +733,7 @@
         <button class="cfg-tab" onclick="showCfgTab('categorias', this)">🏷️ Categorías</button>
         <button class="cfg-tab" onclick="showCfgTab('canales', this)">📡 Canales</button>
         <button class="cfg-tab" onclick="showCfgTab('faq', this)">❓ FAQ</button>
+        <button class="cfg-tab" onclick="showCfgTab('formulario', this)">📋 Formulario</button>
         <button class="cfg-tab" onclick="showCfgTab('apariencia', this)">🎨 Apariencia</button>
       </div>
 
@@ -851,6 +852,44 @@
           </div>
           <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Estas preguntas aparecen en la sección de contacto del portal.</p>
           <div id="cfg-faq-list" style="display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+      </div>
+
+      <!-- TAB: Formulario -->
+      <div class="cfg-panel" id="cfgpanel-formulario" style="display:none">
+        <div class="bo-card" style="padding:28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div>
+              <h3 class="cfg-section-title" style="margin:0">Preguntas del formulario</h3>
+              <p style="font-size:13px;color:var(--gray-500);margin:6px 0 0">Agregá campos extra que aparecerán en el formulario de denuncia (después del paso de categorías).</p>
+            </div>
+            <button class="bo-btn bo-btn-primary" style="font-size:12px;white-space:nowrap" onclick="cfgAddCampo()">+ Agregar pregunta</button>
+          </div>
+
+          <!-- Campos fijos no editables -->
+          <div style="margin-bottom:20px;padding:16px;background:var(--gray-100);border-radius:10px">
+            <p style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin:0 0 10px">Preguntas fijas (siempre presentes)</p>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-600)">
+                <span style="background:var(--gray-200);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600">TEXTO</span>
+                ¿En qué consiste el hecho? <span style="color:var(--gray-400)">(descripción)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-600)">
+                <span style="background:var(--gray-200);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600">FECHA</span>
+                ¿Cuándo ocurrió el hecho?
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-600)">
+                <span style="background:var(--gray-200);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600">ARCHIVO</span>
+                Adjuntar evidencia (opcional)
+              </div>
+            </div>
+          </div>
+
+          <!-- Campos personalizados -->
+          <div id="cfg-campos-list" style="display:flex;flex-direction:column;gap:14px"></div>
+          <p id="cfg-campos-empty" style="font-size:13px;color:var(--gray-400);text-align:center;padding:24px;display:none">
+            No hay preguntas extra. Hacé clic en "+ Agregar pregunta" para comenzar.
+          </p>
         </div>
       </div>
 
@@ -2234,6 +2273,7 @@ function showCfgTab(tab, btn) {
   if (tab === 'categorias') cfgRenderCategorias();
   if (tab === 'faq')        cfgRenderFaq();
   if (tab === 'canales')    cfgLoadCanales();
+  if (tab === 'formulario') cfgRenderCampos();
 }
 
 function cfgLoad() {
@@ -2287,6 +2327,9 @@ function cfgSaveAll() {
     if (q && a && q.value.trim()) faqs.push({ q: q.value.trim(), a: a.value.trim() });
   });
   if (faqs.length) cfg.faq = faqs;
+  // Formulario — campos extra
+  cfg.formulario = cfg.formulario || {};
+  cfg.formulario.camposExtra = cfgCollectCampos();
   // Apariencia
   cfg.apariencia.colorPrimario = getVal('cfg-color-primario-hex') || cfg.apariencia.colorPrimario;
   cfg.apariencia.colorSidebar  = getVal('cfg-color-sidebar-hex')  || cfg.apariencia.colorSidebar;
@@ -2302,6 +2345,7 @@ function cfgReset() {
   cfgRenderCategorias();
   cfgRenderFaq();
   cfgLoadCanales();
+  cfgRenderCampos();
   showToast('Configuración restaurada', '↩️');
 }
 
@@ -2359,6 +2403,127 @@ function cfgAddFaq() {
 }
 function cfgRemoveFaq(btn) { btn.closest('.cfg-faq-row').remove(); }
 
+/* ── Formulario — campos personalizados ── */
+var CAMPO_TIPOS = [
+  { val:'text',     label:'Texto corto' },
+  { val:'textarea', label:'Texto largo' },
+  { val:'select',   label:'Selección (lista)' },
+  { val:'number',   label:'Número' },
+  { val:'date',     label:'Fecha' },
+  { val:'email',    label:'Email' },
+];
+
+function cfgRenderCampos() {
+  var list  = document.getElementById('cfg-campos-list');
+  var empty = document.getElementById('cfg-campos-empty');
+  if (!list || typeof ArgusConfig === 'undefined') return;
+  var campos = ArgusConfig.get().formulario.camposExtra || [];
+  if (campos.length === 0) {
+    list.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  list.innerHTML = campos.map(function(c, i) {
+    var tiposOpts = CAMPO_TIPOS.map(function(t) {
+      return '<option value="' + t.val + '"' + (c.tipo === t.val ? ' selected' : '') + '>' + t.label + '</option>';
+    }).join('');
+    var opcionesRow = c.tipo === 'select'
+      ? '<div class="cfg-campo-opciones-wrap" style="margin-top:8px">' +
+          '<label style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em">Opciones (una por línea)</label>' +
+          '<textarea class="bo-textarea cfg-campo-opciones" rows="3" placeholder="Opción A\nOpción B\nOpción C">' +
+            escHtml((c.opciones||[]).join('\n')) +
+          '</textarea>' +
+        '</div>'
+      : '';
+    return '<div class="cfg-campo-row bo-card" style="padding:16px" data-idx="' + i + '">' +
+      '<div style="display:flex;align-items:flex-start;gap:12px">' +
+        '<div style="flex:1;display:flex;flex-direction:column;gap:8px">' +
+          '<div style="display:grid;grid-template-columns:1fr auto;gap:10px">' +
+            '<div><label style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Pregunta / etiqueta</label>' +
+              '<input type="text" class="bo-select-full cfg-campo-label" value="' + escHtml(c.label) + '" placeholder="Ej: ¿Tenés testigos?" /></div>' +
+            '<div><label style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tipo</label>' +
+              '<select class="bo-select-full cfg-campo-tipo" style="min-width:150px" onchange="cfgToggleOpciones(this)">' + tiposOpts + '</select></div>' +
+          '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center">' +
+            '<input type="text" class="bo-select-full cfg-campo-placeholder" value="' + escHtml(c.placeholder||'') + '" placeholder="Texto de ayuda (opcional)" />' +
+            '<label style="display:flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap;cursor:pointer">' +
+              '<input type="checkbox" class="cfg-campo-required"' + (c.requerido ? ' checked' : '') + ' /> Obligatorio' +
+            '</label>' +
+          '</div>' +
+          opcionesRow +
+        '</div>' +
+        '<button class="bo-btn bo-btn-ghost" style="color:#DC2626;padding:6px 10px;flex-shrink:0" onclick="cfgRemoveCampo(this)" title="Eliminar pregunta">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function cfgToggleOpciones(sel) {
+  var row = sel.closest('.cfg-campo-row');
+  var wrap = row.querySelector('.cfg-campo-opciones-wrap');
+  if (sel.value === 'select') {
+    if (!wrap) {
+      var opWrap = document.createElement('div');
+      opWrap.className = 'cfg-campo-opciones-wrap';
+      opWrap.style.marginTop = '8px';
+      opWrap.innerHTML = '<label style="font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em">Opciones (una por línea)</label>' +
+        '<textarea class="bo-textarea cfg-campo-opciones" rows="3" placeholder="Opción A\nOpción B\nOpción C"></textarea>';
+      row.querySelector('.cfg-campo-row > div > div:first-child, .cfg-campo-row div[style]').appendChild(opWrap);
+      sel.closest('[style]').querySelector('div').appendChild(opWrap);
+    } else {
+      wrap.style.display = 'block';
+    }
+  } else if (wrap) {
+    wrap.style.display = 'none';
+  }
+}
+
+function cfgAddCampo() {
+  if (typeof ArgusConfig === 'undefined') return;
+  var cfg = ArgusConfig.get();
+  cfg.formulario = cfg.formulario || { camposExtra: [] };
+  cfg.formulario.camposExtra = cfg.formulario.camposExtra || [];
+  cfg.formulario.camposExtra.push({ id: 'campo_' + Date.now(), label: '', tipo: 'text', placeholder: '', requerido: false, opciones: [] });
+  ArgusConfig.save(cfg);
+  cfgRenderCampos();
+  var empty = document.getElementById('cfg-campos-empty');
+  if (empty) empty.style.display = 'none';
+  // Focus en el nuevo campo
+  var rows = document.querySelectorAll('.cfg-campo-row');
+  if (rows.length) rows[rows.length - 1].querySelector('.cfg-campo-label').focus();
+}
+
+function cfgRemoveCampo(btn) { btn.closest('.cfg-campo-row').remove(); cfgCheckCamposEmpty(); }
+
+function cfgCheckCamposEmpty() {
+  var list  = document.getElementById('cfg-campos-list');
+  var empty = document.getElementById('cfg-campos-empty');
+  if (list && empty) empty.style.display = list.children.length === 0 ? 'block' : 'none';
+}
+
+function cfgCollectCampos() {
+  var campos = [];
+  document.querySelectorAll('.cfg-campo-row').forEach(function(row) {
+    var label = row.querySelector('.cfg-campo-label');
+    var tipo  = row.querySelector('.cfg-campo-tipo');
+    var ph    = row.querySelector('.cfg-campo-placeholder');
+    var req   = row.querySelector('.cfg-campo-required');
+    var opsTa = row.querySelector('.cfg-campo-opciones');
+    if (!label || !label.value.trim()) return;
+    var opciones = opsTa ? opsTa.value.split('\n').map(function(o){return o.trim();}).filter(Boolean) : [];
+    campos.push({
+      id:          'campo_' + label.value.trim().toLowerCase().replace(/[^a-z0-9]/g,'_'),
+      label:       label.value.trim(),
+      tipo:        tipo ? tipo.value : 'text',
+      placeholder: ph ? ph.value.trim() : '',
+      requerido:   req ? req.checked : false,
+      opciones:    opciones
+    });
+  });
+  return campos;
+}
+
 /* ── Canales ── */
 function cfgLoadCanales() {
   if (typeof ArgusConfig === 'undefined') return;
@@ -2412,6 +2577,7 @@ showView = function(name) {
     cfgLoadCanales();
     cfgRenderCategorias();
     cfgRenderFaq();
+    cfgRenderCampos();
   }
 };
 
