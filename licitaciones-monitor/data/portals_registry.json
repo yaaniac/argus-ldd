@@ -1,0 +1,136 @@
+{
+  "_comment": "Registro de portales de licitaciones públicas de Argentina.",
+  "_version": "1.0",
+  "_updated": "2025-01",
+  "portals": [
+    {
+      "name": "Argentina Compra (COMPR.AR)",
+      "short_name": "comprar",
+      "url": "https://www.argentinacompra.gob.ar",
+      "level": "nacional",
+      "scraper_class": "ComprarScraper",
+      "is_enabled": true,
+      "description": "Sistema nacional de contrataciones del Estado. Incluye licitaciones públicas, concursos y compras directas de todos los organismos nacionales."
+    },
+    {
+      "name": "Boletín Oficial de la República Argentina",
+      "short_name": "boletin-nacional",
+      "url": "https://www.boletinoficial.gob.ar",
+      "level": "nacional",
+      "scraper_class": "BoletinNacionalScraper",
+      "is_enabled": true,
+      "description": "Publicaciones oficiales del Estado Nacional. Sección Tercera: Avisos oficiales de licitaciones."
+    },
+    {
+      "name": "Portal Buenos Aires Compra (PBAC)",
+      "short_name": "pbac",
+      "url": "https://pbac.cgpba.gob.ar",
+      "level": "provincial",
+      "province": "Buenos Aires",
+      "scraper_class": "PortalComprasPBAScraper",
+      "is_enabled": true,
+      "description": "Sistema oficial de compras y contrataciones de la Provincia de Buenos Aires."
+    },
+    {
+      "name": "Boletín Oficial Provincia de Buenos Aires",
+      "short_name": "boletin-pba",
+      "url": "https://www.boletinoficial.gba.gov.ar",
+      "level": "provincial",
+      "province": "Buenos Aires",
+      "scraper_class": "BoletinOficialPBAScraper",
+      "is_enabled": true,
+      "description": "Publicaciones oficiales de la Provincia de Buenos Aires."
+    },
+    {
+      "name": "Municipalidad de La Plata",
+      "short_name": "la-plata",
+      "url": "https://www.laplata.gov.ar",
+      "level": "municipal",
+      "province": "Buenos Aires",
+      "municipality": "La Plata",
+      "scraper_class": "GenericMunicipalScraper",
+      "scraper_config": {
+        "municipality_key": "la-plata",
+        "short_name": "la-plata",
+        "extra_headers": {}
+      },
+      "is_enabled": true,
+      "description": "Portal oficial de la Municipalidad de La Plata."
+    },
+    {
+      "name": "Municipalidad de General Pueyrredon (Mar del Plata)",
+      "short_name": "mar-del-plata",
+      "url": "https://www.mardelplata.gob.ar",
+      "level": "municipal",
+      "province": "Buenos Aires",
+      "municipality": "General Pueyrredon",
+      "scraper_class": "GenericMunicipalScraper",
+      "scraper_config": {
+        "municipality_key": "mar-del-plata",
+        "short_name": "mar-del-plata"
+      },
+      "is_enabled": true,
+      "description": "Portal oficial de la Municipalidad de General Pueyrredon (Mar del Plata)."
+    },
+    {
+      "name": "Municipalidad de Bahía Blanca",
+      "short_name": "bahia-blanca",
+      "url": "https://www.bahia-blanca.gov.ar",
+      "level": "municipal",
+      "province": "Buenos Aires",
+      "municipality": "Bahía Blanca",
+      "scraper_class": "GenericMunicipalScraper",
+      "scraper_config": {
+        "municipality_key": "bahia-blanca",
+        "short_name": "bahia-blanca"
+      },
+      "is_enabled": true,
+      "description": "Portal oficial de la Municipalidad de Bahía Blanca."
+    },
+    {
+      "name": "Municipalidad de San Isidro",
+      "short_name": "san-isidro",
+      "url": "https://www.sanisidro.gob.ar",
+      "level": "municipal",
+      "province": "Buenos Aires",
+      "municipality": "San Isidro",
+      "scraper_class": "GenericMunicipalScraper",
+      "scraper_config": {
+        "municipality_key": "san-isidro",
+        "short_name": "san-isidro"
+      },
+      "is_enabled": true,
+      "description": "Portal oficial del Municipio de San Isidro."
+    },
+    {
+      "name": "Municipalidad de Quilmes",
+      "short_name": "quilmes",
+      "url": "https://www.quilmes.gov.ar",
+      "level": "municipal",
+      "province": "Buenos Aires",
+      "municipality": "Quilmes",
+      "scraper_class": "GenericMunicipalScraper",
+      "scraper_config": {
+        "municipality_key": "quilmes",
+        "short_name": "quilmes"
+      },
+      "is_enabled": false,
+      "description": "Portal oficial de la Municipalidad de Quilmes."
+    },
+    {
+      "name": "Municipalidad de Tigre",
+      "short_name": "tigre",
+      "url": "https://www.tigre.gov.ar",
+      "level": "municipal",
+      "province": "Buenos Aires",
+      "municipality": "Tigre",
+      "scraper_class": "GenericMunicipalScraper",
+      "scraper_config": {
+        "municipality_key": "tigre",
+        "short_name": "tigre"
+      },
+      "is_enabled": false,
+      "description": "Portal oficial del Municipio de Tigre."
+    }
+  ]
+}

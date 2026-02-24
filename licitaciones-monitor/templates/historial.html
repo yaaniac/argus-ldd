@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Historial — LicitaForense Monitor{% endblock %}
+
+{% block content %}
+<div x-data="historialPage()" x-init="load()" x-cloak>
+
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Historial de búsquedas</h1>
+    <p class="text-gray-500 mt-1">Registro de todas las ejecuciones del monitor</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">#</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Estado</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Inicio</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600 hidden sm:table-cell">Duración</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600 hidden md:table-cell">Portales</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Encontradas</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Nuevas</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Disparado por</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <template x-for="run in runs" :key="run.id">
+            <tr class="hover:bg-gray-50 transition">
+              <td class="px-4 py-3 text-gray-500 font-mono" x-text="'#' + run.id"></td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                  :class="{
+                    'bg-green-100 text-green-700': run.status === 'success',
+                    'bg-yellow-100 text-yellow-700': run.status === 'partial',
+                    'bg-red-100 text-red-700': run.status === 'failed',
+                    'bg-blue-100 text-blue-700': run.status === 'running',
+                  }"
+                  x-text="run.status?.toUpperCase()">
+                </span>
+              </td>
+              <td class="px-4 py-3 text-gray-600" x-text="formatDateTime(run.started_at)"></td>
+              <td class="px-4 py-3 text-gray-500 hidden sm:table-cell"
+                x-text="run.duration_seconds ? run.duration_seconds.toFixed(1) + 's' : '—'"></td>
+              <td class="px-4 py-3 hidden md:table-cell">
+                <span x-text="run.portals_scanned"></span>
+                <span x-show="run.portals_failed > 0" class="text-red-500 ml-1"
+                  x-text="'(' + run.portals_failed + ' errores)'"></span>
+              </td>
+              <td class="px-4 py-3 font-medium text-gray-900" x-text="run.licitaciones_found"></td>
+              <td class="px-4 py-3 font-bold text-green-600" x-text="run.licitaciones_new"></td>
+              <td class="px-4 py-3 text-gray-500 hidden lg:table-cell capitalize" x-text="run.triggered_by"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+
+    <div x-show="!runs.length" class="px-6 py-12 text-center text-gray-400">
+      <p class="text-4xl mb-2">📋</p>
+      <p>No hay ejecuciones registradas. Iniciá tu primera búsqueda.</p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function historialPage() {
+  return {
+    runs: [],
+    async load() {
+      const r = await fetch('/api/runs?size=50');
+      const data = await r.json();
+      this.runs = data.items || [];
+    }
+  }
+}
+</script>
+{% endblock %}

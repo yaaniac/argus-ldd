@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Portales — LicitaForense Monitor{% endblock %}
+
+{% block content %}
+<div x-data="portalesPage()" x-init="load()" x-cloak>
+
+  <div class="mb-6 flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Portales</h1>
+      <p class="text-gray-500 mt-1">Gestión de portales de licitaciones monitoreados</p>
+    </div>
+    <button @click="showAddModal = true"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+      + Agregar portal
+    </button>
+  </div>
+
+  <!-- Grilla de portales por nivel -->
+  <template x-for="nivel in ['nacional', 'provincial', 'municipal']" :key="nivel">
+    <div x-show="getByLevel(nivel).length" class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-3 capitalize flex items-center gap-2">
+        <span x-text="{nacional:'🇦🇷 Nacional', provincial:'🏛 Provincial', municipal:'🏙 Municipal'}[nivel]"></span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <template x-for="portal in getByLevel(nivel)" :key="portal.id">
+          <div class="bg-white rounded-xl shadow p-5 border border-gray-200 hover:border-blue-300 transition">
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-900" x-text="portal.name"></h3>
+                <p class="text-xs text-gray-500 mt-0.5" x-text="portal.short_name"></p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full"
+                  :class="portal.status === 'active' ? 'bg-green-400' : portal.status === 'error' ? 'bg-red-400' : 'bg-gray-400'">
+                </span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" :checked="portal.is_enabled"
+                    @change="togglePortal(portal)" class="sr-only peer">
+                  <div class="w-9 h-5 bg-gray-300 peer-checked:bg-blue-600 rounded-full transition"></div>
+                  <div class="absolute left-0.5 top-0.5 bg-white w-4 h-4 rounded-full shadow peer-checked:translate-x-4 transition"></div>
+                </label>
+              </div>
+            </div>
+            <a :href="portal.url" target="_blank" class="text-xs text-blue-600 hover:underline truncate block mb-3" x-text="portal.url"></a>
+            <div class="flex justify-between text-xs text-gray-500">
+              <span x-text="'Scraper: ' + portal.scraper_class.replace('Scraper','')"></span>
+              <span x-show="portal.last_success_at" x-text="'OK: ' + formatDate(portal.last_success_at)"></span>
+            </div>
+            <div x-show="portal.last_error && portal.consecutive_errors > 0"
+              class="mt-2 text-xs text-red-600 bg-red-50 rounded px-2 py-1 truncate"
+              x-text="'⚠ ' + portal.last_error">
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <!-- Modal agregar portal -->
+  <div x-show="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6" @click.stop>
+      <h2 class="text-xl font-semibold mb-4">Agregar nuevo portal</h2>
+      <div class="space-y-3">
+        <input x-model="newPortal.name" placeholder="Nombre del portal"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        <input x-model="newPortal.short_name" placeholder="ID corto (sin espacios, ej: mi-municipio)"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        <input x-model="newPortal.url" placeholder="URL del portal (https://...)"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        <select x-model="newPortal.level"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option value="municipal">Municipal</option>
+          <option value="provincial">Provincial</option>
+          <option value="nacional">Nacional</option>
+        </select>
+        <input x-show="newPortal.level === 'municipal'" x-model="newPortal.municipality"
+          placeholder="Nombre del municipio"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        <select x-model="newPortal.scraper_class"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <template x-for="sc in scrapers" :key="sc">
+            <option :value="sc" x-text="sc"></option>
+          </template>
+        </select>
+      </div>
+      <div class="mt-5 flex gap-3 justify-end">
+        <button @click="showAddModal = false"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
+        <button @click="addPortal()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">Agregar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function portalesPage() {
+  return {
+    portales: [],
+    scrapers: [],
+    showAddModal: false,
+    newPortal: {
+      name: '', short_name: '', url: '', level: 'municipal',
+      municipality: '', scraper_class: 'GenericMunicipalScraper'
+    },
+
+    async load() {
+      const [pr, sr] = await Promise.all([
+        fetch('/api/portales').then(r => r.json()),
+        fetch('/api/portales/scrapers/disponibles').then(r => r.json()),
+      ]);
+      this.portales = pr;
+      this.scrapers = sr;
+    },
+
+    getByLevel(nivel) {
+      return this.portales.filter(p => p.level === nivel);
+    },
+
+    async togglePortal(portal) {
+      await fetch(`/api/portales/${portal.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_enabled: !portal.is_enabled })
+      });
+      portal.is_enabled = !portal.is_enabled;
+      showToast(portal.is_enabled ? 'Portal habilitado' : 'Portal deshabilitado', 'info');
+    },
+
+    async addPortal() {
+      if (!this.newPortal.name || !this.newPortal.url || !this.newPortal.short_name) {
+        showToast('Completá los campos obligatorios', 'error');
+        return;
+      }
+      try {
+        const r = await fetch('/api/portales', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.newPortal)
+        });
+        if (r.ok) {
+          const portal = await r.json();
+          this.portales.push(portal);
+          this.showAddModal = false;
+          this.newPortal = { name: '', short_name: '', url: '', level: 'municipal', municipality: '', scraper_class: 'GenericMunicipalScraper' };
+          showToast('Portal agregado correctamente', 'success');
+        } else {
+          const err = await r.json();
+          showToast(err.detail || 'Error al agregar portal', 'error');
+        }
+      } catch(e) {
+        showToast('Error de conexión', 'error');
+      }
+    }
+  }
+}
+</script>
+{% endblock %}

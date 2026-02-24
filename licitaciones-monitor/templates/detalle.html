@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Detalle Licitación — LicitaForense Monitor{% endblock %}
+
+{% block content %}
+<div x-data="detallePage({{ licitacion_id }})" x-init="load()" x-cloak>
+
+  <div class="mb-4">
+    <a href="/licitaciones" class="text-blue-600 hover:underline text-sm">← Volver a licitaciones</a>
+  </div>
+
+  <!-- Loading -->
+  <div x-show="loading" class="text-center py-12">
+    <div class="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
+  </div>
+
+  <!-- Contenido -->
+  <div x-show="!loading && lic" class="space-y-6">
+
+    <!-- Header card -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold"
+              :class="{
+                'bg-green-100 text-green-700': lic.is_new,
+                'bg-gray-100 text-gray-600': !lic.is_new && lic.status === 'vista',
+                'bg-yellow-100 text-yellow-700': lic.status === 'favorita',
+              }"
+              x-text="lic.is_new ? '🆕 NUEVA' : lic.status?.toUpperCase()">
+            </span>
+            <div class="flex flex-wrap gap-1">
+              <template x-for="kw in (lic.matched_keywords || [])" :key="kw">
+                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-medium" x-text="'🔑 ' + kw"></span>
+              </template>
+            </div>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-900" x-text="lic.titulo"></h1>
+          <p class="text-gray-500 mt-2" x-text="lic.organismo || 'Organismo no especificado'"></p>
+        </div>
+
+        <!-- Score -->
+        <div class="text-center bg-gray-50 rounded-lg px-6 py-4 flex-shrink-0">
+          <p class="text-4xl font-bold" :class="scoreColor(lic.relevance_score)"
+             x-text="Math.round((lic.relevance_score || 0)*100) + '%'"></p>
+          <p class="text-xs text-gray-500 mt-1">Relevancia</p>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="mt-4 flex flex-wrap gap-2 border-t pt-4">
+        <a :href="lic.url_detalle" target="_blank"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+          ↗ Ver en portal oficial
+        </a>
+        <a x-show="lic.url_pliego" :href="lic.url_pliego" target="_blank"
+          class="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition">
+          📄 Descargar pliego
+        </a>
+        <select @change="updateStatus($event.target.value)"
+          class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">Cambiar estado...</option>
+          <option value="vista">Vista</option>
+          <option value="favorita">⭐ Favorita</option>
+          <option value="descartada">🗑 Descartada</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Grid de datos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Datos del proceso -->
+      <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">📋 Datos del proceso</h2>
+        <dl class="space-y-3">
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">N° Licitación</dt>
+            <dd class="text-sm font-medium text-gray-900" x-text="lic.numero_licitacion || '—'"></dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">N° Expediente</dt>
+            <dd class="text-sm font-medium text-gray-900" x-text="lic.numero_expediente || '—'"></dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">Tipo de contratación</dt>
+            <dd class="text-sm font-medium text-gray-900" x-text="lic.tipo_contratacion || '—'"></dd>
+          </div>
+          <div class="flex justify-between" x-show="lic.monto_estimado">
+            <dt class="text-sm text-gray-500">Monto estimado</dt>
+            <dd class="text-sm font-bold text-green-700"
+              x-text="'$' + (lic.monto_estimado || 0).toLocaleString('es-AR') + ' ' + (lic.moneda || 'ARS')">
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Fechas importantes -->
+      <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">📅 Fechas importantes</h2>
+        <dl class="space-y-3">
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">Publicación</dt>
+            <dd class="text-sm font-medium text-gray-900" x-text="formatDate(lic.fecha_publicacion)"></dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">Apertura de ofertas</dt>
+            <dd class="text-sm font-medium" :class="lic.fecha_apertura ? 'text-orange-600 font-bold' : 'text-gray-900'"
+              x-text="formatDate(lic.fecha_apertura)"></dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">Cierre</dt>
+            <dd class="text-sm font-medium text-gray-900" x-text="formatDate(lic.fecha_cierre)"></dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-sm text-gray-500">Detectada por sistema</dt>
+            <dd class="text-sm text-gray-400" x-text="formatDateTime(lic.created_at)"></dd>
+          </div>
+        </dl>
+      </div>
+
+    </div>
+
+    <!-- Descripción -->
+    <div x-show="lic.descripcion" class="bg-white rounded-xl shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">📝 Descripción</h2>
+      <p class="text-gray-700 leading-relaxed whitespace-pre-wrap" x-text="lic.descripcion"></p>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function detallePage(licId) {
+  return {
+    loading: true,
+    lic: null,
+
+    async load() {
+      try {
+        const r = await fetch('/api/licitaciones/' + licId);
+        if (r.ok) this.lic = await r.json();
+      } catch(e) {
+        console.error(e);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async updateStatus(status) {
+      if (!status) return;
+      try {
+        const r = await fetch(`/api/licitaciones/${licId}/status?status=${status}`, { method: 'PATCH' });
+        if (r.ok) {
+          this.lic.status = status;
+          showToast('Estado actualizado: ' + status, 'success');
+        }
+      } catch(e) {
+        showToast('Error al actualizar estado', 'error');
+      }
+    }
+  }
+}
+</script>
+{% endblock %}

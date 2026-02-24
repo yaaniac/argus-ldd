@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}LicitaForense Monitor{% endblock %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eff6ff', 500:'#1d4ed8', 600:'#1e40af', 700:'#1e3a8a' },
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Alpine.js para interactividad -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <style>
+    [x-cloak] { display: none !important; }
+    .badge-nueva    { @apply bg-green-100 text-green-800; }
+    .badge-vista    { @apply bg-gray-100 text-gray-700; }
+    .badge-favorita { @apply bg-yellow-100 text-yellow-800; }
+    .badge-descartada { @apply bg-red-100 text-red-700; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+
+  <!-- ── Navbar ──────────────────────────────────────────────────────── -->
+  <nav class="bg-blue-900 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🔬</span>
+          <div>
+            <a href="/" class="text-xl font-bold tracking-tight">LicitaForense</a>
+            <span class="text-blue-300 text-sm ml-2">Monitor</span>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center gap-1">
+          <a href="/" class="nav-link {% if request.url.path == '/' %}bg-blue-700{% endif %}
+             px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+            Dashboard
+          </a>
+          <a href="/licitaciones" class="nav-link {% if '/licitaciones' in request.url.path %}bg-blue-700{% endif %}
+             px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+            Licitaciones
+          </a>
+          <a href="/portales" class="nav-link {% if '/portales' in request.url.path %}bg-blue-700{% endif %}
+             px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+            Portales
+          </a>
+          <a href="/keywords" class="nav-link {% if '/keywords' in request.url.path %}bg-blue-700{% endif %}
+             px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+            Keywords
+          </a>
+          <a href="/historial" class="nav-link {% if '/historial' in request.url.path %}bg-blue-700{% endif %}
+             px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
+            Historial
+          </a>
+        </div>
+
+        <!-- Botón buscar ahora -->
+        <button onclick="triggerSearch()"
+          class="bg-green-500 hover:bg-green-400 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow transition flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          Buscar ahora
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Contenido ──────────────────────────────────────────────────── -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────── -->
+  <footer class="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500">
+    LicitaForense Monitor v1.0 — Sistema de monitoreo de licitaciones forenses
+  </footer>
+
+  <!-- ── Toast notification ─────────────────────────────────────────── -->
+  <div id="toast" class="fixed bottom-4 right-4 hidden z-50">
+    <div id="toast-body" class="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl text-sm font-medium max-w-sm"></div>
+  </div>
+
+  <script>
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('toast');
+      const body = document.getElementById('toast-body');
+      const colors = { info: 'bg-blue-700', success: 'bg-green-700', error: 'bg-red-700' };
+      body.className = `${colors[type] || 'bg-gray-900'} text-white px-6 py-3 rounded-lg shadow-xl text-sm font-medium max-w-sm`;
+      body.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 4000);
+    }
+
+    async function triggerSearch() {
+      try {
+        showToast('Iniciando búsqueda en todos los portales...', 'info');
+        const resp = await fetch('/api/runs/trigger', { method: 'POST' });
+        const data = await resp.json();
+        showToast('✓ Búsqueda iniciada en segundo plano', 'success');
+      } catch(e) {
+        showToast('Error al iniciar búsqueda', 'error');
+      }
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('es-AR', {
+        day: '2-digit', month: '2-digit', year: 'numeric'
+      });
+    }
+
+    function formatDateTime(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleString('es-AR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function scoreColor(score) {
+      if (score >= 0.8) return 'text-green-600 font-bold';
+      if (score >= 0.5) return 'text-yellow-600 font-semibold';
+      return 'text-gray-500';
+    }
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

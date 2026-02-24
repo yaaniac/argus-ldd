@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Keywords — LicitaForense Monitor{% endblock %}
+
+{% block content %}
+<div x-data="keywordsPage()" x-init="load()" x-cloak>
+
+  <div class="mb-6 flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Keywords</h1>
+      <p class="text-gray-500 mt-1">Palabras clave para búsqueda de licitaciones forenses</p>
+    </div>
+    <button @click="showAddModal = true"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+      + Agregar keyword
+    </button>
+  </div>
+
+  <!-- Por categoría -->
+  <template x-for="cat in categories" :key="cat">
+    <div class="mb-6">
+      <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3" x-text="cat || 'Sin categoría'"></h2>
+      <div class="flex flex-wrap gap-3">
+        <template x-for="kw in getByCategory(cat)" :key="kw.id">
+          <div class="bg-white rounded-lg shadow px-4 py-3 flex items-center gap-3 border border-gray-200"
+            :class="!kw.is_active ? 'opacity-50' : ''">
+            <div>
+              <p class="font-medium text-gray-900" x-text="kw.term"></p>
+              <p class="text-xs text-gray-400 mt-0.5" x-text="'Prioridad: ' + kw.priority"></p>
+            </div>
+            <div class="flex items-center gap-2 ml-auto">
+              <button @click="toggleKeyword(kw)"
+                :class="kw.is_active ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'"
+                class="text-xs px-2 py-1 rounded transition">
+                <span x-text="kw.is_active ? 'Activa' : 'Inactiva'"></span>
+              </button>
+              <button @click="deleteKeyword(kw.id)"
+                class="text-red-400 hover:text-red-600 transition text-sm">✕</button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <!-- Modal agregar -->
+  <div x-show="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Nueva keyword</h2>
+      <div class="space-y-3">
+        <input x-model="newKw.term" placeholder="Término de búsqueda (ej: kit forense)"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        <input x-model="newKw.category" placeholder="Categoría (ej: equipamiento, especialidad)"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        <div class="flex items-center gap-3">
+          <label class="text-sm text-gray-600">Prioridad (1-10):</label>
+          <input type="number" x-model="newKw.priority" min="1" max="10"
+            class="w-20 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        </div>
+      </div>
+      <div class="mt-5 flex gap-3 justify-end">
+        <button @click="showAddModal = false"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancelar</button>
+        <button @click="addKeyword()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">Agregar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function keywordsPage() {
+  return {
+    keywords: [],
+    showAddModal: false,
+    newKw: { term: '', category: '', priority: 7 },
+
+    get categories() {
+      return [...new Set(this.keywords.map(k => k.category))].sort();
+    },
+
+    getByCategory(cat) {
+      return this.keywords.filter(k => k.category === cat);
+    },
+
+    async load() {
+      const r = await fetch('/api/keywords');
+      this.keywords = await r.json();
+    },
+
+    async addKeyword() {
+      if (!this.newKw.term.trim()) { showToast('Ingresá un término', 'error'); return; }
+      try {
+        const r = await fetch('/api/keywords', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...this.newKw, priority: parseInt(this.newKw.priority) })
+        });
+        if (r.ok) {
+          const kw = await r.json();
+          this.keywords.push(kw);
+          this.showAddModal = false;
+          this.newKw = { term: '', category: '', priority: 7 };
+          showToast('Keyword agregada', 'success');
+        } else {
+          const err = await r.json();
+          showToast(err.detail || 'Error', 'error');
+        }
+      } catch(e) { showToast('Error de conexión', 'error'); }
+    },
+
+    async toggleKeyword(kw) {
+      await fetch(`/api/keywords/${kw.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: !kw.is_active })
+      });
+      kw.is_active = !kw.is_active;
+    },
+
+    async deleteKeyword(id) {
+      if (!confirm('¿Eliminar esta keyword?')) return;
+      await fetch(`/api/keywords/${id}`, { method: 'DELETE' });
+      this.keywords = this.keywords.filter(k => k.id !== id);
+      showToast('Keyword eliminada', 'info');
+    }
+  }
+}
+</script>
+{% endblock %}
