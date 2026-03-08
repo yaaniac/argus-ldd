@@ -1059,7 +1059,8 @@
         clearInterval(iv);
         ArgusBackend.listarCasosTenant(TENANT_REP).then(function(r) {
           if (!r || !r.ok) return;
-          _renderReportes(r.casos || []);
+          window._ALL_REP_CASOS = r.casos || [];
+          _renderReportes(window._ALL_REP_CASOS);
         }).catch(function(e) { console.warn('[Argus Reportes] error:', e); });
       } else if (attempts >= maxAttempts) { clearInterval(iv); }
     }, 200);
@@ -1293,9 +1294,22 @@
 
   /* ── Period tabs ── */
   function setPeriod(el, period) {
-    document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.period-tab').forEach(function(t) { t.classList.remove('active'); });
     el.classList.add('active');
-    // In production: re-fetch data for selected period
+    if (!window._ALL_REP_CASOS) return;
+    var now = new Date();
+    var days = { '7d': 7, '30d': 30, '90d': 90, '1y': 365 }[period];
+    var filtered;
+    if (!days) {
+      // 'all' or unknown → show everything
+      filtered = window._ALL_REP_CASOS;
+    } else {
+      var since = new Date(now.getFullYear(), now.getMonth(), now.getDate() - days + 1);
+      filtered = window._ALL_REP_CASOS.filter(function(c) {
+        return c.created_at && new Date(c.created_at) >= since;
+      });
+    }
+    _renderReportes(filtered);
   }
 
   /* ── Dummy actions ── */

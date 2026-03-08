@@ -386,14 +386,33 @@
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M4 7h6M6 10h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
             Filtros avanzados
           </button>
+          <button class="bo-btn bo-btn-ghost" id="btnLimpiarFiltros" onclick="limpiarFiltros()" style="display:none;color:var(--gray-400)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Limpiar
+          </button>
         </div>
         <div class="bo-filtros-avanzados-panel" id="filtrosAvanzadosPanel" style="display:none">
-          <div class="bo-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:12px;padding:16px;background:var(--gray-50);border-radius:8px;border:1px solid var(--gray-200)">
-            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha desde</label><input type="date" class="bo-select-sm" style="width:100%"/></div>
-            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha hasta</label><input type="date" class="bo-select-sm" style="width:100%"/></div>
-            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Investigador</label><select class="bo-select-sm" style="width:100%" id="filtroInvestigador"><option>Todos</option></select></div>
-            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Canal</label><select class="bo-select-sm" style="width:100%"><option>Todos</option><option>Web</option><option>Email</option><option>WhatsApp</option><option>Teléfono</option></select></div>
-            <div style="align-self:end"><button type="button" class="bo-btn bo-btn-primary" onclick="aplicarFiltrosAvanzados()">Aplicar</button></div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;padding:16px;background:var(--gray-50);border-radius:8px;border:1px solid var(--gray-200)">
+            <div style="min-width:140px;flex:1">
+              <label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha desde</label>
+              <input type="date" class="bo-select-sm" id="filtroFechaDesde" style="width:100%;min-width:0"/>
+            </div>
+            <div style="min-width:140px;flex:1">
+              <label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha hasta</label>
+              <input type="date" class="bo-select-sm" id="filtroFechaHasta" style="width:100%;min-width:0"/>
+            </div>
+            <div style="min-width:140px;flex:1">
+              <label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Investigador</label>
+              <select class="bo-select-sm" style="width:100%" id="filtroInvestigador"><option value="">Todos</option></select>
+            </div>
+            <div style="min-width:140px;flex:1">
+              <label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Canal</label>
+              <select class="bo-select-sm" style="width:100%" id="filtroCanal"><option value="">Todos</option><option value="web">Web</option><option value="email">Email</option><option value="whatsapp">WhatsApp</option><option value="telefono">Teléfono</option></select>
+            </div>
+            <div style="align-self:flex-end;display:flex;gap:8px">
+              <button type="button" class="bo-btn bo-btn-primary" onclick="aplicarFiltrosAvanzados()">Aplicar</button>
+              <button type="button" class="bo-btn bo-btn-ghost" onclick="limpiarFiltrosAvanzados()">Limpiar</button>
+            </div>
           </div>
         </div>
       </div>
@@ -966,6 +985,24 @@ a { text-decoration: none; color: inherit; }
 .bo-sidebar.collapsed .sidebar-icon-collapse { display: none !important; }
 .bo-sidebar.collapsed .sidebar-icon-expand { display: block !important; }
 .bo-sidebar:not(.collapsed) .sidebar-icon-expand { display: none !important; }
+/* Collapsed: hide text labels, section labels, badges */
+.bo-sidebar.collapsed .bo-nav-item span { display: none; }
+.bo-sidebar.collapsed .bo-nav-label { display: none; }
+.bo-sidebar.collapsed .bo-badge-count { display: none; }
+.bo-sidebar.collapsed .bo-logo-name { display: none; }
+.bo-sidebar.collapsed .bo-logo-sub { display: none; }
+.bo-sidebar.collapsed .bo-sidebar-user > div:not(:first-child) { display: none; }
+/* Center icons when collapsed */
+.bo-sidebar.collapsed .bo-nav-item {
+  justify-content: center;
+  padding: 9px 0;
+  margin: 2px 6px;
+  gap: 0;
+}
+.bo-sidebar.collapsed .bo-logo {
+  justify-content: center;
+  width: 100%;
+}
 
 .bo-sidebar-header {
   display: flex;
@@ -2584,20 +2621,52 @@ function _goPage(p) {
 }
 
 function filterCasos() {
-  var q = (document.getElementById('casoBusqueda') || {}).value.toLowerCase().trim();
-  var estado = (document.getElementById('filterEstado') || {}).value;
-  var riesgo = (document.getElementById('filterRiesgo') || {}).value;
-  var area   = (document.getElementById('filterArea') || {}).value;
-  var tipo   = (document.getElementById('filterTipo') || {}).value;
+  var q      = (document.getElementById('casoBusqueda')    || {}).value || '';
+  q = q.toLowerCase().trim();
+  var estado = (document.getElementById('filterEstado')    || {}).value || '';
+  var riesgo = (document.getElementById('filterRiesgo')    || {}).value || '';
+  var area   = (document.getElementById('filterArea')      || {}).value || '';
+  var tipo   = (document.getElementById('filterTipo')      || {}).value || '';
+  // Advanced
+  var fDesde = (document.getElementById('filtroFechaDesde') || {}).value || '';
+  var fHasta = (document.getElementById('filtroFechaHasta') || {}).value || '';
+  var fInv   = (document.getElementById('filtroInvestigador') || {}).value || '';
+  var fCanal = (document.getElementById('filtroCanal')      || {}).value || '';
+
+  var hasFilter = q || estado || riesgo || area || tipo || fDesde || fHasta || fInv || fCanal;
+  var limpiarBtn = document.getElementById('btnLimpiarFiltros');
+  if (limpiarBtn) limpiarBtn.style.display = hasFilter ? '' : 'none';
+
   var result = CASOS_DATA.filter(function(c) {
     var matchQ = !q || [c.id, c.tracking_code, c.tipo, c.area, c.canal, c.inv].filter(Boolean).join(' ').toLowerCase().includes(q);
     var matchE = !estado || c.estado === estado;
     var matchR = !riesgo || c.riesgo === riesgo;
-    var matchA = !area   || c.area.toLowerCase().includes(area.toLowerCase());
-    var matchT = !tipo   || c.tipo.toLowerCase().includes(tipo.toLowerCase());
-    return matchQ && matchE && matchR && matchA && matchT;
+    var matchA = !area   || (c.area || '').toLowerCase().includes(area.toLowerCase());
+    var matchT = !tipo   || (c.tipo || '').toLowerCase().includes(tipo.toLowerCase());
+    var matchFD = !fDesde || (c.created_at && c.created_at.slice(0,10) >= fDesde);
+    var matchFH = !fHasta || (c.created_at && c.created_at.slice(0,10) <= fHasta);
+    var matchInv = !fInv  || (c.inv || '').toLowerCase().includes(fInv.toLowerCase());
+    var matchCan = !fCanal || (c.canal || '').toLowerCase().includes(fCanal.toLowerCase());
+    return matchQ && matchE && matchR && matchA && matchT && matchFD && matchFH && matchInv && matchCan;
   });
   renderCasosTable(result);
+}
+
+function limpiarFiltros() {
+  ['casoBusqueda','filterEstado','filterRiesgo','filterArea','filterTipo'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  limpiarFiltrosAvanzados(true);
+  filterCasos();
+}
+
+function limpiarFiltrosAvanzados(silent) {
+  ['filtroFechaDesde','filtroFechaHasta','filtroInvestigador','filtroCanal'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  if (!silent) filterCasos();
 }
 
 function statusLabel(s) {
