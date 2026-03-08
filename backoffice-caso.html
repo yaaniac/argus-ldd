@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Caso ARG-2025-0043 · Argus Back Office</title>
+  <title>Caso · Argus Back Office</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -93,8 +93,11 @@
     </nav>
 
     <div class="bo-sidebar-user">
-      <div class="bo-user-avatar">MA</div>
-      <div class="bo-user-info"><strong>María Álvarez</strong><span>Compliance Officer</span></div>
+      <div class="bo-user-avatar" id="sidebarUserAvatar">—</div>
+      <div class="bo-user-info">
+        <strong id="sidebarUserName">Cargando…</strong>
+        <span id="sidebarUserRole">Back Office</span>
+      </div>
     </div>
   </aside>
 
@@ -117,7 +120,7 @@
       </div>
       <div class="bo-topbar-right">
         <div class="bo-notif-btn"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 015 5v3l2 2H2l2-2V7a5 5 0 015-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="currentColor" stroke-width="1.5"/></svg><span class="bo-notif-dot"></span></div>
-        <div class="bo-topbar-avatar">MA</div>
+        <div class="bo-topbar-avatar" id="topbarAvatar">—</div>
       </div>
     </header>
 
@@ -128,22 +131,14 @@
       <div class="case-header-bar">
         <div class="case-header-left">
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-            <code class="bo-code-lg">ARG-2025-0043</code>
-            <span class="risk-tag risk-critical">CRÍTICO</span>
-            <span class="status-tag status-investigating" id="caseStatusBadge">Investigando</span>
+            <code class="bo-code-lg" id="caseCodeDisplay">—</code>
+            <span class="risk-tag risk-medium" id="caseRiskBadge" style="display:none"></span>
+            <span class="status-tag status-new" id="caseStatusBadge" style="display:none">—</span>
             <span class="conf-tag">🔒 Confidencial</span>
           </div>
-          <h1 class="case-title">Fraude financiero — Compras a proveedores ficticios</h1>
-          <div class="case-meta">
-            <span>📅 Recibido: 18 feb 2025, 11:23 hs</span>
-            <span>·</span>
-            <span>📡 Canal: Email</span>
-            <span>·</span>
-            <span>👤 Anónima</span>
-            <span>·</span>
-            <span>🏢 Área: Finanzas / Contabilidad</span>
-            <span>·</span>
-            <span>🌍 Argentina</span>
+          <h1 class="case-title" id="caseTitleH1">Cargando caso...</h1>
+          <div class="case-meta" id="caseMetaBar">
+            <span>Cargando...</span>
           </div>
         </div>
         <div class="case-header-actions">
@@ -167,13 +162,13 @@
       </div>
 
       <!-- SLA BAR -->
-      <div class="sla-bar">
+      <div class="sla-bar" id="slaBarSection" style="display:none">
         <div class="sla-bar-info">
-          <span class="sla-bar-label">SLA: <strong style="color:#EA580C">8 días restantes</strong> (vence 02/03/2025)</span>
-          <span class="sla-bar-label">Inicio: 18/02/2025 · Objetivo: 60 días · Transcurridos: 4 días</span>
+          <span class="sla-bar-label" id="slaBarLabel">SLA: —</span>
+          <span class="sla-bar-label" id="slaBarSub">—</span>
         </div>
         <div class="sla-bar-track">
-          <div class="sla-bar-fill" style="width:7%;background:var(--primary)"></div>
+          <div class="sla-bar-fill" id="slaBarFill" style="width:0%"></div>
         </div>
       </div>
 
@@ -208,62 +203,16 @@
             <!-- Personas involucradas -->
             <div class="bo-card">
               <div class="bo-card-header"><h3>Personas involucradas</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px">+ Agregar</button></div>
-              <div class="involved-list">
-                <div class="involved-item">
-                  <div class="involved-avatar" style="background:#FEF2F2;color:#DC2626">LP</div>
-                  <div>
-                    <strong>Luis Pereyra</strong>
-                    <span>Gerente de Compras · Principal denunciado</span>
-                  </div>
-                  <span class="risk-tag risk-high" style="margin-left:auto">ALTO</span>
-                </div>
-                <div class="involved-item">
-                  <div class="involved-avatar" style="background:#FFF7ED;color:#EA580C">VP</div>
-                  <div>
-                    <strong>Vendedora Proveedora S.A.</strong>
-                    <span>Proveedor sospechoso — No verificado en AFIP</span>
-                  </div>
-                  <span class="risk-tag risk-critical" style="margin-left:auto">CRÍTICO</span>
-                </div>
-                <div class="involved-item">
-                  <div class="involved-avatar" style="background:#FFFBEB;color:#D97706">??</div>
-                  <div>
-                    <strong>Persona sin identificar</strong>
-                    <span>Firmante de contratos — Identidad a verificar</span>
-                  </div>
-                  <span class="risk-tag risk-medium" style="margin-left:auto">MEDIO</span>
-                </div>
+              <div class="involved-list" id="involvedList">
+                <p style="color:var(--gray-400);font-size:13px;padding:16px 0">Sin personas registradas.</p>
               </div>
             </div>
 
             <!-- Evaluación de riesgo -->
             <div class="bo-card">
               <div class="bo-card-header"><h3>Evaluación de riesgo</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px">Editar</button></div>
-              <div class="risk-eval-grid">
-                <div class="risk-eval-item">
-                  <span class="risk-eval-label">Riesgo financiero</span>
-                  <div class="risk-eval-bar"><div style="width:85%;background:#DC2626"></div></div>
-                  <span class="risk-eval-val">Crítico</span>
-                </div>
-                <div class="risk-eval-item">
-                  <span class="risk-eval-label">Riesgo reputacional</span>
-                  <div class="risk-eval-bar"><div style="width:70%;background:#EA580C"></div></div>
-                  <span class="risk-eval-val">Alto</span>
-                </div>
-                <div class="risk-eval-item">
-                  <span class="risk-eval-label">Riesgo legal / regulatorio</span>
-                  <div class="risk-eval-bar"><div style="width:60%;background:#D97706"></div></div>
-                  <span class="risk-eval-val">Alto</span>
-                </div>
-                <div class="risk-eval-item">
-                  <span class="risk-eval-label">Riesgo de represalias</span>
-                  <div class="risk-eval-bar"><div style="width:40%;background:#D97706"></div></div>
-                  <span class="risk-eval-val">Medio</span>
-                </div>
-              </div>
-              <div class="risk-eval-notes">
-                <strong>Notas del evaluador:</strong>
-                <p>Caso con alto impacto financiero potencial. Se requiere intervención del área Legal y posible denuncia penal. Verificar en AFIP, BCRA y UIF. Paralizar pagos a proveedores involucrados de forma preventiva.</p>
+              <div id="riskEvalContainer" style="padding:16px 20px">
+                <p style="color:var(--gray-400);font-size:13px">Evaluación no disponible.</p>
               </div>
             </div>
 
@@ -272,95 +221,38 @@
           <!-- TAB: INVESTIGACIÓN -->
           <div class="tab-panel" id="tab-investigacion">
             <div class="bo-card">
-              <div class="bo-card-header"><h3>Plan de investigación</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px">+ Agregar tarea</button></div>
-              <div class="inv-tasks">
+              <div class="bo-card-header"><h3>Plan de investigación</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="showAddTareaForm()">+ Agregar tarea</button></div>
+              <div class="inv-tasks" id="tareasContainer">
 
-                <div class="inv-task done">
-                  <div class="task-check done">✓</div>
-                  <div class="task-body">
-                    <strong>Evaluación de admisibilidad</strong>
-                    <p>Revisar si la denuncia entra en el ámbito del canal y tiene contenido suficiente para investigar.</p>
-                    <div class="task-meta"><span>Asignado: M. Álvarez</span><span>Completado: 19/02/2025</span></div>
-                  </div>
+                <p style="padding:16px;color:var(--gray-400);font-size:13px" id="tareasPlaceholder">Cargando tareas...</p>
+              </div>
+              <div id="newTareaArea" style="display:none;padding:16px 20px;border-top:1px solid var(--gray-100)">
+                <input type="text" id="tareaTitle" class="bo-select-full" placeholder="Título de la tarea *" style="margin-bottom:8px" />
+                <textarea id="tareaDesc" class="bo-textarea" rows="2" placeholder="Descripción (opcional)..." style="margin-bottom:8px"></textarea>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                  <input type="text" id="tareaAsignado" class="bo-select-sm" placeholder="Asignado a..." style="flex:1;min-width:130px" />
+                  <input type="date" id="tareaVencimiento" class="bo-select-sm" style="flex:1;min-width:130px" />
+                  <button class="bo-btn bo-btn-primary" style="font-size:12px" onclick="saveNewTarea()">Guardar tarea</button>
+                  <button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="document.getElementById('newTareaArea').style.display='none'">Cancelar</button>
                 </div>
-
-                <div class="inv-task done">
-                  <div class="task-check done">✓</div>
-                  <div class="task-body">
-                    <strong>Solicitud de documentación contable</strong>
-                    <p>Requerir al CFO las órdenes de compra, facturas y comprobantes de transferencia de los últimos 6 meses del área de Compras.</p>
-                    <div class="task-meta"><span>Asignado: R. Mendoza</span><span>Completado: 20/02/2025</span></div>
-                  </div>
-                </div>
-
-                <div class="inv-task in-progress">
-                  <div class="task-check in-progress"></div>
-                  <div class="task-body">
-                    <strong>Verificación de proveedores en AFIP / BCRA / UIF</strong>
-                    <p>Consultar estado fiscal, habilitación y antecedentes de los 3 proveedores mencionados.</p>
-                    <div class="task-meta"><span>Asignado: R. Mendoza</span><span class="task-due warn">Vence: 25/02/2025</span></div>
-                  </div>
-                </div>
-
-                <div class="inv-task in-progress">
-                  <div class="task-check in-progress"></div>
-                  <div class="task-body">
-                    <strong>Análisis de firmas y poderes</strong>
-                    <p>Cotejar las firmas de los contratos con el manual de poderes vigente. Involucrar a Legal.</p>
-                    <div class="task-meta"><span>Asignado: J. Torres</span><span class="task-due warn">Vence: 26/02/2025</span></div>
-                  </div>
-                </div>
-
-                <div class="inv-task pending">
-                  <div class="task-check pending"></div>
-                  <div class="task-body">
-                    <strong>Entrevista al Gerente de Compras</strong>
-                    <p>Entrevista formal con L. Pereyra. Coordinar con RRHH y Legal. Garantizar el debido proceso.</p>
-                    <div class="task-meta"><span>Asignado: M. Álvarez</span><span class="task-due">Pendiente</span></div>
-                  </div>
-                </div>
-
-                <div class="inv-task pending">
-                  <div class="task-check pending"></div>
-                  <div class="task-body">
-                    <strong>Informe preliminar de hallazgos</strong>
-                    <p>Consolidar evidencias, redactar informe preliminar y elevar a Comité de Compliance.</p>
-                    <div class="task-meta"><span>Asignado: M. Álvarez</span><span class="task-due">Pendiente</span></div>
-                  </div>
-                </div>
-
-                <div class="inv-task pending">
-                  <div class="task-check pending"></div>
-                  <div class="task-body">
-                    <strong>Decisión final y medidas correctivas</strong>
-                    <p>Definir sanción, medidas correctivas y posible denuncia penal. Aprobación del Directorio.</p>
-                    <div class="task-meta"><span>Asignado: Comité</span><span class="task-due">Pendiente</span></div>
-                  </div>
-                </div>
-
               </div>
             </div>
 
             <!-- Hallazgos -->
             <div class="bo-card">
               <div class="bo-card-header"><h3>Registro de hallazgos</h3><button class="bo-btn bo-btn-primary" style="font-size:12px" onclick="document.getElementById('newFindingArea').style.display='block'">+ Agregar hallazgo</button></div>
-              <div class="findings-list">
-                <div class="finding-item">
-                  <div class="finding-meta"><strong>R. Mendoza</strong> · 20/02/2025 14:10</div>
-                  <p>Se verificó que "Vendedora Proveedora S.A." (CUIT 30-99999999-0) no posee alta en AFIP como contribuyente activo. El CUIT corresponde a una empresa dada de baja en 2019.</p>
-                  <div style="margin-top:8px"><span class="bo-tag bo-tag-danger">Alta relevancia</span></div>
-                </div>
-                <div class="finding-item">
-                  <div class="finding-meta"><strong>J. Torres</strong> · 21/02/2025 09:45</div>
-                  <p>Las firmas en los contratos no coinciden con las del manual de poderes. La firma del segundo firmante autorizado no puede ser validada. Se sugiere pericia caligráfica.</p>
-                  <div style="margin-top:8px"><span class="bo-tag bo-tag-warn">Relevancia media</span></div>
-                </div>
+              <div class="findings-list" id="hallazgosContainer">
+                <p style="padding:16px;color:var(--gray-400);font-size:13px">Cargando hallazgos...</p>
               </div>
               <div id="newFindingArea" style="display:none;padding:16px 20px;border-top:1px solid var(--gray-100)">
-                <textarea class="bo-textarea" rows="3" placeholder="Describí el hallazgo, su relevancia y fuente de información..."></textarea>
-                <div style="display:flex;gap:8px;margin-top:10px">
-                  <select class="bo-select-sm"><option>Alta relevancia</option><option>Relevancia media</option><option>Informativo</option></select>
-                  <button class="bo-btn bo-btn-primary" style="font-size:12px">Guardar hallazgo</button>
+                <textarea id="findingContent" class="bo-textarea" rows="3" placeholder="Describí el hallazgo, su relevancia y fuente de información..."></textarea>
+                <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
+                  <select id="findingRelevance" class="bo-select-sm">
+                    <option value="high">Alta relevancia</option>
+                    <option value="medium" selected>Relevancia media</option>
+                    <option value="info">Informativo</option>
+                  </select>
+                  <button class="bo-btn bo-btn-primary" style="font-size:12px" onclick="guardarHallazgo()">Guardar hallazgo</button>
                   <button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="document.getElementById('newFindingArea').style.display='none'">Cancelar</button>
                 </div>
               </div>
@@ -369,23 +261,8 @@
             <!-- Recomendaciones -->
             <div class="bo-card">
               <div class="bo-card-header"><h3>Análisis y recomendaciones</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px">Editar</button></div>
-              <div style="padding:20px">
-                <div class="rec-box">
-                  <strong>Medidas preventivas inmediatas</strong>
-                  <ul>
-                    <li>Suspender preventivamente todos los pagos a los proveedores identificados</li>
-                    <li>Reasignar a L. Pereyra fuera del área de Compras hasta resolución</li>
-                    <li>Solicitar bloqueo de acceso al sistema ERP de las cuentas involucradas</li>
-                  </ul>
-                </div>
-                <div class="rec-box" style="margin-top:12px">
-                  <strong>Posibles sanciones según hallazgos</strong>
-                  <ul>
-                    <li>Desvinculación con causa (si se confirman irregularidades)</li>
-                    <li>Denuncia penal por defraudación (art. 173 CP)</li>
-                    <li>Reporte a UIF si se configura tipología de lavado</li>
-                  </ul>
-                </div>
+              <div id="recsContainer" style="padding:20px">
+                <p style="color:var(--gray-400);font-size:13px">Sin recomendaciones registradas.</p>
               </div>
             </div>
           </div><!-- /tab-investigacion -->
@@ -399,41 +276,12 @@
                   <button class="bo-btn bo-btn-primary" style="font-size:12px">+ Subir archivo</button>
                 </div>
               </div>
-              <div class="evidence-table">
+              <div class="evidence-table" id="evidenceTable">
                 <div class="evidence-header">
                   <span>Nombre</span><span>Tipo</span><span>Subido por</span><span>Fecha</span><span>Custodia</span><span></span>
                 </div>
-                <div class="evidence-row">
-                  <div class="evidence-name"><span class="file-icon pdf">PDF</span> factura_vendedora_01.pdf</div>
-                  <div>Factura</div>
-                  <div>R. Mendoza</div>
-                  <div>20/02/2025</div>
-                  <div><span class="custody-tag">✓ Verificada</span></div>
-                  <div class="evidence-actions"><a href="#" class="bo-link">Ver</a> · <a href="#" class="bo-link">Descargar</a></div>
-                </div>
-                <div class="evidence-row">
-                  <div class="evidence-name"><span class="file-icon img">IMG</span> captura_transferencia_1.png</div>
-                  <div>Captura</div>
-                  <div>Denunciante</div>
-                  <div>18/02/2025</div>
-                  <div><span class="custody-tag">✓ Verificada</span></div>
-                  <div class="evidence-actions"><a href="#" class="bo-link">Ver</a> · <a href="#" class="bo-link">Descargar</a></div>
-                </div>
-                <div class="evidence-row">
-                  <div class="evidence-name"><span class="file-icon doc">DOC</span> contrato_proveedor_2024.docx</div>
-                  <div>Contrato</div>
-                  <div>R. Mendoza</div>
-                  <div>21/02/2025</div>
-                  <div><span class="custody-tag pending-c">⏳ Pendiente</span></div>
-                  <div class="evidence-actions"><a href="#" class="bo-link">Ver</a> · <a href="#" class="bo-link">Descargar</a></div>
-                </div>
-                <div class="evidence-row">
-                  <div class="evidence-name"><span class="file-icon xls">XLS</span> ordenes_compra_6m.xlsx</div>
-                  <div>Contabilidad</div>
-                  <div>M. Álvarez</div>
-                  <div>21/02/2025</div>
-                  <div><span class="custody-tag">✓ Verificada</span></div>
-                  <div class="evidence-actions"><a href="#" class="bo-link">Ver</a> · <a href="#" class="bo-link">Descargar</a></div>
+                <div id="evidenceTableBody">
+                  <div style="padding:16px;color:var(--gray-400);font-size:13px;grid-column:1/-1">Sin evidencias cargadas.</div>
                 </div>
               </div>
               <div class="bo-upload-zone" onclick="triggerUpload()">
@@ -448,31 +296,8 @@
           <div class="tab-panel" id="tab-entrevistas">
             <div class="bo-card">
               <div class="bo-card-header"><h3>Registro de entrevistas</h3><button class="bo-btn bo-btn-primary" style="font-size:12px" onclick="openNuevaEntrevistaModal()">+ Nueva entrevista</button></div>
-              <div class="interviews-list">
-                <div class="interview-item">
-                  <div class="interview-header">
-                    <div>
-                      <strong>Entrevista #1 — Testigo A</strong>
-                      <span class="int-tag">Testigo</span>
-                    </div>
-                    <span style="font-size:12px;color:var(--gray-400)">20/02/2025 · Realizada por M. Álvarez</span>
-                  </div>
-                  <p class="interview-summary">El testigo confirmó haber visto facturas inusuales en el sistema durante noviembre y diciembre. Mencionó que L. Pereyra insistió en procesar los pagos "con urgencia" sin la revisión habitual del CFO.</p>
-                  <div style="display:flex;gap:8px;margin-top:10px">
-                    <span class="bo-tag">Corrobora denuncia</span>
-                    <a href="#" class="bo-link" style="font-size:12px;margin-left:auto">Ver acta completa →</a>
-                  </div>
-                </div>
-                <div class="interview-item interview-pending">
-                  <div class="interview-header">
-                    <div>
-                      <strong>Entrevista #2 — Luis Pereyra</strong>
-                      <span class="int-tag int-tag-pending">Pendiente</span>
-                    </div>
-                    <span style="font-size:12px;color:var(--gray-400)">Programada: 27/02/2025</span>
-                  </div>
-                  <p class="interview-summary" style="color:var(--gray-400)">Entrevista formal al denunciado. Pendiente coordinación con RRHH y asesor legal externo para garantizar el debido proceso.</p>
-                </div>
+              <div class="interviews-list" id="entrevistasList">
+                <p style="color:var(--gray-400);font-size:13px;padding:16px 0">Sin entrevistas registradas.</p>
               </div>
             </div>
           </div><!-- /tab-entrevistas -->
@@ -485,29 +310,8 @@
                 <span style="font-size:12px;color:var(--gray-400)">🔒 Cifrado end-to-end · Anónimo</span>
               </div>
               <div class="chat-area" id="chatArea">
-                <div class="chat-msg system">
-                  <div class="chat-bubble system-bubble">Denuncia recibida el 18/02/2025 a las 11:23 hs. Código: ARG-2025-0043</div>
-                  <span class="chat-time">18 feb · 11:23</span>
-                </div>
-                <div class="chat-msg investigator">
-                  <div class="chat-bubble inv-bubble">Gracias por tu reporte. Lo recibimos correctamente y está siendo evaluado por nuestro equipo. Te mantendremos informado ante novedades.</div>
-                  <span class="chat-time">M. Álvarez · 19 feb · 09:10</span>
-                </div>
-                <div class="chat-msg investigator">
-                  <div class="chat-bubble inv-bubble">Tu denuncia fue admitida y se inició una investigación formal. ¿Podés brindarnos más detalles sobre los contratos que mencionás? ¿Tenés acceso a los documentos originales?</div>
-                  <span class="chat-time">M. Álvarez · 20 feb · 11:05</span>
-                </div>
-                <div class="chat-msg whistleblower">
-                  <div class="chat-bubble wb-bubble">Sí, puedo subir los archivos. ¿Cómo hago? Quiero asegurarme que no quedan mis datos asociados.</div>
-                  <span class="chat-time">Anónimo · 20 feb · 14:32</span>
-                </div>
-                <div class="chat-msg investigator">
-                  <div class="chat-bubble inv-bubble">Podés subir los archivos directamente en el portal usando tu código ARG-2025-0043. El sistema no registra tu IP ni ningún dato de identificación. Tus archivos van directo a la investigación.</div>
-                  <span class="chat-time">M. Álvarez · 20 feb · 14:48</span>
-                </div>
-                <div class="chat-msg whistleblower">
-                  <div class="chat-bubble wb-bubble">Ya los subí. Son dos capturas de pantalla de las transferencias y un PDF de la factura.</div>
-                  <span class="chat-time">Anónimo · 20 feb · 15:10</span>
+                <div class="chat-msg system" id="chatEmptyMsg">
+                  <div class="chat-bubble system-bubble">Sin mensajes. Usá el canal para comunicarte con el denunciante.</div>
                 </div>
               </div>
               <div class="chat-input-area">
@@ -524,63 +328,8 @@
           <div class="tab-panel" id="tab-log">
             <div class="bo-card">
               <div class="bo-card-header"><h3>Bitácora del caso</h3><button class="bo-btn bo-btn-outline" style="font-size:12px">Descargar historial PDF</button></div>
-              <div class="case-timeline">
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:var(--primary)"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">22/02/2025 14:32 · M. Álvarez</div>
-                    <div class="tl-action">Revisó hallazgos de J. Torres sobre análisis de firmas</div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:#7C3AED"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">21/02/2025 17:30 · J. Torres</div>
-                    <div class="tl-action">Agregó hallazgo: Firma no coincide con manual de poderes</div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:#D97706"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">21/02/2025 11:05 · R. Mendoza</div>
-                    <div class="tl-action">Subió documento: <code class="bo-code">contrato_proveedor.pdf</code></div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:#D97706"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">20/02/2025 14:10 · R. Mendoza</div>
-                    <div class="tl-action">Agregó hallazgo: Proveedor no verificable en AFIP (CUIT inactivo)</div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:#16A34A"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">20/02/2025 11:30 · M. Álvarez</div>
-                    <div class="tl-action">Realizó entrevista a Testigo A — Acta registrada</div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:var(--primary)"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">19/02/2025 16:00 · M. Álvarez</div>
-                    <div class="tl-action">Cambió estado: <span class="status-tag status-new" style="font-size:10px;padding:2px 7px">Nuevo</span> → <span class="status-tag status-investigating" style="font-size:10px;padding:2px 7px">Investigando</span></div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:var(--primary)"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">19/02/2025 09:10 · M. Álvarez</div>
-                    <div class="tl-action">Asignó investigador: R. Mendoza</div>
-                  </div>
-                </div>
-                <div class="tl-item">
-                  <div class="tl-dot" style="background:var(--primary)"></div>
-                  <div class="tl-content">
-                    <div class="tl-time">18/02/2025 11:23 · Sistema</div>
-                    <div class="tl-action">Caso recibido vía Email · Asignado automáticamente como ARG-2025-0043</div>
-                  </div>
-                </div>
+              <div class="case-timeline" id="timelineContainer">
+                <p style="padding:16px;color:var(--gray-400);font-size:13px">Cargando bitácora...</p>
               </div>
             </div>
           </div><!-- /tab-log -->
@@ -597,24 +346,23 @@
               <div class="assign-row" id="assignRow-inv">
                 <span class="assign-label">Investigador principal</span>
                 <div class="assign-value" id="assignVal-inv">
-                  <div class="bo-log-avatar" style="width:28px;height:28px;background:#D97706;font-size:11px">RM</div>
-                  <span id="assignName-inv">R. Mendoza</span>
-                  <button class="bo-btn bo-btn-ghost" style="font-size:11px;margin-left:auto;padding:3px 8px" onclick="openAssignModal('inv','Investigador principal')">Cambiar</button>
+                  <div class="bo-log-avatar" style="width:28px;height:28px;background:#D97706;font-size:11px" id="assignAvatar-inv">—</div>
+                  <span id="assignName-inv" style="color:var(--gray-400)">Sin asignar</span>
+                  <button class="bo-btn bo-btn-ghost" style="font-size:11px;margin-left:auto;padding:3px 8px" id="assignBtn-inv" onclick="openAssignModal('inv','Investigador principal')">+ Asignar</button>
                 </div>
               </div>
               <div class="assign-row" id="assignRow-legal">
                 <span class="assign-label">Revisión legal</span>
                 <div class="assign-value" id="assignVal-legal">
-                  <div class="bo-log-avatar" style="width:28px;height:28px;background:#059669;font-size:11px">JT</div>
-                  <span id="assignName-legal">J. Torres</span>
-                  <button class="bo-btn bo-btn-ghost" style="font-size:11px;margin-left:auto;padding:3px 8px" onclick="openAssignModal('legal','Revisión legal')">Cambiar</button>
+                  <span id="assignName-legal" style="color:var(--gray-400)">Sin asignar</span>
+                  <button class="bo-btn bo-btn-ghost" style="font-size:11px;margin-left:auto;padding:3px 8px" onclick="openAssignModal('legal','Revisión legal')">+ Asignar</button>
                 </div>
               </div>
-              <div class="assign-row">
+              <div class="assign-row" id="assignRow-supervisor">
                 <span class="assign-label">Supervisor</span>
-                <div class="assign-value">
-                  <div class="bo-user-avatar" style="width:28px;height:28px;font-size:11px">MA</div>
-                  M. Álvarez
+                <div class="assign-value" id="assignVal-supervisor">
+                  <span id="assignName-supervisor" style="color:var(--gray-400)">Sin asignar</span>
+                  <button class="bo-btn bo-btn-ghost" style="font-size:11px;margin-left:auto;padding:3px 8px" onclick="openAssignModal('supervisor','Supervisor')">+ Asignar</button>
                 </div>
               </div>
               <div class="assign-row" id="assignRow-rrhh">
@@ -630,19 +378,16 @@
           <!-- Información del caso -->
           <div class="bo-card">
             <div class="bo-card-header"><h3>Información del caso</h3></div>
-            <div class="case-info-list">
-              <div class="case-info-row"><span>ID</span><code class="bo-code">ARG-2025-0043</code></div>
-              <div class="case-info-row"><span>Canal</span><span>Email</span></div>
-              <div class="case-info-row"><span>Tipo</span><span>Fraude financiero</span></div>
-              <div class="case-info-row"><span>Área</span><span>Finanzas / Contabilidad</span></div>
-              <div class="case-info-row"><span>Jurisdicción</span><span>Argentina</span></div>
+            <div class="case-info-list" id="caseInfoList">
+              <div class="case-info-row"><span>ID</span><code class="bo-code" id="caseInfoId">—</code></div>
+              <div class="case-info-row"><span>Canal</span><span>Web</span></div>
+              <div class="case-info-row"><span>Tipo</span><span id="caseInfoTipo">—</span></div>
+              <div class="case-info-row"><span>Área</span><span id="caseInfoArea">—</span></div>
               <div class="case-info-row"><span>Confidencialidad</span><span>🔒 Confidencial</span></div>
-              <div class="case-info-row"><span>Anónima</span><span>Sí</span></div>
-              <div class="case-info-row"><span>Riesgo</span><span class="risk-tag risk-critical">CRÍTICO</span></div>
-              <div class="case-info-row"><span>Estado</span><span class="status-tag status-investigating" id="caseInfoStatus">Investigando</span></div>
-              <div class="case-info-row"><span>Fecha ingreso</span><span>18/02/2025</span></div>
+              <div class="case-info-row"><span>Anónima</span><span id="caseInfoAnon">—</span></div>
+              <div class="case-info-row"><span>Estado</span><span class="status-tag status-new" id="caseInfoStatus">Nuevo</span></div>
+              <div class="case-info-row"><span>Fecha ingreso</span><span id="caseInfoFecha">—</span></div>
               <div class="case-info-row"><span>SLA objetivo</span><span>60 días hábiles</span></div>
-              <div class="case-info-row"><span>Vencimiento</span><span style="color:#EA580C;font-weight:600">02/03/2025</span></div>
             </div>
           </div>
 
@@ -650,12 +395,7 @@
           <div class="bo-card">
             <div class="bo-card-header"><h3>Etiquetas</h3><button class="bo-btn bo-btn-ghost" style="font-size:11px" onclick="toggleTagInput()">+ Agregar</button></div>
             <div id="tagsList" style="padding:14px 16px;display:flex;flex-wrap:wrap;gap:6px">
-              <span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">Fraude ×</span>
-              <span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">AML ×</span>
-              <span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">Proveedor ficticio ×</span>
-              <span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">Firmas apócrifas ×</span>
-              <span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">Alta prioridad ×</span>
-              <span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">Investigación activa ×</span>
+              <span style="color:var(--gray-400);font-size:12px">Sin etiquetas.</span>
             </div>
             <div id="tagInputWrap" style="display:none;padding:0 16px 14px;display:none;gap:8px;align-items:center">
               <input type="text" id="tagInput" class="bo-select-full" placeholder="Nueva etiqueta..." style="flex:1;max-width:200px" onkeydown="if(event.key==='Enter')addTag()" />
@@ -667,10 +407,8 @@
           <!-- Documentos rápidos -->
           <div class="bo-card">
             <div class="bo-card-header"><h3>Documentos recientes</h3></div>
-            <div class="docs-quick">
-              <div class="doc-q-item"><span class="file-icon pdf">PDF</span><span>factura_vendedora_01.pdf</span></div>
-              <div class="doc-q-item"><span class="file-icon img">IMG</span><span>captura_transferencia_1.png</span></div>
-              <div class="doc-q-item"><span class="file-icon xls">XLS</span><span>ordenes_compra_6m.xlsx</span></div>
+            <div class="docs-quick" id="recentDocsList">
+              <p style="color:var(--gray-400);font-size:12px;padding:8px 0">Sin documentos.</p>
             </div>
           </div>
 
@@ -678,10 +416,7 @@
           <div class="bo-card">
             <div class="bo-card-header"><h3>Notas internas</h3></div>
             <div id="notasList" style="padding:0 16px">
-              <div class="nota-item">
-                <div class="nota-meta">M. Álvarez · 18/02/2025</div>
-                <p class="nota-body">Coordinar con el CFO antes de la entrevista al denunciado. Verificar si existe denuncia penal previa sobre este proveedor.</p>
-              </div>
+              <p style="color:var(--gray-400);font-size:12px;padding:12px 0 4px">Sin notas internas.</p>
             </div>
             <div style="padding:14px 16px;border-top:1px solid var(--gray-100)">
               <textarea class="bo-textarea" id="notaInput" rows="3" placeholder="Nueva nota interna (solo visible para el equipo)..."></textarea>
@@ -730,7 +465,7 @@
 <div class="bo-modal-overlay" id="closeModal" style="display:none" onclick="if(event.target.id==='closeModal')event.target.style.display='none'">
   <div class="bo-modal">
     <div class="bo-modal-header">
-      <h3>Resolver caso ARG-2025-0043</h3>
+      <h3 id="closeModalTitle">Resolver caso</h3>
       <button onclick="document.getElementById('closeModal').style.display='none'" class="bo-modal-close">✕</button>
     </div>
     <div class="bo-modal-body">
@@ -1262,10 +997,23 @@ function confirmAssign() {
     nameEl.textContent = label;
     nameEl.style.color = value ? '' : 'var(--gray-400)';
   }
-  var btnEl = document.querySelector('#assignRow-' + _assignTarget + ' button');
+  var avatarEl = document.getElementById('assignAvatar-' + _assignTarget);
+  if (avatarEl) {
+    var initials = value ? value.split(' ').map(function(p){return p[0]||'';}).join('').toUpperCase().slice(0,2) : '—';
+    avatarEl.textContent = initials;
+  }
+  var btnEl = document.getElementById('assignBtn-' + _assignTarget);
   if (btnEl) btnEl.textContent = value ? 'Cambiar' : '+ Asignar';
   document.getElementById('assignModal').style.display = 'none';
   showToast(value ? 'Asignado: ' + value : 'Asignación removida', value ? '👤' : '➖');
+
+  // Guardar en Supabase si es investigador principal
+  if (_assignTarget === 'inv' && window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.asignarInvestigador) {
+    ArgusBackend.asignarInvestigador(window._CASO_ID_BACKEND, TENANT_CASO, value || '')
+      .then(function(r) {
+        if (!r.ok) showToast('Error al guardar asignación', '⚠️');
+      });
+  }
 }
 
 function guardarNota() {
@@ -1304,6 +1052,12 @@ function changeStatus(val) {
   if (badge) { badge.className = 'status-tag ' + (statusClass[val] || ''); badge.textContent = labels[val] || val; }
   if (infoBadge) { infoBadge.className = 'status-tag ' + (statusClass[val] || ''); infoBadge.textContent = labels[val] || val; }
   showToast('Estado actualizado a «' + (labels[val] || val) + '»', '🔄');
+
+  // Persistir en Supabase
+  var supabaseStatus = { new: 'pending', eval: 'pending', investigating: 'active', review: 'active' }[val] || val;
+  if (window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.actualizarEstadoCaso) {
+    ArgusBackend.actualizarEstadoCaso(window._CASO_ID_BACKEND, TENANT_CASO, supabaseStatus);
+  }
 }
 
 function openCloseModal() {
@@ -1356,44 +1110,415 @@ window.TENANT_CASO = TENANT_CASO;
 document.getElementById('caseIdBreadcrumb').textContent = caseId;
 document.title = 'Caso ' + caseId + ' · Argus Back Office';
 
+// ── Helpers ───────────────────────────────────────────────────
+var _MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function _fmtDate(isoStr) {
+  if (!isoStr) return '—';
+  var d = new Date(isoStr);
+  return d.getDate() + ' ' + _MESES[d.getMonth()] + ' ' + d.getFullYear();
+}
+function _fmtDateTime(isoStr) {
+  if (!isoStr) return '—';
+  var d = new Date(isoStr);
+  return d.getDate() + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear() +
+    ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function _esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Render: tareas ────────────────────────────────────────────
+function renderTareas(tareas) {
+  var container = document.getElementById('tareasContainer');
+  if (!container) return;
+  if (!tareas || !tareas.length) {
+    container.innerHTML = '<p style="padding:16px;color:var(--gray-400);font-size:13px">No hay tareas registradas. Usá "+ Agregar tarea" para crear la primera.</p>';
+    return;
+  }
+  container.innerHTML = tareas.map(function(t) {
+    var isDone = t.status === 'done';
+    var doneDate = isDone ? _fmtDate(t.updated_at || t.created_at) : null;
+    var dueHtml = isDone
+      ? '<span>Completado: ' + (doneDate || '—') + '</span>'
+      : (t.due_date ? '<span class="task-due warn">Vence: ' + t.due_date + '</span>' : '<span class="task-due">Pendiente</span>');
+    return '<div class="inv-task ' + (isDone ? 'done' : 'pending') + '">' +
+      '<div class="task-check ' + (isDone ? 'done' : 'pending') + '" onclick="toggleTarea(\'' + t.id + '\',' + isDone + ')" title="' + (isDone ? 'Marcar como pendiente' : 'Marcar como completada') + '">' + (isDone ? '✓' : '') + '</div>' +
+      '<div class="task-body">' +
+        '<strong>' + _esc(t.title) + '</strong>' +
+        (t.description ? '<p>' + _esc(t.description) + '</p>' : '') +
+        '<div class="task-meta"><span>Asignado: ' + _esc(t.assigned_to || '—') + '</span>' + dueHtml + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Render: hallazgos ─────────────────────────────────────────
+function renderHallazgos(hallazgos) {
+  var container = document.getElementById('hallazgosContainer');
+  if (!container) return;
+  if (!hallazgos || !hallazgos.length) {
+    container.innerHTML = '<p style="padding:16px;color:var(--gray-400);font-size:13px">No hay hallazgos registrados aún.</p>';
+    return;
+  }
+  var relLabels = { high: 'Alta relevancia', medium: 'Relevancia media', info: 'Informativo' };
+  var relClasses = { high: 'bo-tag-danger', medium: 'bo-tag-warn', info: '' };
+  container.innerHTML = hallazgos.map(function(h) {
+    var d = h.created_at ? new Date(h.created_at) : new Date();
+    var dateStr = d.getDate() + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear() +
+      ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+    var rel = h.relevance || 'medium';
+    return '<div class="finding-item">' +
+      '<div class="finding-meta"><strong>' + _esc(h.author || '—') + '</strong> · ' + dateStr + '</div>' +
+      '<p>' + _esc(h.content) + '</p>' +
+      '<div style="margin-top:8px"><span class="bo-tag ' + (relClasses[rel] || '') + '">' + (relLabels[rel] || rel) + '</span></div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Render: timeline / log ────────────────────────────────────
+function renderTimeline(log) {
+  var container = document.getElementById('timelineContainer');
+  if (!container) return;
+  if (!log || !log.length) {
+    container.innerHTML = '<p style="padding:16px;color:var(--gray-400);font-size:13px">Sin entradas en la bitácora.</p>';
+    return;
+  }
+  var colorMap = { primary: 'var(--primary)', purple: '#7C3AED', yellow: '#D97706', green: '#16A34A' };
+  container.innerHTML = log.map(function(l) {
+    var d = l.created_at ? new Date(l.created_at) : new Date();
+    var dateStr = _fmtDateTime(l.created_at) + ' · ' + _esc(l.author || 'Sistema');
+    var color = colorMap[l.color] || 'var(--primary)';
+    return '<div class="tl-item">' +
+      '<div class="tl-dot" style="background:' + color + '"></div>' +
+      '<div class="tl-content">' +
+        '<div class="tl-time">' + dateStr + '</div>' +
+        '<div class="tl-action">' + _esc(l.action) + (l.detail ? ': <em>' + _esc(l.detail) + '</em>' : '') + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Render: panel de info derecho ─────────────────────────────
+function renderInfoPanel(c) {
+  var MESES = _MESES;
+  // ID
+  var idEl = document.getElementById('caseInfoId');
+  if (idEl) idEl.textContent = c.tracking_code || '—';
+  // Tipo
+  var tipoEl = document.getElementById('caseInfoTipo');
+  if (tipoEl) {
+    var cats = c.categories && c.categories.length ? c.categories : (c.category ? [c.category] : []);
+    tipoEl.textContent = cats.join(', ') || '—';
+  }
+  // Área
+  var areaEl = document.getElementById('caseInfoArea');
+  if (areaEl) areaEl.textContent = c.area || '—';
+  // Anónima
+  var anonEl = document.getElementById('caseInfoAnon');
+  if (anonEl) anonEl.textContent = c.anonymous ? 'Sí' : 'No';
+  // Estado
+  var statusToUi = { pending: 'new', active: 'investigating', closed: 'closed' };
+  var uiStatus = statusToUi[c.status] || 'new';
+  var uiLabels = { new: 'Nuevo', investigating: 'Investigando', closed: 'Cerrado' };
+  var infoStatus = document.getElementById('caseInfoStatus');
+  if (infoStatus) {
+    infoStatus.textContent = uiLabels[uiStatus] || c.status;
+    infoStatus.className = 'status-tag status-' + uiStatus;
+  }
+  // Fecha
+  var fechaEl = document.getElementById('caseInfoFecha');
+  if (fechaEl) fechaEl.textContent = _fmtDate(c.created_at);
+}
+
+// ── Render: investigador asignado ─────────────────────────────
+function renderInvestigador(assigned_to) {
+  var nameEl = document.getElementById('assignName-inv');
+  var avatarEl = document.getElementById('assignAvatar-inv');
+  var btnEl = document.getElementById('assignBtn-inv');
+  if (nameEl) {
+    nameEl.textContent = assigned_to || 'Sin asignar';
+    nameEl.style.color = assigned_to ? '' : 'var(--gray-400)';
+  }
+  if (avatarEl) {
+    if (assigned_to) {
+      var initials = assigned_to.split(' ').map(function(p){ return p[0]||''; }).join('').toUpperCase().slice(0,2);
+      avatarEl.textContent = initials;
+      avatarEl.style.background = '#D97706';
+    } else {
+      avatarEl.textContent = '—';
+      avatarEl.style.background = '#e5e7eb';
+    }
+  }
+  if (btnEl) btnEl.textContent = assigned_to ? 'Cambiar' : '+ Asignar';
+}
+
+// ── Acción: toggle tarea ──────────────────────────────────────
+function toggleTarea(tareaId, isDone) {
+  if (!window._CASO_ID_BACKEND || !window.ArgusBackend || !ArgusBackend.actualizarTarea) return;
+  var newStatus = isDone ? 'pending' : 'done';
+  ArgusBackend.actualizarTarea(tareaId, TENANT_CASO, newStatus).then(function(r) {
+    if (r.ok) {
+      // Recargar tareas desde backend
+      ArgusBackend.getCasoDetalleCompleto(window._CASO_ID_BACKEND, TENANT_CASO).then(function(res) {
+        if (res.ok) { renderTareas(res.tareas); renderTimeline(res.log); }
+      });
+      showToast(newStatus === 'done' ? 'Tarea completada ✓' : 'Tarea reabierta', newStatus === 'done' ? '✅' : '🔄');
+    } else {
+      showToast('Error al actualizar tarea', '⚠️');
+    }
+  });
+}
+
+// ── Acción: mostrar form de nueva tarea ───────────────────────
+function showAddTareaForm() {
+  var area = document.getElementById('newTareaArea');
+  if (area) { area.style.display = 'block'; document.getElementById('tareaTitle').focus(); }
+}
+
+// ── Acción: guardar nueva tarea ───────────────────────────────
+function saveNewTarea() {
+  var title = (document.getElementById('tareaTitle') || {}).value || '';
+  var desc  = (document.getElementById('tareaDesc') || {}).value || '';
+  var asign = (document.getElementById('tareaAsignado') || {}).value || '';
+  var due   = (document.getElementById('tareaVencimiento') || {}).value || null;
+  if (!title.trim()) { showToast('El título es requerido', '⚠️'); return; }
+  if (!window._CASO_ID_BACKEND || !window.ArgusBackend || !ArgusBackend.crearTarea) {
+    showToast('Guardado sin conexión al backend', '⚠️'); return;
+  }
+  ArgusBackend.crearTarea(window._CASO_ID_BACKEND, TENANT_CASO, title.trim(), desc.trim() || null, asign.trim() || null, due || null)
+    .then(function(r) {
+      if (r.ok) {
+        document.getElementById('newTareaArea').style.display = 'none';
+        document.getElementById('tareaTitle').value = '';
+        document.getElementById('tareaDesc').value = '';
+        document.getElementById('tareaAsignado').value = '';
+        document.getElementById('tareaVencimiento').value = '';
+        ArgusBackend.getCasoDetalleCompleto(window._CASO_ID_BACKEND, TENANT_CASO).then(function(res) {
+          if (res.ok) { renderTareas(res.tareas); renderTimeline(res.log); }
+        });
+        showToast('Tarea creada', '✅');
+      } else {
+        showToast(r.error || 'Error al crear tarea', '⚠️');
+      }
+    });
+}
+
+// ── Acción: guardar hallazgo ──────────────────────────────────
+function guardarHallazgo() {
+  var content = (document.getElementById('findingContent') || {}).value || '';
+  var relevance = (document.getElementById('findingRelevance') || {}).value || 'medium';
+  if (!content.trim()) { showToast('El contenido del hallazgo es requerido', '⚠️'); return; }
+  if (!window._CASO_ID_BACKEND || !window.ArgusBackend || !ArgusBackend.crearHallazgo) {
+    showToast('Backend no disponible', '⚠️'); return;
+  }
+  ArgusBackend.crearHallazgo(window._CASO_ID_BACKEND, TENANT_CASO, content.trim(), relevance, null)
+    .then(function(r) {
+      if (r.ok) {
+        document.getElementById('newFindingArea').style.display = 'none';
+        document.getElementById('findingContent').value = '';
+        ArgusBackend.getCasoDetalleCompleto(window._CASO_ID_BACKEND, TENANT_CASO).then(function(res) {
+          if (res.ok) { renderHallazgos(res.hallazgos); renderTimeline(res.log); }
+        });
+        showToast('Hallazgo registrado', '✅');
+      } else {
+        showToast(r.error || 'Error al guardar hallazgo', '⚠️');
+      }
+    });
+}
+
+var RISK_LABELS = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' };
+var RISK_CLASSES = { critical:'risk-critical', high:'risk-high', medium:'risk-medium', low:'risk-low' };
+var RISK_COLORS  = { critical:'#DC2626', high:'#EA580C', medium:'#D97706', low:'#16A34A' };
+var SLA_OBJETIVO = 60; // días
+
+function _slaDaysCaso(createdAt) {
+  if (!createdAt) return { elapsed: 0, left: SLA_OBJETIVO, pct: 0 };
+  var elapsed = Math.floor((Date.now() - new Date(createdAt).getTime()) / 86400000);
+  var left = SLA_OBJETIVO - elapsed;
+  var pct  = Math.min(100, Math.round((elapsed / SLA_OBJETIVO) * 100));
+  return { elapsed: elapsed, left: left, pct: pct };
+}
+
 function loadCasoFromBackend(casoId) {
   if (!window.ArgusBackend || !ArgusBackend.isConfigured()) return;
-  ArgusBackend.getCasoPorId(casoId, TENANT_CASO).then(function (r) {
+  ArgusBackend.getCasoDetalleCompleto(casoId, TENANT_CASO).then(function (r) {
     if (!r.ok || !r.caso) return;
     var c = r.caso;
     window._CASO_ID_BACKEND = casoId;
+    var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
     var code = c.tracking_code || caseId;
-    document.getElementById('caseIdBreadcrumb').textContent = code;
+
+    // ── Breadcrumb + page title ─────────────────────────────────
+    var bcEl = document.getElementById('caseIdBreadcrumb');
+    if (bcEl) bcEl.textContent = code;
     document.title = 'Caso ' + code + ' · Argus Back Office';
+
+    // ── Tracking code display ───────────────────────────────────
+    var codeEl = document.getElementById('caseCodeDisplay') || document.querySelector('.bo-code-lg');
+    if (codeEl) codeEl.textContent = code;
+
+    // ── Case title (first category or description snippet) ──────
+    var titleEl = document.getElementById('caseTitleH1') || document.querySelector('.case-title');
+    if (titleEl) {
+      var cats = c.categories && c.categories.length ? c.categories : (c.category ? [c.category] : []);
+      titleEl.textContent = cats.join(', ') || (c.description ? c.description.slice(0,80) : '—');
+    }
+
+    // ── Risk badge ──────────────────────────────────────────────
+    var rl = (c.risk_level || 'medium').toLowerCase();
+    var riskBadge = document.getElementById('caseRiskBadge');
+    if (riskBadge) {
+      riskBadge.textContent = RISK_LABELS[rl] || rl.toUpperCase();
+      riskBadge.className = 'risk-tag ' + (RISK_CLASSES[rl] || 'risk-medium');
+      riskBadge.style.display = '';
+    }
+
+    // ── Status badge + select ───────────────────────────────────
+    var statusToUi = { pending: 'new', active: 'investigating', closed: 'closed' };
+    var uiStatus = statusToUi[c.status] || c.status || 'new';
+    var uiLabels = { new: 'Nuevo', eval: 'En evaluación', investigating: 'Investigando', review: 'En revisión legal', closed: 'Cerrado' };
+    var badgeEl = document.getElementById('caseStatusBadge');
+    if (badgeEl) {
+      badgeEl.textContent = uiLabels[uiStatus] || uiStatus;
+      badgeEl.className = 'status-tag status-' + uiStatus;
+      badgeEl.style.display = '';
+    }
+    var selectEl = document.querySelector('select[onchange="changeStatus(this.value)"]');
+    if (selectEl) selectEl.value = uiStatus;
+
+    // ── Resolve modal title ─────────────────────────────────────
+    var closeModalTitleEl = document.getElementById('closeModalTitle');
+    if (closeModalTitleEl) closeModalTitleEl.textContent = 'Resolver caso ' + code;
+
+    // ── Meta row: fecha, canal, anonimato, área ─────────────────
+    var metaEl = document.getElementById('caseMetaBar') || document.querySelector('.case-meta');
+    if (metaEl) {
+      var created = c.created_at ? new Date(c.created_at) : new Date();
+      var fechaStr = created.getDate() + ' ' + MESES[created.getMonth()] + ' ' + created.getFullYear() + ', ' + created.getHours() + ':' + String(created.getMinutes()).padStart(2,'0') + ' hs';
+      var anonText = c.anonymous ? 'Anónima' : (c.contact_name || 'Identificada');
+      var areaText = c.area ? String(c.area).replace(/</g,'&lt;') : '—';
+      metaEl.innerHTML =
+        '<span>📅 Recibido: ' + fechaStr + '</span>' +
+        '<span>·</span>' +
+        '<span>📡 Canal: Web</span>' +
+        '<span>·</span>' +
+        '<span>👤 ' + anonText + '</span>' +
+        '<span>·</span>' +
+        '<span>🏢 Área: ' + areaText + '</span>';
+    }
+
+    // ── SLA bar ─────────────────────────────────────────────────
+    var slaSection = document.getElementById('slaBarSection');
+    if (slaSection && c.status !== 'closed') {
+      var sla = _slaDaysCaso(c.created_at);
+      var slaColor = sla.left < 0 ? '#DC2626' : sla.left <= 7 ? '#EA580C' : 'var(--primary)';
+      var slaLeftTxt = sla.left < 0
+        ? '<strong style="color:#DC2626">' + Math.abs(sla.left) + ' días vencido</strong>'
+        : '<strong style="color:' + slaColor + '">' + sla.left + ' días restantes</strong>';
+      var labelEl = document.getElementById('slaBarLabel');
+      if (labelEl) labelEl.innerHTML = 'SLA: ' + slaLeftTxt;
+      var subEl = document.getElementById('slaBarSub');
+      if (subEl) {
+        var created3 = c.created_at ? new Date(c.created_at) : new Date();
+        var fmtD = function(d){ return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear(); };
+        var vence = new Date(created3.getTime() + SLA_OBJETIVO * 86400000);
+        subEl.textContent = 'Inicio: ' + fmtD(created3) + ' · Objetivo: ' + SLA_OBJETIVO + ' días · Transcurridos: ' + sla.elapsed + ' días · Vence: ' + fmtD(vence);
+      }
+      var fillEl = document.getElementById('slaBarFill');
+      if (fillEl) { fillEl.style.width = sla.pct + '%'; fillEl.style.background = slaColor; }
+      slaSection.style.display = '';
+    }
+
+    // ── Description ─────────────────────────────────────────────
     var descEl = document.getElementById('caseDescriptionText');
     if (descEl) descEl.textContent = (c.description || '').trim() || 'Sin descripción.';
-    var tagsEl = document.getElementById('caseDescriptionTags');
-    if (tagsEl) {
-      var cats = c.categories && c.categories.length ? c.categories : (c.category ? [c.category] : []);
-      tagsEl.innerHTML = cats.map(function (cat) { return '<span class="bo-tag">' + String(cat).replace(/</g,'&lt;') + '</span>'; }).join(' ');
+
+    // ── Description tags (categories) ───────────────────────────
+    var tagsDescEl = document.getElementById('caseDescriptionTags');
+    var cats2 = c.categories && c.categories.length ? c.categories : (c.category ? [c.category] : []);
+    if (tagsDescEl) {
+      tagsDescEl.innerHTML = cats2.map(function(cat){ return '<span class="bo-tag">' + _esc(cat) + '</span>'; }).join(' ');
     }
-    ArgusBackend.getSeguimientoMensajes(casoId, TENANT_CASO).then(function (mr) {
-      var area = document.getElementById('chatArea');
-      if (!area) return;
-      var created = c.created_at ? new Date(c.created_at) : new Date();
-      var fechaRec = created.getDate() + '/' + (created.getMonth()+1) + '/' + created.getFullYear() + ' a las ' + created.getHours() + ':' + String(created.getMinutes()).padStart(2,'0') + ' hs';
-      var html = '<div class="chat-msg system"><div class="chat-bubble system-bubble">Denuncia recibida el ' + fechaRec + '. Código: ' + (code || '') + '</div><span class="chat-time">' + fechaRec + '</span></div>';
-      (mr.mensajes || []).forEach(function (m) {
+
+    // ── Sidebar tagsList from categories ────────────────────────
+    var tagsListEl = document.getElementById('tagsList');
+    if (tagsListEl) {
+      if (cats2.length) {
+        tagsListEl.innerHTML = cats2.map(function(cat){
+          return '<span class="bo-tag" onclick="removeTag(this)" title="Click para quitar">' + _esc(cat) + ' ×</span>';
+        }).join('');
+      } else {
+        tagsListEl.innerHTML = '<span style="color:var(--gray-400);font-size:12px">Sin etiquetas.</span>';
+      }
+    }
+
+    // ── Risk eval section (from risk_level) ─────────────────────
+    var riskEvalEl = document.getElementById('riskEvalContainer');
+    if (riskEvalEl) {
+      var riskPct = { critical: 90, high: 65, medium: 40, low: 20 };
+      var riskName = { critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo' };
+      var pct = riskPct[rl] || 40;
+      var col = RISK_COLORS[rl] || '#D97706';
+      var nm  = riskName[rl] || 'Medio';
+      riskEvalEl.innerHTML =
+        '<div class="risk-eval-grid">' +
+          ['Riesgo financiero','Riesgo reputacional','Riesgo legal / regulatorio','Riesgo operacional'].map(function(lbl, i){
+            var p2 = Math.max(10, pct - i * 8);
+            return '<div class="risk-eval-item">' +
+              '<span class="risk-eval-label">' + lbl + '</span>' +
+              '<div class="risk-eval-bar"><div style="width:' + p2 + '%;background:' + col + '"></div></div>' +
+              '<span class="risk-eval-val">' + nm + '</span>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+        '<div class="risk-eval-notes"><strong>Nivel de riesgo registrado:</strong><p>Clasificación actual: <strong>' + (RISK_LABELS[rl] || nm) + '</strong>. Revisión recomendada según avance de la investigación.</p></div>';
+    }
+
+    // ── Right info panel + investigator ─────────────────────────
+    renderInfoPanel(c);
+    renderInvestigador(c.assigned_to);
+
+    // ── Tasks, findings, timeline ────────────────────────────────
+    renderTareas(r.tareas || []);
+    renderHallazgos(r.hallazgos || []);
+    renderTimeline(r.log || []);
+
+    // ── Chat: mensajes al denunciante ───────────────────────────
+    var chatEl = document.getElementById('chatArea');
+    if (chatEl) {
+      var created2 = c.created_at ? new Date(c.created_at) : new Date();
+      var fechaRec = created2.getDate() + '/' + (created2.getMonth()+1) + '/' + created2.getFullYear() + ' a las ' + created2.getHours() + ':' + String(created2.getMinutes()).padStart(2,'0') + ' hs';
+      var chatHtml = '<div class="chat-msg system"><div class="chat-bubble system-bubble">Denuncia recibida el ' + fechaRec + '. Código: ' + _esc(code) + '</div><span class="chat-time">' + fechaRec + '</span></div>';
+      var msgs = r.mensajes || [];
+      msgs.forEach(function (m) {
         var d = m.created_at ? new Date(m.created_at) : new Date();
-        var tStr = d.getDate() + ' ' + ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][d.getMonth()] + ' · ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
-        var body = (m.title ? '<strong>' + String(m.title).replace(/</g,'&lt;') + '</strong><br/>' : '') + String(m.message || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        html += '<div class="chat-msg investigator"><div class="chat-bubble inv-bubble">' + body + '</div><span class="chat-time">Equipo · ' + tStr + '</span></div>';
+        var tStr = d.getDate() + ' ' + MESES[d.getMonth()] + ' · ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+        var body = (m.title ? '<strong>' + _esc(m.title) + '</strong><br/>' : '') + _esc(m.message || '');
+        chatHtml += '<div class="chat-msg investigator"><div class="chat-bubble inv-bubble">' + body + '</div><span class="chat-time">Equipo · ' + tStr + '</span></div>';
       });
-      area.innerHTML = html;
-      area.scrollTop = area.scrollHeight;
-    });
+      if (msgs.length === 0) {
+        chatHtml += '<div class="chat-msg system"><div class="chat-bubble system-bubble" style="background:#f0f7f8;color:var(--gray-400)">No hay mensajes aún. Podés escribirle al denunciante usando el campo de abajo.</div></div>';
+      }
+      chatEl.innerHTML = chatHtml;
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
   });
 }
-if (window.ArgusBackend && ArgusBackend.isConfigured() && caseId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(caseId)) {
-  loadCasoFromBackend(caseId);
-}
 
-// Actualizar links con tenant y label de empresa
+// ── Boot polling: espera a que ArgusBackend esté listo ────────
+(function _bootCaso() {
+  if (!caseId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(caseId)) return;
+  var attempts = 0, maxAttempts = 40;
+  var iv = setInterval(function() {
+    attempts++;
+    if (window.ArgusBackend && ArgusBackend.isConfigured()) {
+      clearInterval(iv);
+      loadCasoFromBackend(caseId);
+    } else if (attempts >= maxAttempts) {
+      clearInterval(iv);
+    }
+  }, 200);
+})();
+
+// Actualizar links con tenant, label de empresa y usuario en sidebar
 (function() {
   var tParam = TENANT_CASO !== 'default' ? '?t=' + TENANT_CASO : '';
   // Links al backoffice principal
@@ -1406,12 +1531,26 @@ if (window.ArgusBackend && ArgusBackend.isConfigured() && caseId && /^[0-9a-f]{8
   // Link al portal público
   var portalLink = document.getElementById('nav-portal-link');
   if (portalLink) portalLink.href = 'index.html' + tParam;
-  // Label del tenant en sidebar
+
+  // Poblar nombre empresa en sidebar
   var cfg = window.ArgusConfig ? ArgusConfig.get() : null;
-  var label = document.getElementById('sidebar-tenant-label');
-  if (label && cfg && cfg.empresa && cfg.empresa.nombre) {
-    label.textContent = cfg.empresa.nombre;
-  }
+  var nombre = (cfg && cfg.empresa && cfg.empresa.nombre) || TENANT_CASO || 'Argus';
+  var rubro  = (cfg && cfg.empresa && cfg.empresa.rubro)  || 'Compliance';
+  var initials = nombre.split(/\s+/).map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2) || '–';
+
+  var sidebarLabel = document.getElementById('sidebar-tenant-label');
+  if (sidebarLabel) sidebarLabel.textContent = nombre;
+
+  var sidebarAvatar = document.getElementById('sidebarUserAvatar');
+  if (sidebarAvatar) sidebarAvatar.textContent = initials;
+  var sidebarName = document.getElementById('sidebarUserName');
+  if (sidebarName) sidebarName.textContent = nombre;
+  var sidebarRole = document.getElementById('sidebarUserRole');
+  if (sidebarRole) sidebarRole.textContent = rubro;
+
+  var topbarAv = document.getElementById('topbarAvatar');
+  if (topbarAv) topbarAv.textContent = initials;
+
   // Aplicar config del tenant (colores, etc.)
   if (window.ArgusConfig) ArgusConfig.apply();
 })();

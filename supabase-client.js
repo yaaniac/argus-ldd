@@ -178,6 +178,81 @@
     }).catch(function (err) { return { ok: false, error: err.message }; });
   }
 
+  /**
+   * Detalle completo del caso: caso + tareas + hallazgos + log + mensajes
+   * Requiere migración 003_caso_detalles.sql
+   */
+  function getCasoDetalleCompleto(casoId, tenantSlug) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('get_caso_detalle_completo', { p_caso_id: casoId, p_tenant_slug: tenantSlug || 'default' })
+      .then(function (res) {
+        if (res.error) return { ok: false, error: res.error.message };
+        var d = res.data || {};
+        return { ok: d.ok === true, caso: d.caso, tareas: d.tareas || [], hallazgos: d.hallazgos || [], log: d.log || [], mensajes: d.mensajes || [], error: d.error };
+      })
+      .catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
+  /** Asignar investigador principal al caso */
+  function asignarInvestigador(casoId, tenantSlug, investigator) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('asignar_investigador', { p_caso_id: casoId, p_tenant_slug: tenantSlug || 'default', p_investigator: investigator || '' })
+      .then(function (res) {
+        if (res.error) return { ok: false, error: res.error.message };
+        var d = res.data || {};
+        return { ok: d.ok === true, error: d.error };
+      })
+      .catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
+  /** Crear tarea en el caso */
+  function crearTarea(casoId, tenantSlug, title, description, assignedTo, dueDate) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('crear_tarea', {
+      p_caso_id: casoId, p_tenant_slug: tenantSlug || 'default',
+      p_title: title || '', p_description: description || null,
+      p_assigned_to: assignedTo || null, p_due_date: dueDate || null
+    })
+      .then(function (res) {
+        if (res.error) return { ok: false, error: res.error.message };
+        var d = res.data || {};
+        return { ok: d.ok === true, id: d.id, error: d.error };
+      })
+      .catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
+  /** Actualizar estado de una tarea (pending | done) */
+  function actualizarTarea(tareaId, tenantSlug, status) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('actualizar_tarea', { p_tarea_id: tareaId, p_tenant_slug: tenantSlug || 'default', p_status: status })
+      .then(function (res) {
+        if (res.error) return { ok: false, error: res.error.message };
+        var d = res.data || {};
+        return { ok: d.ok === true, error: d.error };
+      })
+      .catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
+  /** Registrar un hallazgo en el caso */
+  function crearHallazgo(casoId, tenantSlug, content, relevance, author) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('crear_hallazgo', {
+      p_caso_id: casoId, p_tenant_slug: tenantSlug || 'default',
+      p_content: content || '', p_relevance: relevance || 'medium', p_author: author || null
+    })
+      .then(function (res) {
+        if (res.error) return { ok: false, error: res.error.message };
+        var d = res.data || {};
+        return { ok: d.ok === true, id: d.id, error: d.error };
+      })
+      .catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
   window.ArgusBackend = {
     isConfigured: function () {
       return !!(config.url && config.anonKey);
@@ -186,8 +261,13 @@
     getSeguimiento: getSeguimiento,
     listarCasosTenant: listarCasosTenant,
     getCasoPorId: getCasoPorId,
+    getCasoDetalleCompleto: getCasoDetalleCompleto,
     getSeguimientoMensajes: getSeguimientoMensajes,
     enviarMensajeDenunciante: enviarMensajeDenunciante,
-    actualizarEstadoCaso: actualizarEstadoCaso
+    actualizarEstadoCaso: actualizarEstadoCaso,
+    asignarInvestigador: asignarInvestigador,
+    crearTarea: crearTarea,
+    actualizarTarea: actualizarTarea,
+    crearHallazgo: crearHallazgo
   };
 })();

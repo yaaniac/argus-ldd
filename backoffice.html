@@ -134,10 +134,10 @@
     </nav>
 
     <div class="bo-sidebar-user">
-      <div class="bo-user-avatar">MA</div>
+      <div class="bo-user-avatar" id="sidebarUserAvatar">—</div>
       <div class="bo-user-info">
-        <strong>María Álvarez</strong>
-        <span>Compliance Officer</span>
+        <strong id="sidebarUserName">Cargando…</strong>
+        <span id="sidebarUserRole">Back Office</span>
       </div>
     </div>
   </aside>
@@ -176,7 +176,7 @@
             </div>
           </div>
         </div>
-        <div class="bo-topbar-avatar">MA</div>
+        <div class="bo-topbar-avatar" id="topbarAvatar">—</div>
       </div>
     </header>
 
@@ -187,7 +187,7 @@
       <div class="dash-hero">
         <div class="dash-hero-left">
           <div class="dash-hero-greeting" id="dashGreeting">Buen día</div>
-          <h1 class="dash-hero-title">María Álvarez <span class="dash-hero-role">— Compliance Officer</span></h1>
+          <h1 class="dash-hero-title" id="dashHeroTitle">Panel de control <span class="dash-hero-role" id="dashHeroCompany"></span></h1>
           <p class="dash-hero-sub"><span id="dashDate"></span> · Resumen ejecutivo del sistema</p>
         </div>
         <div style="display:flex;gap:10px;align-items:center;flex-shrink:0">
@@ -212,8 +212,8 @@
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 3H4a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5"/><path d="M6 9h6M6 6h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </div>
           </div>
-          <div class="bo-kpi-value">24</div>
-          <div class="bo-kpi-delta up">+3 vs mes anterior</div>
+          <div class="bo-kpi-value" id="kpiAbiertos">—</div>
+          <div class="bo-kpi-delta up" id="kpiAbiertosD"></div>
         </div>
         <div class="bo-kpi-card">
           <div class="bo-kpi-header">
@@ -222,8 +222,8 @@
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M14 14l-2.5-2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             </div>
           </div>
-          <div class="bo-kpi-value">7</div>
-          <div class="bo-kpi-delta">Sin variación</div>
+          <div class="bo-kpi-value" id="kpiInvestigando">—</div>
+          <div class="bo-kpi-delta" id="kpiInvestigandoD"></div>
         </div>
         <div class="bo-kpi-card">
           <div class="bo-kpi-header">
@@ -232,8 +232,8 @@
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="bo-kpi-value danger">3</div>
-          <div class="bo-kpi-delta down">Requieren atención inmediata</div>
+          <div class="bo-kpi-value danger" id="kpiVencidos">—</div>
+          <div class="bo-kpi-delta down" id="kpiVencidosD">Requieren atención inmediata</div>
         </div>
         <div class="bo-kpi-card">
           <div class="bo-kpi-header">
@@ -242,8 +242,8 @@
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9l4 4 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="bo-kpi-value">11</div>
-          <div class="bo-kpi-delta up">+4 vs mes anterior</div>
+          <div class="bo-kpi-value" id="kpiCerradosMes">—</div>
+          <div class="bo-kpi-delta up" id="kpiCerradosMesD"></div>
         </div>
         <div class="bo-kpi-card">
           <div class="bo-kpi-header">
@@ -252,18 +252,18 @@
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="bo-kpi-value">18<span style="font-size:18px;font-weight:500;color:#888"> días</span></div>
-          <div class="bo-kpi-delta up">-2 días vs anterior</div>
+          <div class="bo-kpi-value" id="kpiSlaPromedio">—<span style="font-size:18px;font-weight:500;color:#888"> días</span></div>
+          <div class="bo-kpi-delta up" id="kpiSlaPromedioD"></div>
         </div>
         <div class="bo-kpi-card">
           <div class="bo-kpi-header">
-            <span class="bo-kpi-label">Tasa de confirmación</span>
+            <span class="bo-kpi-label">Total recibidos</span>
             <div class="bo-kpi-icon" style="background:#ECFDF5;color:#059669">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.6 3.3L14 6.1l-2.5 2.5.6 3.7L9 10.6l-3.1 1.7.6-3.7L4 6.1l3.4-.8L9 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <div class="bo-kpi-value">62<span style="font-size:18px;font-weight:500;color:#888">%</span></div>
-          <div class="bo-kpi-delta up">Denuncias confirmadas</div>
+          <div class="bo-kpi-value" id="kpiTotal">—</div>
+          <div class="bo-kpi-delta up" id="kpiTotalD">Total de casos</div>
         </div>
       </div>
 
@@ -287,38 +287,14 @@
         <!-- Risk distribution -->
         <div class="bo-card">
           <div class="bo-card-header"><h3>Distribución por riesgo</h3></div>
-          <div class="bo-risk-bars">
-            <div class="bo-risk-row">
-              <span class="risk-tag risk-critical">CRÍTICO</span>
-              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:15%;background:#DC2626"></div></div>
-              <span class="bo-risk-n">4</span>
-            </div>
-            <div class="bo-risk-row">
-              <span class="risk-tag risk-high">ALTO</span>
-              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:30%;background:#EA580C"></div></div>
-              <span class="bo-risk-n">8</span>
-            </div>
-            <div class="bo-risk-row">
-              <span class="risk-tag risk-medium">MEDIO</span>
-              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:42%;background:#D97706"></div></div>
-              <span class="bo-risk-n">11</span>
-            </div>
-            <div class="bo-risk-row">
-              <span class="risk-tag risk-low">BAJO</span>
-              <div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:13%;background:#16A34A"></div></div>
-              <span class="bo-risk-n">1</span>
-            </div>
+          <div class="bo-risk-bars" id="riskBarsContainer">
+            <div style="color:var(--gray-400);font-size:13px;padding:8px 0">Cargando...</div>
           </div>
 
           <div class="bo-card-divider"></div>
           <div class="bo-card-header"><h3>Por tipo de denuncia</h3></div>
-          <div class="bo-type-pills">
-            <span class="bo-type-pill">Fraude · <strong>7</strong></span>
-            <span class="bo-type-pill">Acoso laboral · <strong>5</strong></span>
-            <span class="bo-type-pill">Corrupción · <strong>4</strong></span>
-            <span class="bo-type-pill">Conflicto interés · <strong>3</strong></span>
-            <span class="bo-type-pill">AML · <strong>3</strong></span>
-            <span class="bo-type-pill">Acoso sexual · <strong>2</strong></span>
+          <div class="bo-type-pills" id="typePillsContainer">
+            <span style="color:var(--gray-400);font-size:13px">Cargando...</span>
           </div>
         </div>
 
@@ -330,104 +306,16 @@
         <!-- Alerts -->
         <div class="bo-card">
           <div class="bo-card-header"><h3>⚠️ Alertas activas</h3></div>
-          <div class="bo-alerts-list">
-            <div class="bo-alert bo-alert-danger">
-              <div class="bo-alert-icon">🔴</div>
-              <div>
-                <strong>ARG-2025-0041</strong>
-                <p>Vencido hace 5 días · Fraude financiero · Sin investigador asignado</p>
-              </div>
-              <a href="backoffice-caso.html?id=ARG-2025-0041" class="bo-alert-link">Ver →</a>
-            </div>
-            <div class="bo-alert bo-alert-danger">
-              <div class="bo-alert-icon">🔴</div>
-              <div>
-                <strong>ARG-2025-0038</strong>
-                <p>Vencido hace 2 días · Acoso laboral · Pendiente de evaluación</p>
-              </div>
-              <a href="backoffice-caso.html?id=ARG-2025-0038" class="bo-alert-link">Ver →</a>
-            </div>
-            <div class="bo-alert bo-alert-warn">
-              <div class="bo-alert-icon">🟡</div>
-              <div>
-                <strong>ARG-2025-0039</strong>
-                <p>Vence en 2 días · Corrupción · Investigación en curso</p>
-              </div>
-              <a href="backoffice-caso.html?id=ARG-2025-0039" class="bo-alert-link">Ver →</a>
-            </div>
-            <div class="bo-alert bo-alert-warn">
-              <div class="bo-alert-icon">🟡</div>
-              <div>
-                <strong>ARG-2025-0042</strong>
-                <p>Sin movimiento hace 8 días · AML · Asignado a R. Mendoza</p>
-              </div>
-              <a href="backoffice-caso.html?id=ARG-2025-0042" class="bo-alert-link">Ver →</a>
-            </div>
-            <div class="bo-alert bo-alert-info">
-              <div class="bo-alert-icon">🔵</div>
-              <div>
-                <strong>ARG-2025-0044</strong>
-                <p>Nuevo mensaje del denunciante · Pendiente de respuesta</p>
-              </div>
-              <a href="backoffice-caso.html?id=ARG-2025-0044" class="bo-alert-link">Ver →</a>
-            </div>
+          <div class="bo-alerts-list" id="alertsListContainer">
+            <div style="color:var(--gray-400);font-size:13px;padding:12px 0">Cargando alertas...</div>
           </div>
         </div>
 
         <!-- Area breakdown -->
         <div class="bo-card">
           <div class="bo-card-header"><h3>Casos por área</h3></div>
-          <div class="bo-area-list">
-            <div class="bo-area-row">
-              <div class="bo-area-label">
-                <span class="bo-area-dot" style="background:#0097A7"></span>
-                Finanzas / Contabilidad
-              </div>
-              <div class="bo-area-bar-wrap">
-                <div class="bo-area-bar" style="width:35%;background:#0097A7"></div>
-              </div>
-              <span class="bo-area-n">8</span>
-            </div>
-            <div class="bo-area-row">
-              <div class="bo-area-label">
-                <span class="bo-area-dot" style="background:#EA580C"></span>
-                Recursos Humanos
-              </div>
-              <div class="bo-area-bar-wrap">
-                <div class="bo-area-bar" style="width:25%;background:#EA580C"></div>
-              </div>
-              <span class="bo-area-n">6</span>
-            </div>
-            <div class="bo-area-row">
-              <div class="bo-area-label">
-                <span class="bo-area-dot" style="background:#D97706"></span>
-                Compras / Proveedores
-              </div>
-              <div class="bo-area-bar-wrap">
-                <div class="bo-area-bar" style="width:20%;background:#D97706"></div>
-              </div>
-              <span class="bo-area-n">5</span>
-            </div>
-            <div class="bo-area-row">
-              <div class="bo-area-label">
-                <span class="bo-area-dot" style="background:#7C3AED"></span>
-                Dirección General
-              </div>
-              <div class="bo-area-bar-wrap">
-                <div class="bo-area-bar" style="width:15%;background:#7C3AED"></div>
-              </div>
-              <span class="bo-area-n">3</span>
-            </div>
-            <div class="bo-area-row">
-              <div class="bo-area-label">
-                <span class="bo-area-dot" style="background:#0284C7"></span>
-                Operaciones
-              </div>
-              <div class="bo-area-bar-wrap">
-                <div class="bo-area-bar" style="width:8%;background:#0284C7"></div>
-              </div>
-              <span class="bo-area-n">2</span>
-            </div>
+          <div class="bo-area-list" id="areaListContainer">
+            <div style="color:var(--gray-400);font-size:13px;padding:8px 0">Cargando...</div>
           </div>
         </div>
 
@@ -455,73 +343,8 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              <tr onclick="goToCase('ARG-2025-0044')" class="bo-table-row">
-                <td><code class="bo-code">ARG-2025-0044</code></td>
-                <td>Acoso laboral</td>
-                <td>RRHH</td>
-                <td><span class="risk-tag risk-high">ALTO</span></td>
-                <td><span class="status-tag status-new">Nuevo</span></td>
-                <td><span class="bo-unassigned">Sin asignar</span></td>
-                <td><span class="sla-tag sla-ok">23 días</span></td>
-                <td>22/02/2025</td>
-                <td><a href="backoffice-caso.html?id=ARG-2025-0044" class="bo-table-link">Abrir</a></td>
-              </tr>
-              <tr onclick="goToCase('ARG-2025-0043')" class="bo-table-row">
-                <td><code class="bo-code">ARG-2025-0043</code></td>
-                <td>Fraude financiero</td>
-                <td>Finanzas</td>
-                <td><span class="risk-tag risk-critical">CRÍTICO</span></td>
-                <td><span class="status-tag status-investigating">Investigando</span></td>
-                <td>R. Mendoza</td>
-                <td><span class="sla-tag sla-warn">8 días</span></td>
-                <td>18/02/2025</td>
-                <td><a href="backoffice-caso.html?id=ARG-2025-0043" class="bo-table-link">Abrir</a></td>
-              </tr>
-              <tr onclick="goToCase('ARG-2025-0042')" class="bo-table-row">
-                <td><code class="bo-code">ARG-2025-0042</code></td>
-                <td>AML / Lavado</td>
-                <td>Compras</td>
-                <td><span class="risk-tag risk-critical">CRÍTICO</span></td>
-                <td><span class="status-tag status-investigating">Investigando</span></td>
-                <td>R. Mendoza</td>
-                <td><span class="sla-tag sla-warn">5 días</span></td>
-                <td>14/02/2025</td>
-                <td><a href="backoffice-caso.html?id=ARG-2025-0042" class="bo-table-link">Abrir</a></td>
-              </tr>
-              <tr onclick="goToCase('ARG-2025-0041')" class="bo-table-row">
-                <td><code class="bo-code">ARG-2025-0041</code></td>
-                <td>Fraude financiero</td>
-                <td>Finanzas</td>
-                <td><span class="risk-tag risk-high">ALTO</span></td>
-                <td><span class="status-tag status-new">Nuevo</span></td>
-                <td><span class="bo-unassigned">Sin asignar</span></td>
-                <td><span class="sla-tag sla-over">Vencido</span></td>
-                <td>10/02/2025</td>
-                <td><a href="backoffice-caso.html?id=ARG-2025-0041" class="bo-table-link">Abrir</a></td>
-              </tr>
-              <tr onclick="goToCase('ARG-2025-0040')" class="bo-table-row">
-                <td><code class="bo-code">ARG-2025-0040</code></td>
-                <td>Conflicto interés</td>
-                <td>Dirección</td>
-                <td><span class="risk-tag risk-medium">MEDIO</span></td>
-                <td><span class="status-tag status-review">En revisión</span></td>
-                <td>M. Álvarez</td>
-                <td><span class="sla-tag sla-ok">16 días</span></td>
-                <td>08/02/2025</td>
-                <td><a href="backoffice-caso.html?id=ARG-2025-0040" class="bo-table-link">Abrir</a></td>
-              </tr>
-              <tr onclick="goToCase('ARG-2025-0039')" class="bo-table-row">
-                <td><code class="bo-code">ARG-2025-0039</code></td>
-                <td>Corrupción</td>
-                <td>Compras</td>
-                <td><span class="risk-tag risk-critical">CRÍTICO</span></td>
-                <td><span class="status-tag status-investigating">Investigando</span></td>
-                <td>J. Torres</td>
-                <td><span class="sla-tag sla-warn">2 días</span></td>
-                <td>05/02/2025</td>
-                <td><a href="backoffice-caso.html?id=ARG-2025-0039" class="bo-table-link">Abrir</a></td>
-              </tr>
+            <tbody id="recentCasesBody">
+              <tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray-400)">Cargando casos...</td></tr>
             </tbody>
           </table>
         </div>
@@ -534,7 +357,7 @@
       <div class="bo-page-header">
         <div>
           <h1 class="bo-page-title">Repositorio de casos</h1>
-          <p class="bo-page-sub">24 casos activos · 87 totales</p>
+          <p class="bo-page-sub" id="casosPageSub">Cargando casos...</p>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
           <button class="bo-btn bo-btn-ghost" onclick="exportCasosCsv()" title="Exportar casos visibles a CSV">
@@ -572,7 +395,7 @@
           <div class="bo-form-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:12px;padding:16px;background:var(--gray-50);border-radius:8px;border:1px solid var(--gray-200)">
             <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha desde</label><input type="date" class="bo-select-sm" style="width:100%"/></div>
             <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Fecha hasta</label><input type="date" class="bo-select-sm" style="width:100%"/></div>
-            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Investigador</label><select class="bo-select-sm" style="width:100%"><option>Todos</option><option>M. Álvarez</option><option>R. Mendoza</option><option>J. Torres</option></select></div>
+            <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Investigador</label><select class="bo-select-sm" style="width:100%" id="filtroInvestigador"><option>Todos</option></select></div>
             <div><label style="font-size:11px;color:var(--gray-500);display:block;margin-bottom:4px">Canal</label><select class="bo-select-sm" style="width:100%"><option>Todos</option><option>Web</option><option>Email</option><option>WhatsApp</option><option>Teléfono</option></select></div>
             <div style="align-self:end"><button type="button" class="bo-btn bo-btn-primary" onclick="aplicarFiltrosAvanzados()">Aplicar</button></div>
           </div>
@@ -626,42 +449,10 @@
         <div class="bo-card-header">
           <span style="font-size:13px;color:#666">Registro inmutable de todas las acciones del sistema</span>
         </div>
-        <div class="bo-log-list">
-          <div class="bo-log-item">
-            <div class="bo-log-time">22/02/2025 14:32</div>
-            <div class="bo-log-user"><span class="bo-log-avatar">MA</span> M. Álvarez</div>
-            <div class="bo-log-action">Abrió caso <code class="bo-code">ARG-2025-0044</code></div>
-            <div class="bo-log-ip">IP: 192.168.1.45</div>
-          </div>
-          <div class="bo-log-item">
-            <div class="bo-log-time">22/02/2025 13:18</div>
-            <div class="bo-log-user"><span class="bo-log-avatar" style="background:#059669">JT</span> J. Torres</div>
-            <div class="bo-log-action">Cambió estado <code class="bo-code">ARG-2025-0039</code> → Investigando</div>
-            <div class="bo-log-ip">IP: 192.168.1.71</div>
-          </div>
-          <div class="bo-log-item">
-            <div class="bo-log-time">22/02/2025 11:05</div>
-            <div class="bo-log-user"><span class="bo-log-avatar" style="background:#D97706">RM</span> R. Mendoza</div>
-            <div class="bo-log-action">Subió documento a <code class="bo-code">ARG-2025-0043</code> (contrato_proveedor.pdf)</div>
-            <div class="bo-log-ip">IP: 10.0.0.12</div>
-          </div>
-          <div class="bo-log-item">
-            <div class="bo-log-time">21/02/2025 17:44</div>
-            <div class="bo-log-user"><span class="bo-log-avatar">MA</span> M. Álvarez</div>
-            <div class="bo-log-action">Asignó investigador en <code class="bo-code">ARG-2025-0042</code> → R. Mendoza</div>
-            <div class="bo-log-ip">IP: 192.168.1.45</div>
-          </div>
-          <div class="bo-log-item">
-            <div class="bo-log-time">21/02/2025 16:20</div>
-            <div class="bo-log-user"><span class="bo-log-avatar" style="background:#7C3AED">LG</span> L. García</div>
-            <div class="bo-log-action">Descargó reporte ejecutivo mensual (febrero 2025)</div>
-            <div class="bo-log-ip">IP: 10.0.0.8</div>
-          </div>
-          <div class="bo-log-item">
-            <div class="bo-log-time">20/02/2025 09:11</div>
-            <div class="bo-log-user"><span class="bo-log-avatar">MA</span> M. Álvarez</div>
-            <div class="bo-log-action">Cerró caso <code class="bo-code">ARG-2025-0037</code> — Decisión: Confirmado · Sanción: Suspensión</div>
-            <div class="bo-log-ip">IP: 192.168.1.45</div>
+        <div class="bo-log-list" id="auditoriaLogList">
+          <div style="padding:24px;text-align:center;color:var(--gray-400);font-size:13px">
+            El log de auditoría global está disponible en el plan Enterprise.<br>
+            Consultá el log individual de cada caso en la pestaña <strong>Log / Auditoría</strong> dentro del caso.
           </div>
         </div>
       </div>
@@ -2222,11 +2013,31 @@ function showGateError(msg) {
 }
 
 function initTenantUI() {
-  // Nombre empresa en sidebar
-  var cfg = (window.ArgusConfig && ArgusConfig.get()) || {};
-  var nombre = (cfg.empresa && cfg.empresa.nombre) || TENANT;
+  var cfg    = (window.ArgusConfig && ArgusConfig.get()) || {};
+  var nombre = (cfg.empresa && cfg.empresa.nombre) || TENANT || 'Argus';
+  var rubro  = (cfg.empresa && cfg.empresa.rubro)  || 'Compliance';
+
+  // Nombre empresa en sidebar subtitle
   var lbl = document.getElementById('sidebar-tenant-label');
   if (lbl) lbl.textContent = nombre;
+
+  // Sidebar user section: usar nombre de empresa
+  var initials = nombre.split(/\s+/).map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2) || '–';
+  var avatarEl = document.getElementById('sidebarUserAvatar');
+  if (avatarEl) avatarEl.textContent = initials;
+  var nameEl = document.getElementById('sidebarUserName');
+  if (nameEl) nameEl.textContent = nombre;
+  var roleEl = document.getElementById('sidebarUserRole');
+  if (roleEl) roleEl.textContent = rubro;
+
+  // Topbar avatar
+  var topbarAv = document.getElementById('topbarAvatar');
+  if (topbarAv) topbarAv.textContent = initials;
+
+  // Dashboard hero
+  var heroTitle = document.getElementById('dashHeroTitle');
+  var heroCompany = document.getElementById('dashHeroCompany');
+  if (heroCompany) heroCompany.textContent = '— ' + nombre;
 
   // Link "Ir al portal" con tenant
   var portalLink = document.getElementById('nav-portal-link');
@@ -2237,8 +2048,8 @@ function initTenantUI() {
     a.href = 'backoffice.html?t=' + TENANT;
   });
 
-  // Links a backoffice-caso.html ya incluyen ?id=..., añadir &t=
-  // (se maneja en buildRow)
+  // Aplicar colores del tenant
+  if (window.ArgusConfig) ArgusConfig.apply();
 }
 
 // ── Date ──────────────────────────────────────────────────────
@@ -2304,29 +2115,59 @@ function showView(name) {
 }
 
 // ── Generate cases table ──────────────────────────────────────
-// Si hay backend configurado, no usar localStorage para casos; cargar desde Supabase
-var CASOS_DATA = (window.ArgusBackend && ArgusBackend.isConfigured() && TENANT) ? [] : loadCasos();
+// Si hay un tenant activo, siempre empezar vacío y cargar desde Supabase
+var CASOS_DATA = TENANT ? [] : loadCasos();
 var CASOS_FROM_BACKEND = false;
+
+// ── SLA_SLA days from created_at ─────────────────────────────
+var SLA_DAYS = 30;
+function _slaDaysLeft(createdAt) {
+  if (!createdAt) return null;
+  var created = new Date(createdAt);
+  var now = new Date();
+  var elapsed = Math.floor((now - created) / 86400000);
+  return SLA_DAYS - elapsed;
+}
+function _slaStatus(daysLeft) {
+  if (daysLeft === null) return 'ok';
+  if (daysLeft < 0) return 'over';
+  if (daysLeft <= 5) return 'warn';
+  return 'ok';
+}
+function _fmtDateDash(iso) {
+  if (!iso) return '—';
+  var d = new Date(iso);
+  return (d.getDate() < 10 ? '0' : '') + d.getDate() + '/' +
+         (d.getMonth() < 9 ? '0' : '') + (d.getMonth() + 1) + '/' + d.getFullYear();
+}
 
 function mapSupabaseCasos(casos) {
   if (!casos || !casos.length) return [];
-  var statusToEstado = { pending: 'new', active: 'investigating', closed: 'closed-ok' };
+  var statusToEstado = {
+    pending: 'new', active: 'investigating', closed: 'closed-ok',
+    new: 'new', investigating: 'investigating', review: 'review',
+    eval: 'eval', 'closed-ok': 'closed-ok', 'closed-no': 'closed-no'
+  };
+  var riskMap = { critical:'critical', high:'high', medium:'medium', low:'low', null:'medium', undefined:'medium' };
   return casos.map(function (row) {
-    var d = row.created_at ? new Date(row.created_at) : new Date();
-    var fecha = (d.getDate() < 10 ? '0' : '') + d.getDate() + '/' + (d.getMonth() < 9 ? '0' : '') + (d.getMonth() + 1) + '/' + d.getFullYear();
+    var daysLeft = _slaDaysLeft(row.created_at);
+    var slaS = _slaStatus(daysLeft);
+    var slaLabel = daysLeft === null ? '—' : (daysLeft < 0 ? String(Math.abs(daysLeft)) : String(daysLeft));
     return {
       id: row.id,
       tracking_code: row.tracking_code,
       tipo: row.category || '—',
       area: row.area || '—',
       canal: 'Web',
-      riesgo: 'medium',
+      riesgo: riskMap[row.risk_level] || 'medium',
       estado: statusToEstado[row.status] || 'new',
       anon: row.anonymous ? 'Sí' : 'No',
-      inv: '—',
-      sla_s: 'ok',
-      sla: '—',
-      fecha: fecha
+      inv: row.assigned_to || '—',
+      sla_s: slaS,
+      sla: slaLabel,
+      fecha: _fmtDateDash(row.created_at),
+      created_at: row.created_at,
+      updated_at: row.updated_at
     };
   });
 }
@@ -2342,6 +2183,307 @@ function ensureCasosLoaded(cb) {
   }).catch(function () { if (cb) cb(); });
 }
 
+// ── loadDashboard — poblar todas las secciones del dashboard ──
+function loadDashboard() {
+  if (!window.ArgusBackend || !ArgusBackend.isConfigured() || !TENANT) return;
+  ArgusBackend.listarCasosTenant(TENANT).then(function(r) {
+    if (!r || !r.ok) return;
+    var raw = r.casos || [];
+    CASOS_DATA = mapSupabaseCasos(raw);
+    CASOS_FROM_BACKEND = true;
+    _renderDashboard(CASOS_DATA, raw);
+  }).catch(function(e) {
+    console.warn('[Argus] loadDashboard error:', e);
+  });
+}
+
+function _renderDashboard(casos, raw) {
+  var now = new Date();
+  var thisMonth = now.getMonth();
+  var thisYear  = now.getFullYear();
+
+  // ── Poblar filtro de investigador con valores reales ──
+  var filtroInv = document.getElementById('filtroInvestigador');
+  if (filtroInv) {
+    var uniqueInvs = [];
+    casos.forEach(function(c){ if (c.inv && c.inv !== '—' && uniqueInvs.indexOf(c.inv) === -1) uniqueInvs.push(c.inv); });
+    filtroInv.innerHTML = '<option>Todos</option>' + uniqueInvs.map(function(n){ return '<option>' + n + '</option>'; }).join('');
+  }
+
+  // ── KPIs ──
+  var abiertos     = casos.filter(function(c){ return c.estado !== 'closed-ok' && c.estado !== 'closed-no'; }).length;
+  var investigando = casos.filter(function(c){ return c.estado === 'investigating'; }).length;
+  var vencidos     = casos.filter(function(c){ return c.sla_s === 'over'; }).length;
+  var cerradosMes  = casos.filter(function(c){
+    if (c.estado !== 'closed-ok' && c.estado !== 'closed-no') return false;
+    if (!c.updated_at) return false;
+    var d = new Date(c.updated_at);
+    return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+  }).length;
+  var total = casos.length;
+
+  // SLA promedio (días transcurridos para casos abiertos)
+  var openCasos = casos.filter(function(c){ return c.estado !== 'closed-ok' && c.estado !== 'closed-no'; });
+  var avgSla = 0;
+  if (openCasos.length) {
+    var totalDays = openCasos.reduce(function(acc, c) {
+      if (!c.created_at) return acc;
+      return acc + Math.floor((now - new Date(c.created_at)) / 86400000);
+    }, 0);
+    avgSla = Math.round(totalDays / openCasos.length);
+  }
+
+  _setKpi('kpiAbiertos',    abiertos,     abiertos + ' casos sin cerrar');
+  _setKpi('kpiInvestigando', investigando, investigando + ' en investigación activa');
+  _setKpi('kpiVencidos',    vencidos,     vencidos ? 'Requieren atención inmediata' : 'Sin vencimientos');
+  _setKpi('kpiCerradosMes', cerradosMes,  'Cerrados en ' + now.toLocaleString('es-AR',{month:'long'}));
+  _setKpiSla('kpiSlaPromedio', avgSla);
+  _setKpi('kpiTotal',       total,        total + ' casos en total');
+
+  // ── Subtitle en vista casos ──
+  var sub = document.getElementById('casosPageSub');
+  if (sub) sub.textContent = abiertos + ' casos activos · ' + total + ' totales';
+
+  // ── Secciones ──
+  _renderRiskBars(casos);
+  _renderTypePills(casos);
+  _renderAlerts(casos);
+  _renderAreaBars(casos);
+  _renderRecentCases(casos);
+  _renderDashChart(raw);
+}
+
+function _setKpi(id, val, delta) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+  var dEl = document.getElementById(id + 'D');
+  if (dEl && delta !== undefined) dEl.textContent = delta;
+}
+function _setKpiSla(id, days) {
+  var el = document.getElementById(id);
+  if (el) el.innerHTML = days + '<span style="font-size:18px;font-weight:500;color:#888"> días</span>';
+  var dEl = document.getElementById(id + 'D');
+  if (dEl) dEl.textContent = 'Promedio días transcurridos';
+}
+
+function _renderRiskBars(casos) {
+  var el = document.getElementById('riskBarsContainer');
+  if (!el) return;
+  var counts = { critical:0, high:0, medium:0, low:0 };
+  casos.forEach(function(c){ if (counts[c.riesgo] !== undefined) counts[c.riesgo]++; });
+  var total = casos.length || 1;
+  var defs = [
+    { key:'critical', label:'CRÍTICO', cls:'risk-critical', color:'#DC2626' },
+    { key:'high',     label:'ALTO',    cls:'risk-high',     color:'#EA580C' },
+    { key:'medium',   label:'MEDIO',   cls:'risk-medium',   color:'#D97706' },
+    { key:'low',      label:'BAJO',    cls:'risk-low',      color:'#16A34A' },
+  ];
+  if (!casos.length) { el.innerHTML = '<div style="color:var(--gray-400);font-size:13px;padding:8px 0">Sin datos</div>'; return; }
+  el.innerHTML = defs.map(function(d) {
+    var n = counts[d.key];
+    var pct = Math.round((n / total) * 100);
+    return '<div class="bo-risk-row">' +
+      '<span class="risk-tag ' + d.cls + '">' + d.label + '</span>' +
+      '<div class="bo-risk-bar-wrap"><div class="bo-risk-bar" style="width:' + pct + '%;background:' + d.color + '"></div></div>' +
+      '<span class="bo-risk-n">' + n + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+function _renderTypePills(casos) {
+  var el = document.getElementById('typePillsContainer');
+  if (!el) return;
+  if (!casos.length) { el.innerHTML = '<span style="color:var(--gray-400);font-size:13px">Sin datos</span>'; return; }
+  var counts = {};
+  casos.forEach(function(c) {
+    var t = c.tipo || 'Sin categoría';
+    counts[t] = (counts[t] || 0) + 1;
+  });
+  var sorted = Object.keys(counts).sort(function(a,b){ return counts[b] - counts[a]; }).slice(0,8);
+  el.innerHTML = sorted.map(function(t) {
+    return '<span class="bo-type-pill">' + escHtml(t) + ' · <strong>' + counts[t] + '</strong></span>';
+  }).join('');
+}
+
+function _renderAlerts(casos) {
+  var el = document.getElementById('alertsListContainer');
+  if (!el) return;
+  // Vencidos (danger) y próximos a vencer ≤5 días (warn)
+  var alerts = casos
+    .filter(function(c){ return c.estado !== 'closed-ok' && c.estado !== 'closed-no' && (c.sla_s === 'over' || c.sla_s === 'warn'); })
+    .sort(function(a,b){
+      var ord = { over:0, warn:1, ok:2 };
+      return (ord[a.sla_s]||2) - (ord[b.sla_s]||2);
+    })
+    .slice(0, 6);
+  if (!alerts.length) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--gray-400);font-size:13px">✅ Sin alertas activas</div>';
+    return;
+  }
+  el.innerHTML = alerts.map(function(c) {
+    var isDanger = c.sla_s === 'over';
+    var icon  = isDanger ? '🔴' : '🟡';
+    var cls   = isDanger ? 'bo-alert-danger' : 'bo-alert-warn';
+    var displayId = escHtml(c.tracking_code || c.id);
+    var msgSla = isDanger
+      ? 'Vencido hace ' + Math.abs(parseInt(c.sla)) + ' días'
+      : 'Vence en ' + c.sla + ' días';
+    var msgCat = escHtml(c.tipo);
+    var msgInv = c.inv && c.inv !== '—' ? 'Asignado a ' + escHtml(c.inv) : 'Sin investigador asignado';
+    var link = 'backoffice-caso.html?id=' + encodeURIComponent(c.id) + (TENANT ? '&t=' + TENANT : '');
+    return '<div class="bo-alert ' + cls + '">' +
+      '<div class="bo-alert-icon">' + icon + '</div>' +
+      '<div><strong>' + displayId + '</strong>' +
+        '<p>' + msgSla + ' · ' + msgCat + ' · ' + msgInv + '</p>' +
+      '</div>' +
+      '<a href="' + link + '" class="bo-alert-link">Ver →</a>' +
+    '</div>';
+  }).join('');
+}
+
+function _renderAreaBars(casos) {
+  var el = document.getElementById('areaListContainer');
+  if (!el) return;
+  if (!casos.length) { el.innerHTML = '<div style="color:var(--gray-400);font-size:13px;padding:8px 0">Sin datos</div>'; return; }
+  var counts = {};
+  casos.forEach(function(c) {
+    var a = c.area || 'Sin área';
+    counts[a] = (counts[a] || 0) + 1;
+  });
+  var sorted = Object.keys(counts).sort(function(a,b){ return counts[b] - counts[a]; }).slice(0, 6);
+  var maxCount = counts[sorted[0]] || 1;
+  var colors = ['#0097A7','#EA580C','#D97706','#7C3AED','#0284C7','#16A34A'];
+  el.innerHTML = sorted.map(function(area, i) {
+    var n   = counts[area];
+    var pct = Math.round((n / maxCount) * 100);
+    var col = colors[i % colors.length];
+    return '<div class="bo-area-row">' +
+      '<div class="bo-area-label"><span class="bo-area-dot" style="background:' + col + '"></span>' + escHtml(area) + '</div>' +
+      '<div class="bo-area-bar-wrap"><div class="bo-area-bar" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+      '<span class="bo-area-n">' + n + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+function _renderRecentCases(casos) {
+  var el = document.getElementById('recentCasesBody');
+  if (!el) return;
+  var recent = casos.slice().sort(function(a,b){
+    return new Date(b.created_at||0) - new Date(a.created_at||0);
+  }).slice(0, 6);
+  if (!recent.length) {
+    el.innerHTML = '<tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray-400)">Sin casos registrados</td></tr>';
+    return;
+  }
+  el.innerHTML = recent.map(function(c) {
+    var displayId = escHtml(c.tracking_code || c.id);
+    var link = 'backoffice-caso.html?id=' + encodeURIComponent(c.id) + (TENANT ? '&t=' + TENANT : '');
+    var riskLabel = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' }[c.riesgo] || c.riesgo;
+    var invHtml = (c.inv && c.inv !== '—') ? escHtml(c.inv) : '<span class="bo-unassigned">Sin asignar</span>';
+    var slaHtml = c.sla_s === 'over'
+      ? '<span class="sla-tag sla-over">Vencido</span>'
+      : '<span class="sla-tag sla-' + c.sla_s + '">' + c.sla + ' días</span>';
+    return '<tr onclick="goToCase(\'' + String(c.id).replace(/'/g,"\\'") + '\')" class="bo-table-row">' +
+      '<td><code class="bo-code">' + displayId + '</code></td>' +
+      '<td>' + escHtml(c.tipo) + '</td>' +
+      '<td>' + escHtml(c.area) + '</td>' +
+      '<td><span class="risk-tag risk-' + c.riesgo + '">' + riskLabel + '</span></td>' +
+      '<td><span class="status-tag status-' + c.estado + '">' + statusLabel(c.estado) + '</span></td>' +
+      '<td>' + invHtml + '</td>' +
+      '<td>' + slaHtml + '</td>' +
+      '<td>' + c.fecha + '</td>' +
+      '<td><a href="' + link + '" class="bo-table-link" onclick="event.stopPropagation()">Abrir</a></td>' +
+    '</tr>';
+  }).join('');
+}
+
+function _renderDashChart(rawCasos) {
+  var canvas = document.getElementById('casesChart');
+  if (!canvas) return;
+  if (!rawCasos || !rawCasos.length) return;
+
+  // Últimos 6 meses
+  var now = new Date();
+  var months = [];
+  for (var i = 5; i >= 0; i--) {
+    var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({ year: d.getFullYear(), month: d.getMonth(), label: d.toLocaleString('es-AR',{month:'short'}) });
+  }
+  var received = months.map(function(m) {
+    return rawCasos.filter(function(c) {
+      if (!c.created_at) return false;
+      var d = new Date(c.created_at);
+      return d.getFullYear() === m.year && d.getMonth() === m.month;
+    }).length;
+  });
+  var closed = months.map(function(m) {
+    return rawCasos.filter(function(c) {
+      // status 'closed' en Supabase = cerrado; también aceptar variantes mapeadas
+      var st = (c.status || '').toLowerCase();
+      if (st !== 'closed' && st !== 'closed-ok' && st !== 'closed-no') return false;
+      var dt = c.updated_at || c.created_at;
+      if (!dt) return false;
+      var d = new Date(dt);
+      return d.getFullYear() === m.year && d.getMonth() === m.month;
+    }).length;
+  });
+
+  var ctx  = canvas.getContext('2d');
+  var W    = canvas.parentElement.clientWidth - 40;
+  var H    = 180;
+  canvas.width  = W;
+  canvas.height = H;
+
+  var maxV   = Math.max.apply(null, received.concat(closed).concat([1]));
+  var barW   = 18;
+  var gap    = W / months.length;
+  var padTop = 20;
+  var padBot = 24;
+  var chartH = H - padTop - padBot;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.font = '11px Inter, sans-serif';
+  ctx.textAlign = 'center';
+
+  months.forEach(function(m, i) {
+    var x  = gap * i + gap / 2;
+    var rH = received[i] ? (received[i] / maxV) * chartH : 0;
+    var cH = closed[i]   ? (closed[i]   / maxV) * chartH : 0;
+
+    ctx.fillStyle = '#0097A7';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x - barW - 2, H - padBot - rH, barW, Math.max(rH,1), [4,4,0,0]);
+    else ctx.rect(x - barW - 2, H - padBot - rH, barW, Math.max(rH,1));
+    ctx.fill();
+
+    ctx.fillStyle = '#16A34A';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x + 2, H - padBot - cH, barW, Math.max(cH,1), [4,4,0,0]);
+    else ctx.rect(x + 2, H - padBot - cH, barW, Math.max(cH,1));
+    ctx.fill();
+
+    ctx.fillStyle = '#007A87';
+    ctx.fillText(m.label, x, H - 4);
+  });
+}
+
+// ── Boot: esperar a que ArgusBackend esté listo, luego cargar dashboard ──
+(function _bootDashboard() {
+  if (!TENANT) return; // sin tenant no hay qué cargar
+  var attempts = 0;
+  var maxAttempts = 40; // 8 segundos
+  var interval = setInterval(function() {
+    attempts++;
+    if (window.ArgusBackend && ArgusBackend.isConfigured()) {
+      clearInterval(interval);
+      loadDashboard();
+    } else if (attempts >= maxAttempts) {
+      clearInterval(interval);
+      console.warn('[Argus] ArgusBackend no disponible luego de ' + maxAttempts + ' intentos.');
+    }
+  }, 200);
+})();
+
 // Cargar casos desde Supabase al terminar de cargar la página (lib ya disponible)
 document.addEventListener('DOMContentLoaded', function () {
   if (TENANT && window.ArgusBackend && ArgusBackend.isConfigured()) {
@@ -2349,6 +2491,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (r.ok && r.casos) {
         CASOS_DATA = mapSupabaseCasos(r.casos);
         CASOS_FROM_BACKEND = true;
+        _renderDashboard(CASOS_DATA, r.casos);
       }
     });
   }
@@ -3070,17 +3213,10 @@ function deleteRole(roleId) {
 
 /* ── Usuarios table (dinámica) ── */
 var USERS_DATA_KEY = 'argus_users_' + (TENANT || 'default');
-var DEMO_USERS = [
-  { nombre:'María Álvarez',  email:'maria@empresa.com',   rol:'compliance',  jurisdiccion:'Argentina · Uruguay', acceso:'Todos',           ultimo:'Hoy, 14:32',    estado:'activo',   color:'#0097A7' },
-  { nombre:'Rodrigo Mendoza',email:'rodrigo@empresa.com', rol:'investigador',jurisdiccion:'Argentina',           acceso:'Asignados',       ultimo:'Hoy, 11:05',    estado:'activo',   color:'#D97706' },
-  { nombre:'Julia Torres',   email:'julia@empresa.com',   rol:'legal',       jurisdiccion:'Argentina',           acceso:'Legal / Riesgo',  ultimo:'Hoy, 13:18',    estado:'activo',   color:'#059669' },
-  { nombre:'Laura García',   email:'laura@empresa.com',   rol:'auditor',     jurisdiccion:'Multi-región',        acceso:'Solo lectura',    ultimo:'Ayer, 16:20',   estado:'activo',   color:'#7C3AED' },
-  { nombre:'Carlos Pérez',   email:'carlos@empresa.com',  rol:'rrhh',        jurisdiccion:'Argentina',           acceso:'Acoso / Laboral', ultimo:'20/02/2025',    estado:'inactivo', color:'#DC2626' },
-];
+var DEMO_USERS = []; // No usar datos demo — la gestión de usuarios es local por tenant
 function loadUsers() {
   try { var s = localStorage.getItem(USERS_DATA_KEY); if (s) return JSON.parse(s); } catch(e) {}
-  localStorage.setItem(USERS_DATA_KEY, JSON.stringify(DEMO_USERS));
-  return JSON.parse(JSON.stringify(DEMO_USERS));
+  return [];
 }
 function saveUsers(u) { localStorage.setItem(USERS_DATA_KEY, JSON.stringify(u)); }
 
@@ -3089,6 +3225,12 @@ function renderUsersTable() {
   if (!tbody) return;
   var users = loadUsers();
   var roles = loadRoles();
+
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="padding:24px;text-align:center;color:var(--gray-400);font-size:13px">' +
+      'No hay usuarios registrados. Hacé clic en <strong>+ Invitar usuario</strong> para agregar el primero.</td></tr>';
+    return;
+  }
 
   tbody.innerHTML = users.map(function(u) {
     var role = roles.find(function(r){ return r.id === u.rol; }) || { nombre: u.rol, color: '#5F9EA5' };
@@ -3223,52 +3365,8 @@ function toggleNotifs(e) {
   }
 }
 
-// ── Canvas chart (simple bars) ────────────────────────────────
-window.addEventListener('load', () => {
-  const canvas = document.getElementById('casesChart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W = canvas.parentElement.clientWidth - 40;
-  const H = 180;
-  canvas.width = W;
-  canvas.height = H;
-
-  const months = ['Sep','Oct','Nov','Dic','Ene','Feb'];
-  const received = [8, 12, 7, 15, 11, 9];
-  const closed =   [5,  9, 6, 12,  8, 11];
-  const maxV = Math.max(...received, ...closed);
-  const barW = 18;
-  const gap = W / months.length;
-  const padTop = 20;
-  const padBot = 24;
-  const chartH = H - padTop - padBot;
-
-  ctx.font = '11px Inter, sans-serif';
-  ctx.fillStyle = '#8CBDC3';
-  ctx.textAlign = 'center';
-
-  months.forEach((m, i) => {
-    const x = gap * i + gap / 2;
-    const rH = (received[i] / maxV) * chartH;
-    const cH = (closed[i] / maxV) * chartH;
-
-    // Received bar
-    ctx.fillStyle = '#0097A7';
-    ctx.beginPath();
-    ctx.roundRect(x - barW - 2, H - padBot - rH, barW, rH, [4, 4, 0, 0]);
-    ctx.fill();
-
-    // Closed bar
-    ctx.fillStyle = '#16A34A';
-    ctx.beginPath();
-    ctx.roundRect(x + 2, H - padBot - cH, barW, cH, [4, 4, 0, 0]);
-    ctx.fill();
-
-    // Label
-    ctx.fillStyle = '#007A87';
-    ctx.fillText(m, x, H - 4);
-  });
-});
+// ── Canvas chart: se dibuja desde _renderDashChart() con datos reales ──
+// (El chart estático fue eliminado; se renderiza desde loadDashboard)
 
 function updateDashboard(days) { /* live filter — placeholder */ }
 
