@@ -305,78 +305,8 @@
         <div class="section-tag">Preguntas frecuentes</div>
         <h2>Lo que más nos preguntan</h2>
       </div>
-      <div class="land-faq-list" style="max-width:720px;margin:0 auto">
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Puedo denunciar de forma completamente anónima?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>Sí. Podés elegir el anonimato total al final del proceso. En ese caso, no necesitás proporcionar ningún dato personal. Recibirás igualmente un código de seguimiento para consultar el estado de tu caso sin identificarte.</p>
-          </div>
-        </div>
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Mi empresa va a saber que fui yo?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>Si elegís el anonimato total, es técnicamente imposible para la empresa identificarte. El sistema no registra tu IP, no usa cookies, y el contenido está cifrado. Ni el equipo de compliance de la empresa ni los administradores de la plataforma pueden vincular la denuncia a tu identidad.</p>
-          </div>
-        </div>
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Qué pasa si no tengo pruebas?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>No es necesario tener pruebas para realizar una denuncia. El relato de los hechos ya es suficiente para iniciar una investigación. Las evidencias son opcionales y ayudan a agilizar el proceso, pero no son un requisito.</p>
-          </div>
-        </div>
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Puedo recibir represalias por denunciar?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>No. El reglamento del canal prohíbe expresamente cualquier medida retaliativa. Las políticas internacionales de protección al denunciante (OCDE, Directiva EU 2019/1937, UNCAC) establecen que toda represalia es en sí misma una infracción grave. Si experimentás alguna, podés reportarla por este mismo canal.</p>
-          </div>
-        </div>
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Cuánto tiempo lleva el proceso de investigación?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>La investigación puede tomar hasta 60 días hábiles, dependiendo de la complejidad del caso. Podés consultar el estado en cualquier momento con tu código de seguimiento, sin necesidad de identificarte.</p>
-          </div>
-        </div>
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Qué pasa si mi denuncia involucra a la dirección de la empresa?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>Dado que el canal es operado por un tercero externo e independiente, los casos que involucran a la alta dirección o al directorio son investigados con el mismo rigor. La empresa no es notificada si los involucrados forman parte de quienes normalmente recibirían esa notificación.</p>
-          </div>
-        </div>
-
-        <div class="land-faq-item">
-          <button class="land-faq-q" onclick="toggleLandFaq(this)">
-            ¿Puedo realizar una denuncia si no soy empleado de la empresa?
-            <span class="land-faq-icon">+</span>
-          </button>
-          <div class="land-faq-a">
-            <p>Sí. El canal es accesible para empleados, ex-empleados, proveedores, clientes y cualquier persona que haya tenido relación o conocimiento de una situación irregular en la organización.</p>
-          </div>
-        </div>
-
+      <div class="land-faq-list" id="faqListDynamic" style="max-width:720px;margin:0 auto">
+        <!-- Generado dinámicamente desde ArgusConfig -->
       </div>
     </div>
   </section>
@@ -1531,9 +1461,29 @@
     });
   }
 
+  /* ── FAQ dinámico desde ArgusConfig ── */
+  function renderFaq() {
+    var list = document.getElementById('faqListDynamic');
+    if (!list) return;
+    var faqs = (window.ArgusConfig ? ArgusConfig.get().faq : null) || [];
+    if (!faqs.length) { list.innerHTML = ''; return; }
+    list.innerHTML = faqs.map(function(item) {
+      var q = (item.q || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var a = (item.a || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return '<div class="land-faq-item">' +
+        '<button class="land-faq-q" onclick="toggleLandFaq(this)">' +
+          q +
+          '<span class="land-faq-icon">+</span>' +
+        '</button>' +
+        '<div class="land-faq-a"><p>' + a + '</p></div>' +
+      '</div>';
+    }).join('');
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     renderCatGrid();
     renderCamposExtra();
+    renderFaq();
     if (window.ArgusConfig) ArgusConfig.apply();
   });
 </script>

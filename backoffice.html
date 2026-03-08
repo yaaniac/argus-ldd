@@ -106,10 +106,6 @@
 
       <div class="bo-nav-section">
         <span class="bo-nav-label">Sistema</span>
-        <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('auditoria')">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 5v5c0 4 2.8 7.3 6 8 3.2-.7 6-4 6-8V5L9 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          <span>Auditoría / Log</span>
-        </a>
         <a href="#" class="bo-nav-item" onclick="event.preventDefault(); showView('usuarios')">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M1 16c0-3.3 2.7-6 6-6h0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="13" cy="11" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M10 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 13.5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span>Usuarios y roles</span>
@@ -334,13 +330,12 @@
                 <th>Riesgo</th>
                 <th>Estado</th>
                 <th>Investigador</th>
-                <th>SLA</th>
                 <th>Recibido</th>
                 <th></th>
               </tr>
             </thead>
             <tbody id="recentCasesBody">
-              <tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray-400)">Cargando casos...</td></tr>
+              <tr><td colspan="8" style="padding:24px;text-align:center;color:var(--gray-400)">Cargando casos...</td></tr>
             </tbody>
           </table>
         </div>
@@ -431,7 +426,6 @@
                 <th>Estado</th>
                 <th>Anónimo</th>
                 <th>Investigador</th>
-                <th>SLA</th>
                 <th>Ingreso</th>
                 <th></th>
               </tr>
@@ -447,25 +441,6 @@
         </div>
       </div>
     </div><!-- /view-casos -->
-
-    <!-- ═══ VIEW: AUDITORÍA ═══ -->
-    <div class="bo-view" id="view-auditoria">
-      <div class="bo-page-header">
-        <h1 class="bo-page-title">Log de auditoría</h1>
-        <button class="bo-btn bo-btn-outline">Exportar log completo</button>
-      </div>
-      <div class="bo-card">
-        <div class="bo-card-header">
-          <span style="font-size:13px;color:#666">Registro inmutable de todas las acciones del sistema</span>
-        </div>
-        <div class="bo-log-list" id="auditoriaLogList">
-          <div style="padding:24px;text-align:center;color:var(--gray-400);font-size:13px">
-            El log de auditoría global está disponible en el plan Enterprise.<br>
-            Consultá el log individual de cada caso en la pestaña <strong>Log / Auditoría</strong> dentro del caso.
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- ═══ VIEW: USUARIOS ═══ -->
     <div class="bo-view" id="view-usuarios">
@@ -2121,8 +2096,6 @@ const viewTitles = {
   dashboard: 'Dashboard',
   casos: 'Casos',
   tareas: 'Mis tareas',
-  comunicaciones: 'Comunicaciones',
-  auditoria: 'Auditoría / Log',
   usuarios: 'Usuarios y roles',
   configuracion: 'Configuración del portal'
 };
@@ -2427,7 +2400,7 @@ function _renderRecentCases(casos) {
     return new Date(b.created_at||0) - new Date(a.created_at||0);
   }).slice(0, 6);
   if (!recent.length) {
-    el.innerHTML = '<tr><td colspan="9" style="padding:24px;text-align:center;color:var(--gray-400)">Sin casos registrados</td></tr>';
+    el.innerHTML = '<tr><td colspan="8" style="padding:24px;text-align:center;color:var(--gray-400)">Sin casos registrados</td></tr>';
     return;
   }
   el.innerHTML = recent.map(function(c) {
@@ -2436,9 +2409,6 @@ function _renderRecentCases(casos) {
     var _rl = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' }[c.riesgo];
     var riskHtml = _rl ? '<span class="risk-tag risk-' + c.riesgo + '">' + _rl + '</span>' : '<span style="font-size:11px;color:var(--gray-400)">—</span>';
     var invHtml = (c.inv && c.inv !== '—') ? escHtml(c.inv) : '<span class="bo-unassigned">Sin asignar</span>';
-    var slaHtml = c.sla_s === 'over'
-      ? '<span class="sla-tag sla-over">Vencido</span>'
-      : '<span class="sla-tag sla-' + c.sla_s + '">' + c.sla + ' días</span>';
     return '<tr onclick="goToCase(\'' + String(c.id).replace(/'/g,"\\'") + '\')" class="bo-table-row">' +
       '<td><code class="bo-code">' + displayId + '</code></td>' +
       '<td>' + escHtml(c.tipo) + '</td>' +
@@ -2446,7 +2416,6 @@ function _renderRecentCases(casos) {
       '<td>' + riskHtml + '</td>' +
       '<td><span class="status-tag status-' + c.estado + '">' + statusLabel(c.estado) + '</span></td>' +
       '<td>' + invHtml + '</td>' +
-      '<td>' + slaHtml + '</td>' +
       '<td>' + c.fecha + '</td>' +
       '<td><a href="' + link + '" class="bo-table-link" onclick="event.stopPropagation()">Abrir</a></td>' +
     '</tr>';
@@ -2542,6 +2511,10 @@ function _renderDashChart(rawCasos) {
 
 // Cargar casos desde Supabase al terminar de cargar la página (lib ya disponible)
 document.addEventListener('DOMContentLoaded', function () {
+  // Navegar a la vista especificada en el parámetro URL ?view=
+  var _viewParam = new URLSearchParams(window.location.search).get('view');
+  if (_viewParam && viewTitles[_viewParam]) showView(_viewParam);
+
   if (TENANT && window.ArgusBackend && ArgusBackend.isConfigured()) {
     ArgusBackend.listarCasosTenant(TENANT).then(function (r) {
       if (r.ok && r.casos) {
@@ -2567,7 +2540,6 @@ function buildRow(c) {
     <td><span class="status-tag status-${c.estado}">${statusLabel(c.estado)}</span></td>
     <td><span style="font-size:12px;color:${c.anon==='Sí'?'var(--gray-400)':'var(--black)'}">${c.anon}</span></td>
     <td>${c.inv === '—' ? '<span class="bo-unassigned">Sin asignar</span>' : c.inv}</td>
-    <td><span class="sla-tag sla-${c.sla_s}">${c.sla_s==='over'?'Vencido':c.sla+' días'}</span></td>
     <td>${c.fecha}</td>
     <td><a href="backoffice-caso.html?id=${c.id}${TENANT ? '&t=' + TENANT : ''}" class="bo-table-link" onclick="event.stopPropagation()">Abrir</a></td>
   </tr>`;
@@ -2588,7 +2560,7 @@ function renderCasosTable(data) {
   var pageRows = _CASOS_FILTERED.slice(start, start + _CASOS_PAGE_SIZE);
 
   if (total === 0) {
-    tbody.innerHTML = '<tr><td colspan="12" style="padding:40px;text-align:center;color:var(--gray-500)">No se encontraron casos con los filtros seleccionados.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="padding:40px;text-align:center;color:var(--gray-500)">No se encontraron casos con los filtros seleccionados.</td></tr>';
   } else {
     tbody.innerHTML = pageRows.map(buildRow).join('');
   }
