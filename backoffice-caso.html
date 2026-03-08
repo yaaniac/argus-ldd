@@ -199,16 +199,9 @@
             <!-- Descripción -->
             <div class="bo-card">
               <div class="bo-card-header"><h3>Descripción del hecho</h3></div>
-              <div class="case-description">
-                <p>El denunciante reporta que el área de Compras habría aprobado facturas de al menos tres proveedores cuya existencia no puede verificarse en los registros del BCRA ni en el AFIP. Los montos involucrados superarían los $4.200.000 en los últimos 6 meses. Menciona específicamente al Gerente de Compras como posible responsable.</p>
-                <p style="margin-top:12px">Los pagos habrían sido aprobados con firmas que no corresponden a los autorizados según el manual de poderes vigente. El denunciante indica tener capturas de pantalla de dos transferencias y un contrato con fecha adulterada.</p>
-                <div class="case-tags" style="margin-top:16px">
-                  <span class="bo-tag">Fraude</span>
-                  <span class="bo-tag">Proveedores ficticios</span>
-                  <span class="bo-tag">Facturas apócrifas</span>
-                  <span class="bo-tag">AML</span>
-                  <span class="bo-tag">Firma irregular</span>
-                </div>
+              <div class="case-description" id="caseDescriptionBlock">
+                <p id="caseDescriptionText">—</p>
+                <div class="case-tags" id="caseDescriptionTags" style="margin-top:16px"></div>
               </div>
             </div>
 
@@ -1372,6 +1365,13 @@ function loadCasoFromBackend(casoId) {
     var code = c.tracking_code || caseId;
     document.getElementById('caseIdBreadcrumb').textContent = code;
     document.title = 'Caso ' + code + ' · Argus Back Office';
+    var descEl = document.getElementById('caseDescriptionText');
+    if (descEl) descEl.textContent = (c.description || '').trim() || 'Sin descripción.';
+    var tagsEl = document.getElementById('caseDescriptionTags');
+    if (tagsEl) {
+      var cats = c.categories && c.categories.length ? c.categories : (c.category ? [c.category] : []);
+      tagsEl.innerHTML = cats.map(function (cat) { return '<span class="bo-tag">' + String(cat).replace(/</g,'&lt;') + '</span>'; }).join(' ');
+    }
     ArgusBackend.getSeguimientoMensajes(casoId, TENANT_CASO).then(function (mr) {
       var area = document.getElementById('chatArea');
       if (!area) return;
