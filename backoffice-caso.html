@@ -259,9 +259,9 @@
 
             <!-- Recomendaciones -->
             <div class="bo-card">
-              <div class="bo-card-header"><h3>Análisis y recomendaciones</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px">Editar</button></div>
+              <div class="bo-card-header"><h3>Análisis y recomendaciones</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="openRecsModal()">Editar</button></div>
               <div id="recsContainer" style="padding:20px">
-                <p style="color:var(--gray-400);font-size:13px">Sin recomendaciones registradas.</p>
+                <p style="color:var(--gray-400);font-size:13px">Sin análisis registrado.</p>
               </div>
             </div>
           </div><!-- /tab-investigacion -->
@@ -582,6 +582,30 @@
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
         <button type="button" onclick="closeRiskEvalModal()" class="bo-btn bo-btn-ghost">Cancelar</button>
         <button type="button" onclick="saveRiskEval()" class="bo-btn bo-btn-primary">Guardar evaluación</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Análisis y recomendaciones -->
+<div class="bo-modal-overlay" id="recsModal" style="display:none" onclick="if(event.target.id==='recsModal')closeRecsModal()">
+  <div class="bo-modal" style="max-width:560px" onclick="event.stopPropagation()">
+    <div class="bo-modal-header">
+      <h3>Análisis y recomendaciones</h3>
+      <button type="button" onclick="closeRecsModal()" class="bo-modal-close">✕</button>
+    </div>
+    <div class="bo-modal-body">
+      <div class="bo-form-group">
+        <label>Análisis del caso</label>
+        <textarea class="bo-textarea" id="recsAnalisis" rows="5" placeholder="Describí el análisis de los hechos investigados, evidencias encontradas y conclusiones preliminares..."></textarea>
+      </div>
+      <div class="bo-form-group" style="margin-top:16px">
+        <label>Recomendaciones</label>
+        <textarea class="bo-textarea" id="recsRecomendaciones" rows="5" placeholder="Indicá las acciones correctivas, sanciones sugeridas o medidas preventivas recomendadas..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" onclick="closeRecsModal()" class="bo-btn bo-btn-ghost">Cancelar</button>
+        <button type="button" onclick="saveRecs()" class="bo-btn bo-btn-primary">Guardar</button>
       </div>
     </div>
   </div>
@@ -1164,7 +1188,7 @@ function registrarResolucion() {
 
 // Read case ID and tenant from URL
 var _urlParams = new URLSearchParams(window.location.search);
-const caseId = _urlParams.get('id') || 'ARG-2025-0043';
+const caseId = _urlParams.get('id') || '';
 var TENANT_CASO = (_urlParams.get('t') || '').replace(/[^a-zA-Z0-9_-]/g, '') || 'default';
 window.TENANT_CASO = TENANT_CASO;
 
@@ -1404,7 +1428,9 @@ function loadCasoFromBackend(casoId) {
     if (!r.ok || !r.caso) return;
     var c = r.caso;
     window._CASO_ID_BACKEND = casoId;
-    window._CASO_RISKEVAL   = c.risk_eval || null;
+    window._CASO_RISKEVAL   = c.risk_eval  || null;
+    window._CASO_ANALISIS   = c.analisis   || null;
+    _renderRecs(window._CASO_ANALISIS);
     var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
     var code = c.tracking_code || caseId;
 
@@ -1646,6 +1672,67 @@ function saveRiskEval() {
     riskBadge.className = 'risk-tag ' + (RISK_CLASSES[overallLevel] || 'risk-medium');
     riskBadge.style.display = '';
   }
+}
+
+// ── Análisis y Recomendaciones ────────────────────────────────
+function _recsKey() { return 'argus_analisis_' + (caseId || 'x'); }
+
+function _loadRecs() {
+  if (window._CASO_ANALISIS !== undefined) return window._CASO_ANALISIS || null;
+  try { return JSON.parse(localStorage.getItem(_recsKey()) || 'null'); } catch(e) { return null; }
+}
+
+function _saveRecs(data) {
+  window._CASO_ANALISIS = data;
+  try { localStorage.setItem(_recsKey(), JSON.stringify(data)); } catch(e) {}
+}
+
+function _renderRecs(data) {
+  var el = document.getElementById('recsContainer');
+  if (!el) return;
+  if (!data || (!data.analisis && !data.recomendaciones)) {
+    el.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Sin análisis registrado.</p>';
+    return;
+  }
+  var html = '';
+  if (data.analisis) {
+    html += '<div style="margin-bottom:14px"><p style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Análisis</p>' +
+            '<p style="font-size:13px;color:var(--gray-700);line-height:1.6;white-space:pre-wrap;margin:0">' + data.analisis.replace(/</g,'&lt;') + '</p></div>';
+  }
+  if (data.recomendaciones) {
+    html += '<div><p style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px">Recomendaciones</p>' +
+            '<p style="font-size:13px;color:var(--gray-700);line-height:1.6;white-space:pre-wrap;margin:0">' + data.recomendaciones.replace(/</g,'&lt;') + '</p></div>';
+  }
+  el.innerHTML = '<div style="padding:20px">' + html + '</div>';
+}
+
+function openRecsModal() {
+  var data = _loadRecs();
+  var ta1 = document.getElementById('recsAnalisis');
+  var ta2 = document.getElementById('recsRecomendaciones');
+  if (ta1) ta1.value = (data && data.analisis) ? data.analisis : '';
+  if (ta2) ta2.value = (data && data.recomendaciones) ? data.recomendaciones : '';
+  document.getElementById('recsModal').style.display = 'flex';
+}
+
+function closeRecsModal() {
+  document.getElementById('recsModal').style.display = 'none';
+}
+
+function saveRecs() {
+  var analisis        = (document.getElementById('recsAnalisis') || {}).value || '';
+  var recomendaciones = (document.getElementById('recsRecomendaciones') || {}).value || '';
+  var data = { analisis: analisis.trim(), recomendaciones: recomendaciones.trim(), savedAt: new Date().toISOString() };
+
+  if (window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.actualizarAnalisis) {
+    ArgusBackend.actualizarAnalisis(window._CASO_ID_BACKEND, TENANT_CASO, data)
+      .then(function(r) { if (!r.ok) console.warn('[Argus] analisis save error:', r.error); });
+  }
+
+  _saveRecs(data);
+  _renderRecs(data);
+  closeRecsModal();
+  showToast('Análisis guardado', '✅');
 }
 
 // ── Boot polling: espera a que ArgusBackend esté listo ────────

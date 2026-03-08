@@ -275,6 +275,24 @@
     }).catch(function (err) { return { ok: false, error: err.message }; });
   }
 
+  /**
+   * Back office: guardar análisis y recomendaciones del caso.
+   * Devuelve Promise<{ ok, error? }>
+   */
+  function actualizarAnalisis(casoId, tenantSlug, analisisData) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('actualizar_analisis', {
+      p_caso_id:     casoId,
+      p_tenant_slug: tenantSlug || 'default',
+      p_analisis:    analisisData || null
+    }).then(function (res) {
+      if (res.error) return { ok: false, error: res.error.message };
+      var d = res.data || {};
+      return { ok: d.ok === true, error: d.error };
+    }).catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
   /** Registrar un hallazgo en el caso */
   function crearHallazgo(casoId, tenantSlug, content, relevance, author) {
     var client = getClient();
@@ -308,6 +326,7 @@
     asignarInvestigador: asignarInvestigador,
     crearTarea: crearTarea,
     actualizarTarea: actualizarTarea,
+    actualizarAnalisis: actualizarAnalisis,
     crearHallazgo: crearHallazgo
   };
 })();
