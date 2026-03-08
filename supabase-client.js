@@ -56,7 +56,7 @@
   }
 
   /**
-   * Consultar estado por código. Devuelve Promise<{ ok, found?, status?, label?, date?, msg? }>
+   * Consultar estado por código. Devuelve Promise<{ ok, found?, status?, label?, date?, mensajes[], msg? }>
    */
   function getSeguimiento(trackingCode) {
     var client = getClient();
@@ -89,7 +89,8 @@
         label: data.label,
         date: data.date,
         tracking_code: data.tracking_code,
-        msg: data.msg || null
+        mensajes: data.mensajes || [],   // array completo de mensajes del equipo
+        msg: data.msg || null            // backwards compat (puede quedar vacío)
       };
     }).catch(function (err) {
       return { ok: false, found: false, error: err.message || 'Error de conexión' };

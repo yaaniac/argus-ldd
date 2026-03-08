@@ -1101,17 +1101,37 @@
           '<p class="seg-result-date">' + raw + '</p></div>';
         return;
       }
-      var colors = { pending: '#EA580C', active: 'var(--primary)', closed: '#16A34A' };
-      var msgHtml = (data.msg && data.msg.title) ? '<div class="seg-result-msg"><strong>' + (data.msg.title || '') + '</strong><p>' + (data.msg.text || '') + '</p></div>' : '';
+      var colors = { pending: '#EA580C', new: '#EA580C', investigating: 'var(--primary)', active: 'var(--primary)', closed: '#16A34A' };
       var status = data.status || 'pending';
-      var label = data.label || 'Pendiente';
-      var title = status === 'pending' ? 'Denuncia recibida — evaluación en curso' : (status === 'active' ? 'Denuncia en proceso' : 'Caso cerrado');
-      var desc = status === 'pending' ? 'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.' : (status === 'active' ? 'Tu denuncia se encuentra en etapa de investigación.' : 'La investigación finalizó y se adoptaron las medidas correspondientes.');
+      var label  = data.label  || 'Pendiente';
+      var title  = { pending:'Denuncia recibida — evaluación en curso', new:'Denuncia recibida — evaluación en curso', investigating:'Denuncia en proceso de investigación', active:'Denuncia en proceso de investigación', closed:'Caso cerrado' }[status] || 'Denuncia recibida';
+      var desc   = { pending:'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.', new:'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.', investigating:'Tu denuncia se encuentra en etapa de investigación activa.', active:'Tu denuncia se encuentra en etapa de investigación activa.', closed:'La investigación finalizó y se adoptaron las medidas correspondientes.' }[status] || '';
+
+      // Mensajes del equipo (chat thread)
+      var mensajes = data.mensajes || [];
+      var msgsHtml = '';
+      if (mensajes.length > 0) {
+        var MESES_C = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+        msgsHtml = '<div style="margin-top:16px;border-top:1.5px solid rgba(0,0,0,.07);padding-top:14px;">' +
+          '<div style="font-size:11px;font-weight:700;color:#8B9AAB;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Mensajes del equipo</div>';
+        mensajes.forEach(function(m) {
+          var d   = m.created_at ? new Date(m.created_at) : new Date();
+          var tStr = d.getDate() + ' ' + MESES_C[d.getMonth()] + ' · ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0') + ' hs';
+          var body = (m.title ? '<strong style="display:block;margin-bottom:3px">' + m.title + '</strong>' : '') + (m.message || '');
+          msgsHtml += '<div style="background:#fff;border:1.5px solid #E2EDF5;border-radius:10px;padding:11px 14px;margin-bottom:8px;">' +
+            '<div style="font-size:13.5px;color:#2C3E50;line-height:1.55">' + body + '</div>' +
+            '<div style="font-size:11px;color:#8B9AAB;margin-top:5px">Equipo de compliance · ' + tStr + '</div>' +
+          '</div>';
+        });
+        msgsHtml += '</div>';
+      }
+
       result.innerHTML = '<div class="seg-result-box ' + status + '">' +
         '<div class="seg-result-label" style="color:' + (colors[status] || colors.pending) + '">' + label + '</div>' +
         '<div class="seg-result-title">' + title + '</div>' +
         '<p class="seg-result-desc">' + desc + '</p>' +
-        '<p class="seg-result-date">' + (data.date || '') + '</p>' + msgHtml + '</div>';
+        '<p class="seg-result-date">' + (data.date || '') + '</p>' +
+        msgsHtml + '</div>';
     }
 
     if (window.ArgusBackend && ArgusBackend.getSeguimiento && ArgusBackend.isConfigured()) {
