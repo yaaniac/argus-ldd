@@ -29,7 +29,7 @@
     <div style="display:flex;flex-direction:column;gap:14px">
       <div>
         <label style="font-size:12px;font-weight:600;color:#8CBDC3;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Código de empresa</label>
-        <input id="gate-code" type="text" placeholder="ej: acme, banco-xyz, empresa-s-a"
+        <input id="gate-code" type="text" placeholder="ej: banco-meridiano, demo, empresa-s-a"
           style="width:100%;box-sizing:border-box;background:#003340;border:1.5px solid #004D55;border-radius:10px;padding:11px 14px;font-size:14px;color:#fff;outline:none"
           onkeydown="if(event.key==='Enter') gateLogin()" />
       </div>
@@ -2304,8 +2304,8 @@ function showView(name) {
 }
 
 // ── Generate cases table ──────────────────────────────────────
-// Casos: desde Supabase si hay backend, sino localStorage
-var CASOS_DATA = loadCasos();
+// Si hay backend configurado, no usar localStorage para casos; cargar desde Supabase
+var CASOS_DATA = (window.ArgusBackend && ArgusBackend.isConfigured() && TENANT) ? [] : loadCasos();
 var CASOS_FROM_BACKEND = false;
 
 function mapSupabaseCasos(casos) {
@@ -2332,16 +2332,27 @@ function mapSupabaseCasos(casos) {
 }
 
 function ensureCasosLoaded(cb) {
-  if (!window.ArgusBackend || !ArgusBackend.isConfigured()) { if (cb) cb(); return; }
-  if (CASOS_FROM_BACKEND) { if (cb) cb(); return; }
+  if (!window.ArgusBackend || !ArgusBackend.isConfigured() || !TENANT) { if (cb) cb(); return; }
   ArgusBackend.listarCasosTenant(TENANT).then(function (r) {
-    if (r.ok && r.casos && r.casos.length >= 0) {
+    if (r.ok && r.casos) {
       CASOS_DATA = mapSupabaseCasos(r.casos);
       CASOS_FROM_BACKEND = true;
     }
     if (cb) cb();
   }).catch(function () { if (cb) cb(); });
 }
+
+// Cargar casos desde Supabase al terminar de cargar la página (lib ya disponible)
+document.addEventListener('DOMContentLoaded', function () {
+  if (TENANT && window.ArgusBackend && ArgusBackend.isConfigured()) {
+    ArgusBackend.listarCasosTenant(TENANT).then(function (r) {
+      if (r.ok && r.casos) {
+        CASOS_DATA = mapSupabaseCasos(r.casos);
+        CASOS_FROM_BACKEND = true;
+      }
+    });
+  }
+});
 
 const riskLabels = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' };
 
