@@ -209,9 +209,9 @@
 
             <!-- Evaluación de riesgo -->
             <div class="bo-card">
-              <div class="bo-card-header"><h3>Evaluación de riesgo</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px">Editar</button></div>
+              <div class="bo-card-header"><h3>Evaluación de riesgo</h3><button class="bo-btn bo-btn-ghost" style="font-size:12px" onclick="openRiskEvalModal()">Editar</button></div>
               <div id="riskEvalContainer" style="padding:16px 20px">
-                <p style="color:var(--gray-400);font-size:13px">Evaluación no disponible.</p>
+                <p style="color:var(--gray-400);font-size:13px">Sin evaluación registrada. Hacé clic en <strong>Editar</strong> para completar.</p>
               </div>
             </div>
 
@@ -522,6 +522,69 @@
 <div id="boToast" style="display:none;position:fixed;bottom:28px;right:28px;z-index:9999;background:#002B2E;color:#fff;padding:14px 20px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);display:none;align-items:center;gap:10px;max-width:360px">
   <span id="boToastIcon">✅</span>
   <span id="boToastMsg">Acción realizada</span>
+</div>
+
+<!-- MODAL: Evaluación de riesgo -->
+<div class="bo-modal-overlay" id="riskEvalModal" style="display:none" onclick="if(event.target.id==='riskEvalModal')closeRiskEvalModal()">
+  <div class="bo-modal" style="max-width:500px" onclick="event.stopPropagation()">
+    <div class="bo-modal-header">
+      <h3>Evaluación de riesgo</h3>
+      <button type="button" onclick="closeRiskEvalModal()" class="bo-modal-close">✕</button>
+    </div>
+    <div class="bo-modal-body">
+      <p style="font-size:12.5px;color:var(--gray-500);margin-bottom:18px">Asigná un nivel de riesgo a cada dimensión para este caso.</p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:13px;color:var(--gray-700);min-width:210px">Riesgo financiero</span>
+          <select class="bo-select-full" id="reFinanciero">
+            <option value="">— Sin evaluar —</option>
+            <option value="low">Bajo</option>
+            <option value="medium">Medio</option>
+            <option value="high">Alto</option>
+            <option value="critical">Crítico</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:13px;color:var(--gray-700);min-width:210px">Riesgo reputacional</span>
+          <select class="bo-select-full" id="reReputacional">
+            <option value="">— Sin evaluar —</option>
+            <option value="low">Bajo</option>
+            <option value="medium">Medio</option>
+            <option value="high">Alto</option>
+            <option value="critical">Crítico</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:13px;color:var(--gray-700);min-width:210px">Riesgo legal / regulatorio</span>
+          <select class="bo-select-full" id="reLegal">
+            <option value="">— Sin evaluar —</option>
+            <option value="low">Bajo</option>
+            <option value="medium">Medio</option>
+            <option value="high">Alto</option>
+            <option value="critical">Crítico</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:13px;color:var(--gray-700);min-width:210px">Riesgo operacional</span>
+          <select class="bo-select-full" id="reOperacional">
+            <option value="">— Sin evaluar —</option>
+            <option value="low">Bajo</option>
+            <option value="medium">Medio</option>
+            <option value="high">Alto</option>
+            <option value="critical">Crítico</option>
+          </select>
+        </div>
+      </div>
+      <div class="bo-form-group" style="margin-top:20px;">
+        <label>Notas / justificación</label>
+        <textarea class="bo-textarea" id="reNotas" rows="3" placeholder="Describí brevemente los factores considerados en la evaluación..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" onclick="closeRiskEvalModal()" class="bo-btn bo-btn-ghost">Cancelar</button>
+        <button type="button" onclick="saveRiskEval()" class="bo-btn bo-btn-primary">Guardar evaluación</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL: Nueva entrevista -->
@@ -1449,27 +1512,8 @@ function loadCasoFromBackend(casoId) {
       }
     }
 
-    // ── Risk eval section (from risk_level) ─────────────────────
-    var riskEvalEl = document.getElementById('riskEvalContainer');
-    if (riskEvalEl) {
-      var riskPct = { critical: 90, high: 65, medium: 40, low: 20 };
-      var riskName = { critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo' };
-      var pct = riskPct[rl] || 40;
-      var col = RISK_COLORS[rl] || '#D97706';
-      var nm  = riskName[rl] || 'Medio';
-      riskEvalEl.innerHTML =
-        '<div class="risk-eval-grid">' +
-          ['Riesgo financiero','Riesgo reputacional','Riesgo legal / regulatorio','Riesgo operacional'].map(function(lbl, i){
-            var p2 = Math.max(10, pct - i * 8);
-            return '<div class="risk-eval-item">' +
-              '<span class="risk-eval-label">' + lbl + '</span>' +
-              '<div class="risk-eval-bar"><div style="width:' + p2 + '%;background:' + col + '"></div></div>' +
-              '<span class="risk-eval-val">' + nm + '</span>' +
-            '</div>';
-          }).join('') +
-        '</div>' +
-        '<div class="risk-eval-notes"><strong>Nivel de riesgo registrado:</strong><p>Clasificación actual: <strong>' + (RISK_LABELS[rl] || nm) + '</strong>. Revisión recomendada según avance de la investigación.</p></div>';
-    }
+    // ── Risk eval section: cargar desde localStorage ─────────────
+    _renderRiskEval(_loadRiskEval());
 
     // ── Right info panel + investigator ─────────────────────────
     renderInfoPanel(c);
@@ -1500,6 +1544,76 @@ function loadCasoFromBackend(casoId) {
       chatEl.scrollTop = chatEl.scrollHeight;
     }
   });
+}
+
+// ── Evaluación de riesgo ──────────────────────────────────────
+var RE_DIMS = [
+  { id: 'financiero',   label: 'Riesgo financiero',          selectId: 'reFinanciero'  },
+  { id: 'reputacional', label: 'Riesgo reputacional',        selectId: 'reReputacional'},
+  { id: 'legal',        label: 'Riesgo legal / regulatorio', selectId: 'reLegal'       },
+  { id: 'operacional',  label: 'Riesgo operacional',         selectId: 'reOperacional' }
+];
+var RE_PCT   = { critical: 95, high: 75, medium: 50, low: 20 };
+var RE_LABEL = { critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo' };
+var RE_COLOR = { critical: '#DC2626', high: '#EA580C', medium: '#D97706', low: '#16A34A' };
+
+function _reKey() { return 'argus_riskeval_' + (caseId || 'x'); }
+
+function _loadRiskEval() {
+  try { return JSON.parse(localStorage.getItem(_reKey()) || 'null'); } catch(e) { return null; }
+}
+
+function _saveRiskEval(data) {
+  try { localStorage.setItem(_reKey(), JSON.stringify(data)); } catch(e) {}
+}
+
+function _renderRiskEval(data) {
+  var el = document.getElementById('riskEvalContainer');
+  if (!el) return;
+  if (!data || !data.dims || !data.dims.some(function(d){ return d.level; })) {
+    el.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Sin evaluación registrada. Hacé clic en <strong>Editar</strong> para completar.</p>';
+    return;
+  }
+  var rows = data.dims.map(function(d) {
+    var lv  = d.level || '';
+    var pct = RE_PCT[lv]   || 0;
+    var col = RE_COLOR[lv] || '#BAD8DB';
+    var lbl = RE_LABEL[lv] || '—';
+    return '<div class="risk-eval-item">' +
+      '<span class="risk-eval-label">' + d.label + '</span>' +
+      '<div class="risk-eval-bar"><div style="width:' + pct + '%;background:' + col + '"></div></div>' +
+      '<span class="risk-eval-val">' + lbl + '</span>' +
+    '</div>';
+  }).join('');
+  var notas = data.notas ? '<div class="risk-eval-notes"><strong>Notas:</strong><p>' + _esc(data.notas) + '</p></div>' : '';
+  el.innerHTML = '<div class="risk-eval-grid">' + rows + '</div>' + notas;
+}
+
+function openRiskEvalModal() {
+  var data = _loadRiskEval();
+  RE_DIMS.forEach(function(d) {
+    var sel = document.getElementById(d.selectId);
+    if (sel) sel.value = (data && data.dims) ? ((data.dims.find(function(x){ return x.id === d.id; }) || {}).level || '') : '';
+  });
+  var notasEl = document.getElementById('reNotas');
+  if (notasEl) notasEl.value = (data && data.notas) || '';
+  document.getElementById('riskEvalModal').style.display = 'flex';
+}
+
+function closeRiskEvalModal() {
+  document.getElementById('riskEvalModal').style.display = 'none';
+}
+
+function saveRiskEval() {
+  var dims = RE_DIMS.map(function(d) {
+    var sel = document.getElementById(d.selectId);
+    return { id: d.id, label: d.label, level: sel ? sel.value : '' };
+  });
+  var notas = (document.getElementById('reNotas') || {}).value || '';
+  var data = { dims: dims, notas: notas, savedAt: new Date().toISOString() };
+  _saveRiskEval(data);
+  _renderRiskEval(data);
+  closeRiskEvalModal();
 }
 
 // ── Boot polling: espera a que ArgusBackend esté listo ────────
