@@ -272,7 +272,10 @@
   <script src="main.js"></script>
   <script>
     function goToForm(company) {
-      window.location.href = 'formulario.html?empresa=' + encodeURIComponent(company);
+      var params = new URLSearchParams(window.location.search);
+      var t = (params.get('t') || params.get('tenant') || 'default').replace(/[^a-zA-Z0-9_-]/g, '');
+      if (!t) t = 'default';
+      window.location.href = 'formulario.html?empresa=' + encodeURIComponent(company) + '&t=' + encodeURIComponent(t);
     }
 
     const searchInput = document.getElementById('companySearch');
