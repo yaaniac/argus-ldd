@@ -1167,15 +1167,38 @@
     _renderReportes(filtered);
   }
 
-  /* ── Dummy actions ── */
-  function scheduleReport() { alert('Programar reporte: funcionalidad disponible en la versión conectada.'); }
-  function exportAll()       { alert('Exportando todos los reportes del trimestre...'); }
-  function exportTable()     { alert('Exportando tabla de SLA como CSV...'); }
-  function downloadReport(type) {
-    const labels = { exec:'Reporte ejecutivo', audit:'Informe de auditoría', xlsx:'Dataset completo', ppt:'Presentación Directorio' };
-    alert(`Descargando: ${labels[type] || type}\nEsta funcionalidad estará disponible en la próxima versión.`);
+  /* ── Acciones ── */
+  function scheduleReport() { alert('Programar reporte: funcionalidad disponible en la próxima versión.'); }
+
+  function exportAll() {
+    var casos = window._ALL_REP_CASOS || [];
+    if (!casos.length) { alert('No hay datos para exportar.'); return; }
+    var headers = ['ID','Tracking','Tipo','Área','Canal','Riesgo','Estado','Anónimo','Investigador','Fecha creación','Última actualización'];
+    var lines = [headers.map(function(h){ return '"' + h + '"'; }).join(',')];
+    var riskMap  = { critical:'Crítico', high:'Alto', medium:'Medio', low:'Bajo' };
+    var stMap    = { new:'Nuevo', eval:'En evaluación', investigating:'Investigando', review:'En revisión', closed:'Cerrado' };
+    casos.forEach(function(c) {
+      lines.push([
+        c.id || '', c.tracking_code || '',
+        c.category || '', c.area || '', c.channel || '',
+        riskMap[c.risk_level] || c.risk_level || '',
+        stMap[c.status] || c.status || '',
+        c.anonymous ? 'Sí' : 'No',
+        c.assigned_to || '',
+        c.created_at ? c.created_at.slice(0,10) : '',
+        c.updated_at ? c.updated_at.slice(0,10) : ''
+      ].map(function(v){ return '"' + String(v||'').replace(/"/g,'""') + '"'; }).join(','));
+    });
+    var empresa = (window.ArgusConfig ? ArgusConfig.get().empresa.nombre : 'argus') || 'argus';
+    var filename = 'reporte_' + empresa.toLowerCase().replace(/\s+/g,'-') + '_' + new Date().toISOString().slice(0,10) + '.csv';
+    var blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
   }
-  function downloadCert(e) { e.preventDefault(); alert('Descargando certificado de operación conforme (PDF)...'); }
+
+  function exportTable() { exportAll(); }
 
   /* ══════════════════════════════════════
      CHARTS
