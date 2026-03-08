@@ -56,10 +56,6 @@
 
       <div class="bo-nav-section">
         <span class="bo-nav-label">Gestión</span>
-        <a id="nav-comms-link" href="backoffice.html" class="bo-nav-item">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3l3 3 3-3h3a1 1 0 001-1V4a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-          <span>Comunicaciones</span>
-        </a>
         <a id="nav-reportes-link" href="backoffice-reportes.html" class="bo-nav-item">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V8M7 14V5M11 14V9M15 14V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           <span>Reportes</span>
@@ -181,7 +177,6 @@
           <div class="case-tabs">
             <button class="case-tab active" onclick="switchTab('resumen',this)">Resumen</button>
             <button class="case-tab" onclick="switchTab('investigacion',this)">Investigación</button>
-            <button class="case-tab" onclick="switchTab('evidencia',this)">Evidencia</button>
             <button class="case-tab" onclick="switchTab('entrevistas',this)">Entrevistas</button>
             <button class="case-tab" onclick="switchTab('comunicacion',this)">Comunicación</button>
             <button class="case-tab" onclick="switchTab('log',this)">Log / Auditoría</button>
@@ -266,30 +261,6 @@
             </div>
           </div><!-- /tab-investigacion -->
 
-          <!-- TAB: EVIDENCIA -->
-          <div class="tab-panel" id="tab-evidencia">
-            <div class="bo-card">
-              <div class="bo-card-header"><h3>Documentos y evidencia</h3>
-                <div style="display:flex;gap:8px">
-                  <button class="bo-btn bo-btn-outline" style="font-size:12px">Descargar todo (ZIP)</button>
-                  <button class="bo-btn bo-btn-primary" style="font-size:12px">+ Subir archivo</button>
-                </div>
-              </div>
-              <div class="evidence-table" id="evidenceTable">
-                <div class="evidence-header">
-                  <span>Nombre</span><span>Tipo</span><span>Subido por</span><span>Fecha</span><span>Custodia</span><span></span>
-                </div>
-                <div id="evidenceTableBody">
-                  <div style="padding:16px;color:var(--gray-400);font-size:13px;grid-column:1/-1">Sin evidencias cargadas.</div>
-                </div>
-              </div>
-              <div class="bo-upload-zone" onclick="triggerUpload()">
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 18V10m0 0l-4 4m4-4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="19" width="22" height="6" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
-                <p>Arrastrá archivos o <span style="color:var(--primary);font-weight:600">hacé clic para subir</span></p>
-                <span>PDF, imágenes, audio, video, documentos · Máx. 50 MB por archivo</span>
-              </div>
-            </div>
-          </div><!-- /tab-evidencia -->
 
           <!-- TAB: ENTREVISTAS -->
           <div class="tab-panel" id="tab-entrevistas">
