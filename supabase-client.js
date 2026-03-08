@@ -238,6 +238,43 @@
       .catch(function (err) { return { ok: false, error: err.message }; });
   }
 
+  /**
+   * Back office: guardar evaluación de riesgo (risk_eval JSONB + risk_level calculado).
+   * Devuelve Promise<{ ok, error? }>
+   */
+  function actualizarRiskEval(casoId, tenantSlug, riskEval, riskLevel) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false });
+    return client.rpc('actualizar_risk_eval', {
+      p_caso_id:     casoId,
+      p_tenant_slug: tenantSlug || 'default',
+      p_risk_eval:   riskEval || null,
+      p_risk_level:  riskLevel || null
+    }).then(function (res) {
+      if (res.error) return { ok: false, error: res.error.message };
+      var d = res.data || {};
+      return { ok: d.ok === true, error: d.error };
+    }).catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
+  /**
+   * Portal: el denunciante envía un mensaje usando su tracking code.
+   * Devuelve Promise<{ ok, id?, error? }>
+   */
+  function enviarMensajeSeguimiento(trackingCode, message, title) {
+    var client = getClient();
+    if (!client) return Promise.resolve({ ok: false, error: 'Backend no configurado' });
+    return client.rpc('enviar_mensaje_seguimiento', {
+      p_tracking_code: (trackingCode || '').trim().toUpperCase(),
+      p_message:       (message || '').trim(),
+      p_title:         title || null
+    }).then(function (res) {
+      if (res.error) return { ok: false, error: res.error.message };
+      var d = res.data || {};
+      return { ok: d.ok === true, id: d.id, error: d.error };
+    }).catch(function (err) { return { ok: false, error: err.message }; });
+  }
+
   /** Registrar un hallazgo en el caso */
   function crearHallazgo(casoId, tenantSlug, content, relevance, author) {
     var client = getClient();
@@ -265,7 +302,9 @@
     getCasoDetalleCompleto: getCasoDetalleCompleto,
     getSeguimientoMensajes: getSeguimientoMensajes,
     enviarMensajeDenunciante: enviarMensajeDenunciante,
+    enviarMensajeSeguimiento: enviarMensajeSeguimiento,
     actualizarEstadoCaso: actualizarEstadoCaso,
+    actualizarRiskEval: actualizarRiskEval,
     asignarInvestigador: asignarInvestigador,
     crearTarea: crearTarea,
     actualizarTarea: actualizarTarea,

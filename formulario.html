@@ -1101,29 +1101,64 @@
           '<p class="seg-result-date">' + raw + '</p></div>';
         return;
       }
-      var colors = { pending: '#EA580C', new: '#EA580C', investigating: 'var(--primary)', active: 'var(--primary)', closed: '#16A34A' };
+      var colors = { pending:'#EA580C', new:'#EA580C', eval:'#EA580C', investigating:'var(--primary)', active:'var(--primary)', review:'#7C3AED', closed:'#16A34A' };
       var status = data.status || 'pending';
-      var label  = data.label  || 'Pendiente';
-      var title  = { pending:'Denuncia recibida — evaluación en curso', new:'Denuncia recibida — evaluación en curso', investigating:'Denuncia en proceso de investigación', active:'Denuncia en proceso de investigación', closed:'Caso cerrado' }[status] || 'Denuncia recibida';
-      var desc   = { pending:'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.', new:'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.', investigating:'Tu denuncia se encuentra en etapa de investigación activa.', active:'Tu denuncia se encuentra en etapa de investigación activa.', closed:'La investigación finalizó y se adoptaron las medidas correspondientes.' }[status] || '';
+      var label  = data.label  || 'En proceso';
+      var title  = {
+        pending:'Denuncia recibida — evaluación en curso', new:'Denuncia recibida — evaluación en curso',
+        eval:'Denuncia en evaluación por el equipo', investigating:'Denuncia en proceso de investigación',
+        active:'Denuncia en proceso de investigación', review:'Caso en revisión final', closed:'Caso cerrado'
+      }[status] || 'Denuncia recibida';
+      var desc = {
+        pending:'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.',
+        new:'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.',
+        eval:'El equipo de compliance está analizando tu denuncia.',
+        investigating:'Tu denuncia se encuentra en etapa de investigación activa.',
+        active:'Tu denuncia se encuentra en etapa de investigación activa.',
+        review:'El equipo está revisando los hallazgos y elaborando la resolución.',
+        closed:'La investigación finalizó y se adoptaron las medidas correspondientes.'
+      }[status] || '';
 
-      // Mensajes del equipo (chat thread)
+      // Mensajes bidireccionales (equipo ↔ denunciante)
       var mensajes = data.mensajes || [];
+      var MESES_C = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
       var msgsHtml = '';
       if (mensajes.length > 0) {
-        var MESES_C = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        msgsHtml = '<div style="margin-top:16px;border-top:1.5px solid rgba(0,0,0,.07);padding-top:14px;">' +
-          '<div style="font-size:11px;font-weight:700;color:#8B9AAB;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Mensajes del equipo</div>';
+        msgsHtml = '<div style="margin-top:16px;border-top:1.5px solid rgba(0,0,0,.07);padding-top:14px;display:flex;flex-direction:column;gap:8px;" id="segMsgThread">';
         mensajes.forEach(function(m) {
-          var d   = m.created_at ? new Date(m.created_at) : new Date();
+          var d    = m.created_at ? new Date(m.created_at) : new Date();
           var tStr = d.getDate() + ' ' + MESES_C[d.getMonth()] + ' · ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0') + ' hs';
           var body = (m.title ? '<strong style="display:block;margin-bottom:3px">' + m.title + '</strong>' : '') + (m.message || '');
-          msgsHtml += '<div style="background:#fff;border:1.5px solid #E2EDF5;border-radius:10px;padding:11px 14px;margin-bottom:8px;">' +
-            '<div style="font-size:13.5px;color:#2C3E50;line-height:1.55">' + body + '</div>' +
-            '<div style="font-size:11px;color:#8B9AAB;margin-top:5px">Equipo de compliance · ' + tStr + '</div>' +
-          '</div>';
+          if (m.sender === 'denunciante') {
+            msgsHtml += '<div style="display:flex;justify-content:flex-end;">' +
+              '<div style="background:var(--primary);color:#fff;border-radius:12px 12px 2px 12px;padding:10px 14px;max-width:82%;box-shadow:0 1px 4px rgba(0,151,167,.15)">' +
+              '<div style="font-size:13px;line-height:1.55">' + body + '</div>' +
+              '<div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;text-align:right">Vos · ' + tStr + '</div>' +
+              '</div></div>';
+          } else {
+            msgsHtml += '<div style="display:flex;justify-content:flex-start;">' +
+              '<div style="background:#fff;border:1.5px solid #E2EDF5;border-radius:12px 12px 12px 2px;padding:10px 14px;max-width:82%;box-shadow:0 1px 3px rgba(0,0,0,.04)">' +
+              '<div style="font-size:13px;color:#2C3E50;line-height:1.55">' + body + '</div>' +
+              '<div style="font-size:11px;color:#8B9AAB;margin-top:4px">Equipo · ' + tStr + '</div>' +
+              '</div></div>';
+          }
         });
         msgsHtml += '</div>';
+      } else {
+        msgsHtml = '<div id="segMsgThread" style="margin-top:16px;border-top:1.5px solid rgba(0,0,0,.07);padding-top:14px;display:flex;flex-direction:column;gap:8px;"></div>';
+      }
+
+      // Caja de redacción (oculta si el caso ya está cerrado)
+      var composeHtml = '';
+      if (status !== 'closed') {
+        var rawEsc = raw.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        composeHtml =
+          '<div style="margin-top:12px;padding-top:12px;border-top:1.5px solid rgba(0,0,0,.07);">' +
+          '<div style="font-size:11px;font-weight:700;color:#8B9AAB;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Enviá un mensaje al equipo</div>' +
+          '<textarea id="segMsgInput" rows="3" style="width:100%;box-sizing:border-box;border:1.5px solid #E2EDF5;border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;resize:none;color:#2C3E50;outline:none;transition:border-color .15s" placeholder="Escribí tu mensaje acá..." onfocus="this.style.borderColor=\'var(--primary)\'" onblur="this.style.borderColor=\'#E2EDF5\'"></textarea>' +
+          '<div style="display:flex;justify-content:flex-end;margin-top:8px;">' +
+          '<button id="segSendBtn" onclick="enviarRespuestaSeguimiento(\'' + rawEsc + '\')" style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s">Enviar →</button>' +
+          '</div></div>';
       }
 
       result.innerHTML = '<div class="seg-result-box ' + status + '">' +
@@ -1131,8 +1166,51 @@
         '<div class="seg-result-title">' + title + '</div>' +
         '<p class="seg-result-desc">' + desc + '</p>' +
         '<p class="seg-result-date">' + (data.date || '') + '</p>' +
-        msgsHtml + '</div>';
+        msgsHtml + composeHtml + '</div>';
     }
+
+    // Denunciante envía un mensaje al equipo
+    window.enviarRespuestaSeguimiento = function(trackingCode) {
+      var input   = document.getElementById('segMsgInput');
+      var sendBtn = document.getElementById('segSendBtn');
+      var thread  = document.getElementById('segMsgThread');
+      if (!input) return;
+      var msg = (input.value || '').trim();
+      if (!msg) { input.focus(); return; }
+
+      if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = 'Enviando...'; }
+
+      function appendMsg() {
+        var MESES_C = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+        var now  = new Date();
+        var tStr = now.getDate() + ' ' + MESES_C[now.getMonth()] + ' · ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + ' hs';
+        var div  = document.createElement('div');
+        div.style.cssText = 'display:flex;justify-content:flex-end;';
+        div.innerHTML = '<div style="background:var(--primary);color:#fff;border-radius:12px 12px 2px 12px;padding:10px 14px;max-width:82%;box-shadow:0 1px 4px rgba(0,151,167,.15)">' +
+          '<div style="font-size:13px;line-height:1.55">' + msg.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;text-align:right">Vos · ' + tStr + '</div></div>';
+        if (thread) thread.appendChild(div);
+        input.value = '';
+        if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Enviar →'; }
+      }
+
+      if (window.ArgusBackend && ArgusBackend.enviarMensajeSeguimiento && ArgusBackend.isConfigured()) {
+        ArgusBackend.enviarMensajeSeguimiento(trackingCode, msg).then(function(r) {
+          if (r.ok) {
+            appendMsg();
+          } else {
+            alert('Error: ' + (r.error || 'No se pudo enviar el mensaje.'));
+            if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Enviar →'; }
+          }
+        }).catch(function() {
+          alert('Error de conexión. Intentá nuevamente.');
+          if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Enviar →'; }
+        });
+      } else {
+        // Sin backend: mostrar igualmente en UI (demo)
+        appendMsg();
+      }
+    };
 
     if (window.ArgusBackend && ArgusBackend.getSeguimiento && ArgusBackend.isConfigured()) {
       ArgusBackend.getSeguimiento(raw).then(function (res) {

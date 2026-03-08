@@ -1115,10 +1115,9 @@ function changeStatus(val) {
   if (infoBadge) { infoBadge.className = 'status-tag ' + (statusClass[val] || ''); infoBadge.textContent = labels[val] || val; }
   showToast('Estado actualizado a «' + (labels[val] || val) + '»', '🔄');
 
-  // Persistir en Supabase
-  var supabaseStatus = { new: 'pending', eval: 'pending', investigating: 'active', review: 'active' }[val] || val;
+  // Persistir en Supabase (passthrough directo — el RPC ya acepta todos los estados)
   if (window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.actualizarEstadoCaso) {
-    ArgusBackend.actualizarEstadoCaso(window._CASO_ID_BACKEND, TENANT_CASO, supabaseStatus);
+    ArgusBackend.actualizarEstadoCaso(window._CASO_ID_BACKEND, TENANT_CASO, val);
   }
 }
 
@@ -1277,9 +1276,9 @@ function renderInfoPanel(c) {
   var anonEl = document.getElementById('caseInfoAnon');
   if (anonEl) anonEl.textContent = c.anonymous ? 'Sí' : 'No';
   // Estado
-  var statusToUi = { pending: 'new', active: 'investigating', closed: 'closed' };
-  var uiStatus = statusToUi[c.status] || 'new';
-  var uiLabels = { new: 'Nuevo', investigating: 'Investigando', closed: 'Cerrado' };
+  var statusToUi = { pending:'new', new:'new', eval:'eval', investigating:'investigating', active:'investigating', review:'review', closed:'closed' };
+  var uiStatus = statusToUi[c.status] || c.status || 'new';
+  var uiLabels = { new:'Nuevo', eval:'En evaluación', investigating:'Investigando', review:'En revisión', closed:'Cerrado' };
   var infoStatus = document.getElementById('caseInfoStatus');
   if (infoStatus) {
     infoStatus.textContent = uiLabels[uiStatus] || c.status;
@@ -1405,6 +1404,7 @@ function loadCasoFromBackend(casoId) {
     if (!r.ok || !r.caso) return;
     var c = r.caso;
     window._CASO_ID_BACKEND = casoId;
+    window._CASO_RISKEVAL   = c.risk_eval || null;
     var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
     var code = c.tracking_code || caseId;
 
@@ -1425,16 +1425,20 @@ function loadCasoFromBackend(casoId) {
     }
 
     // ── Risk badge ──────────────────────────────────────────────
-    var rl = (c.risk_level || 'medium').toLowerCase();
+    var rl = c.risk_level ? c.risk_level.toLowerCase() : null;
     var riskBadge = document.getElementById('caseRiskBadge');
     if (riskBadge) {
-      riskBadge.textContent = RISK_LABELS[rl] || rl.toUpperCase();
-      riskBadge.className = 'risk-tag ' + (RISK_CLASSES[rl] || 'risk-medium');
-      riskBadge.style.display = '';
+      if (rl) {
+        riskBadge.textContent = RISK_LABELS[rl] || rl.toUpperCase();
+        riskBadge.className = 'risk-tag ' + (RISK_CLASSES[rl] || 'risk-medium');
+        riskBadge.style.display = '';
+      } else {
+        riskBadge.style.display = 'none';
+      }
     }
 
     // ── Status badge + select ───────────────────────────────────
-    var statusToUi = { pending: 'new', active: 'investigating', closed: 'closed' };
+    var statusToUi = { pending:'new', new:'new', eval:'eval', investigating:'investigating', active:'investigating', review:'review', closed:'closed' };
     var uiStatus = statusToUi[c.status] || c.status || 'new';
     var uiLabels = { new: 'Nuevo', eval: 'En evaluación', investigating: 'Investigando', review: 'En revisión legal', closed: 'Cerrado' };
     var badgeEl = document.getElementById('caseStatusBadge');
@@ -1535,7 +1539,11 @@ function loadCasoFromBackend(casoId) {
         var d = m.created_at ? new Date(m.created_at) : new Date();
         var tStr = d.getDate() + ' ' + MESES[d.getMonth()] + ' · ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
         var body = (m.title ? '<strong>' + _esc(m.title) + '</strong><br/>' : '') + _esc(m.message || '');
-        chatHtml += '<div class="chat-msg investigator"><div class="chat-bubble inv-bubble">' + body + '</div><span class="chat-time">Equipo · ' + tStr + '</span></div>';
+        if (m.sender === 'denunciante') {
+          chatHtml += '<div class="chat-msg whistleblower"><div class="chat-bubble wb-bubble">' + body + '</div><span class="chat-time">Denunciante · ' + tStr + '</span></div>';
+        } else {
+          chatHtml += '<div class="chat-msg investigator"><div class="chat-bubble inv-bubble">' + body + '</div><span class="chat-time">Equipo · ' + tStr + '</span></div>';
+        }
       });
       if (msgs.length === 0) {
         chatHtml += '<div class="chat-msg system"><div class="chat-bubble system-bubble" style="background:#f0f7f8;color:var(--gray-400)">No hay mensajes aún. Podés escribirle al denunciante usando el campo de abajo.</div></div>';
@@ -1560,10 +1568,13 @@ var RE_COLOR = { critical: '#DC2626', high: '#EA580C', medium: '#D97706', low: '
 function _reKey() { return 'argus_riskeval_' + (caseId || 'x'); }
 
 function _loadRiskEval() {
+  // Prioridad: datos de Supabase (seteados en loadCasoFromBackend) > cache localStorage
+  if (window._CASO_RISKEVAL) return window._CASO_RISKEVAL;
   try { return JSON.parse(localStorage.getItem(_reKey()) || 'null'); } catch(e) { return null; }
 }
 
 function _saveRiskEval(data) {
+  window._CASO_RISKEVAL = data;
   try { localStorage.setItem(_reKey(), JSON.stringify(data)); } catch(e) {}
 }
 
@@ -1611,9 +1622,30 @@ function saveRiskEval() {
   });
   var notas = (document.getElementById('reNotas') || {}).value || '';
   var data = { dims: dims, notas: notas, savedAt: new Date().toISOString() };
+
+  // Calcular nivel de riesgo general (el más alto de las dimensiones)
+  var lvlPriority = { critical: 4, high: 3, medium: 2, low: 1 };
+  var maxP = 0, overallLevel = null;
+  dims.forEach(function(d) { var p = lvlPriority[d.level] || 0; if (p > maxP) { maxP = p; overallLevel = d.level; } });
+
+  // Persistir en Supabase
+  if (window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.actualizarRiskEval) {
+    ArgusBackend.actualizarRiskEval(window._CASO_ID_BACKEND, TENANT_CASO, data, overallLevel)
+      .then(function(r) { if (!r.ok) console.warn('[Argus] risk_eval save error:', r.error); });
+  }
+
   _saveRiskEval(data);
   _renderRiskEval(data);
   closeRiskEvalModal();
+  showToast('Evaluación de riesgo guardada', '✅');
+
+  // Actualizar badge de riesgo en el header
+  var riskBadge = document.getElementById('caseRiskBadge');
+  if (riskBadge && overallLevel) {
+    riskBadge.textContent = RISK_LABELS[overallLevel] || overallLevel.toUpperCase();
+    riskBadge.className = 'risk-tag ' + (RISK_CLASSES[overallLevel] || 'risk-medium');
+    riskBadge.style.display = '';
+  }
 }
 
 // ── Boot polling: espera a que ArgusBackend esté listo ────────

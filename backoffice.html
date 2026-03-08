@@ -2148,7 +2148,7 @@ function mapSupabaseCasos(casos) {
     new: 'new', investigating: 'investigating', review: 'review',
     eval: 'eval', 'closed-ok': 'closed-ok', 'closed-no': 'closed-no'
   };
-  var riskMap = { critical:'critical', high:'high', medium:'medium', low:'low', null:'medium', undefined:'medium' };
+  var validRisks = { critical:1, high:1, medium:1, low:1 };
   return casos.map(function (row) {
     var daysLeft = _slaDaysLeft(row.created_at);
     var slaS = _slaStatus(daysLeft);
@@ -2159,7 +2159,7 @@ function mapSupabaseCasos(casos) {
       tipo: row.category || '—',
       area: row.area || '—',
       canal: 'Web',
-      riesgo: riskMap[row.risk_level] || 'medium',
+      riesgo: (row.risk_level && validRisks[row.risk_level]) ? row.risk_level : null,
       estado: statusToEstado[row.status] || 'new',
       anon: row.anonymous ? 'Sí' : 'No',
       inv: row.assigned_to || '—',
@@ -2387,7 +2387,8 @@ function _renderRecentCases(casos) {
   el.innerHTML = recent.map(function(c) {
     var displayId = escHtml(c.tracking_code || c.id);
     var link = 'backoffice-caso.html?id=' + encodeURIComponent(c.id) + (TENANT ? '&t=' + TENANT : '');
-    var riskLabel = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' }[c.riesgo] || c.riesgo;
+    var _rl = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' }[c.riesgo];
+    var riskHtml = _rl ? '<span class="risk-tag risk-' + c.riesgo + '">' + _rl + '</span>' : '<span style="font-size:11px;color:var(--gray-400)">—</span>';
     var invHtml = (c.inv && c.inv !== '—') ? escHtml(c.inv) : '<span class="bo-unassigned">Sin asignar</span>';
     var slaHtml = c.sla_s === 'over'
       ? '<span class="sla-tag sla-over">Vencido</span>'
@@ -2396,7 +2397,7 @@ function _renderRecentCases(casos) {
       '<td><code class="bo-code">' + displayId + '</code></td>' +
       '<td>' + escHtml(c.tipo) + '</td>' +
       '<td>' + escHtml(c.area) + '</td>' +
-      '<td><span class="risk-tag risk-' + c.riesgo + '">' + riskLabel + '</span></td>' +
+      '<td>' + riskHtml + '</td>' +
       '<td><span class="status-tag status-' + c.estado + '">' + statusLabel(c.estado) + '</span></td>' +
       '<td>' + invHtml + '</td>' +
       '<td>' + slaHtml + '</td>' +
@@ -2516,7 +2517,7 @@ function buildRow(c) {
     <td>${escHtml(c.tipo)}</td>
     <td>${c.area}</td>
     <td><span style="font-size:11px;color:var(--gray-500)">${c.canal}</span></td>
-    <td><span class="risk-tag risk-${c.riesgo}">${riskLabels[c.riesgo]}</span></td>
+    <td>${c.riesgo ? '<span class="risk-tag risk-' + c.riesgo + '">' + (riskLabels[c.riesgo] || c.riesgo) + '</span>' : '<span style="font-size:11px;color:var(--gray-400)">—</span>'}</td>
     <td><span class="status-tag status-${c.estado}">${statusLabel(c.estado)}</span></td>
     <td><span style="font-size:12px;color:${c.anon==='Sí'?'var(--gray-400)':'var(--black)'}">${c.anon}</span></td>
     <td>${c.inv === '—' ? '<span class="bo-unassigned">Sin asignar</span>' : c.inv}</td>
