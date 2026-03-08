@@ -1,0 +1,8 @@
+/**
+ * Copiá este archivo a supabase-env.js y reemplazá con tus valores de Supabase.
+ * En Render: no hace falta crear el archivo; el build inyecta las variables.
+ */
+window.ArgusSupabase = {
+  url: 'https://TU_PROYECTO.supabase.co',
+  anonKey: 'tu_anon_key_aqui'
+};

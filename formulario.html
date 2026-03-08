@@ -8,7 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="client-config.js"></script>
+  <script src="supabase-env.js"></script>
+  <script src="supabase-client.js"></script>
 </head>
 <body>
 
@@ -956,10 +959,10 @@
             Tus datos son tratados con estricta confidencialidad y solo serán utilizados para el seguimiento de tu denuncia.
           </p>
           <div class="identity-row">
-            <input class="wizard-input" type="text" placeholder="Nombre y apellido" />
-            <input class="wizard-input" type="email" placeholder="Email de contacto" />
+            <input class="wizard-input" type="text" id="contactName" placeholder="Nombre y apellido" />
+            <input class="wizard-input" type="email" id="contactEmail" placeholder="Email de contacto" />
           </div>
-          <input class="wizard-input" type="tel" placeholder="Teléfono (opcional)" />
+          <input class="wizard-input" type="tel" id="contactPhone" placeholder="Teléfono (opcional)" />
         </div>
 
         <div class="form-checkbox" style="margin-top:16px">
@@ -1070,47 +1073,61 @@
   };
 
   function consultarSeguimientoForm() {
-    const raw = document.getElementById('segTrackingInput').value.trim().toUpperCase();
-    const result = document.getElementById('segFormResult');
-    const btn = document.getElementById('segFormBtn');
+    var raw = document.getElementById('segTrackingInput').value.trim().toUpperCase();
+    var result = document.getElementById('segFormResult');
+    var btn = document.getElementById('segFormBtn');
 
     if (!/^ARG-\d{4}-\d{4}$/.test(raw)) {
       result.style.display = 'block';
-      result.innerHTML = `<div class="seg-result-box not-found">
-        <div class="seg-result-label" style="color:var(--gray-500)">Código no válido</div>
-        <div class="seg-result-title">Formato incorrecto</div>
-        <p class="seg-result-desc">El formato correcto es <code>ARG-AAAA-XXXX</code> (ej: ARG-2025-4821).</p>
-      </div>`;
+      result.innerHTML = '<div class="seg-result-box not-found">' +
+        '<div class="seg-result-label" style="color:var(--gray-500)">Código no válido</div>' +
+        '<div class="seg-result-title">Formato incorrecto</div>' +
+        '<p class="seg-result-desc">El formato correcto es <code>ARG-AAAA-XXXX</code> (ej: ARG-2025-4821).</p></div>';
       return;
     }
 
     btn.disabled = true;
     btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite"></span> Consultando...';
 
-    setTimeout(() => {
+    function renderResult(data) {
       btn.disabled = false;
       btn.innerHTML = 'Consultar <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      const data = SEG_STATES[raw];
       result.style.display = 'block';
-      if (!data) {
-        result.innerHTML = `<div class="seg-result-box not-found">
-          <div class="seg-result-label" style="color:var(--gray-500)">No encontrado</div>
-          <div class="seg-result-title">Código no registrado</div>
-          <p class="seg-result-desc">No encontramos una denuncia con ese código. Verificá que lo ingresaste correctamente.</p>
-          <p class="seg-result-date">${raw}</p>
-        </div>`;
+      if (!data || !data.found) {
+        result.innerHTML = '<div class="seg-result-box not-found">' +
+          '<div class="seg-result-label" style="color:var(--gray-500)">No encontrado</div>' +
+          '<div class="seg-result-title">Código no registrado</div>' +
+          '<p class="seg-result-desc">No encontramos una denuncia con ese código. Verificá que lo ingresaste correctamente.</p>' +
+          '<p class="seg-result-date">' + raw + '</p></div>';
         return;
       }
-      const colors = { pending:'#EA580C', active:'var(--primary)', closed:'#16A34A' };
-      const msgHtml = data.msg ? `<div class="seg-result-msg"><strong>${data.msg.title}</strong><p>${data.msg.text}</p></div>` : '';
-      result.innerHTML = `<div class="seg-result-box ${data.status}">
-        <div class="seg-result-label" style="color:${colors[data.status]}">${data.label}</div>
-        <div class="seg-result-title">${data.title}</div>
-        <p class="seg-result-desc">${data.desc}</p>
-        <p class="seg-result-date">${data.date}</p>
-        ${msgHtml}
-      </div>`;
-    }, 900);
+      var colors = { pending: '#EA580C', active: 'var(--primary)', closed: '#16A34A' };
+      var msgHtml = (data.msg && data.msg.title) ? '<div class="seg-result-msg"><strong>' + (data.msg.title || '') + '</strong><p>' + (data.msg.text || '') + '</p></div>' : '';
+      var status = data.status || 'pending';
+      var label = data.label || 'Pendiente';
+      var title = status === 'pending' ? 'Denuncia recibida — evaluación en curso' : (status === 'active' ? 'Denuncia en proceso' : 'Caso cerrado');
+      var desc = status === 'pending' ? 'Tu denuncia fue recibida. El equipo está evaluando su admisibilidad.' : (status === 'active' ? 'Tu denuncia se encuentra en etapa de investigación.' : 'La investigación finalizó y se adoptaron las medidas correspondientes.');
+      result.innerHTML = '<div class="seg-result-box ' + status + '">' +
+        '<div class="seg-result-label" style="color:' + (colors[status] || colors.pending) + '">' + label + '</div>' +
+        '<div class="seg-result-title">' + title + '</div>' +
+        '<p class="seg-result-desc">' + desc + '</p>' +
+        '<p class="seg-result-date">' + (data.date || '') + '</p>' + msgHtml + '</div>';
+    }
+
+    if (window.ArgusBackend && ArgusBackend.getSeguimiento && ArgusBackend.isConfigured()) {
+      ArgusBackend.getSeguimiento(raw).then(function (res) {
+        if (res.ok && res.found) {
+          renderResult(res);
+        } else {
+          renderResult({ found: false });
+        }
+      }).catch(function () { renderResult({ found: false }); });
+    } else {
+      setTimeout(function () {
+        var data = SEG_STATES[raw];
+        renderResult(data ? { found: true, status: data.status, label: data.label, title: data.title, desc: data.desc, date: data.date, msg: data.msg } : { found: false });
+      }, 900);
+    }
   }
 
   document.getElementById('segTrackingInput')?.addEventListener('keydown', e => {
@@ -1263,16 +1280,66 @@
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Enviando...';
 
-    setTimeout(() => {
-      const code = 'ARG-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+    var tenantSlug = (window.ArgusConfig && ArgusConfig.tenant) ? ArgusConfig.tenant : 'default';
+    if (tenantSlug === 'default') {
+      var tParam = new URLSearchParams(window.location.search).get('t') || '';
+      if (tParam) tenantSlug = tParam;
+    }
+    var catEls = document.querySelectorAll('#step-2 .cat-option.selected');
+    var categories = [];
+    catEls.forEach(function (el) { categories.push(el.getAttribute('data-val') || el.textContent.trim()); });
+    var areaEl = document.querySelector('#areaPills .pill.selected');
+    var area = areaEl ? (areaEl.getAttribute('data-val') || null) : null;
+    var anonymous = !document.getElementById('identityFields').classList.contains('visible');
+    var contactName = anonymous ? null : (document.getElementById('contactName') && document.getElementById('contactName').value.trim()) || null;
+    var contactEmail = anonymous ? null : (document.getElementById('contactEmail') && document.getElementById('contactEmail').value.trim()) || null;
+    var contactPhone = anonymous ? null : (document.getElementById('contactPhone') && document.getElementById('contactPhone').value.trim()) || null;
+
+    var payload = {
+      tenant_slug: tenantSlug,
+      category: categories[0] || null,
+      categories: categories.length ? categories : null,
+      description: document.getElementById('descriptionText').value.trim() || null,
+      area: area,
+      anonymous: anonymous,
+      contact_name: contactName,
+      contact_email: contactEmail,
+      contact_phone: contactPhone,
+      metadata: {}
+    };
+
+    function showSuccess(code) {
       document.getElementById('trackingCodeDisplay').textContent = code;
       document.getElementById('progressFill').style.width = '100%';
       document.getElementById('stepLabel').textContent = '¡Listo!';
-      // Pre-fill seguimiento input and update button href (same page)
       document.getElementById('segTrackingInput').value = code;
-      document.getElementById('seguimientoLink').onclick = (e) => { e.preventDefault(); startSeguimiento(); };
+      document.getElementById('seguimientoLink').onclick = function (e) { e.preventDefault(); startSeguimiento(); };
       goToStep('success');
-    }, 1800);
+    }
+
+    function showError(msg) {
+      btn.disabled = false;
+      btn.innerHTML = 'Enviar denuncia <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      alert(msg || 'No se pudo enviar la denuncia. Intentá de nuevo.');
+    }
+
+    if (window.ArgusBackend && ArgusBackend.crearDenuncia) {
+      ArgusBackend.crearDenuncia(payload).then(function (res) {
+        if (res.ok && res.tracking_code) {
+          showSuccess(res.tracking_code);
+        } else if (res._mock) {
+          var mockCode = 'ARG-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+          showSuccess(mockCode);
+        } else {
+          showError(res.error || 'Error al enviar');
+        }
+      }).catch(function () { showError('Error de conexión'); });
+    } else {
+      setTimeout(function () {
+        var code = 'ARG-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+        showSuccess(code);
+      }, 1800);
+    }
   }
 
   // ── Landing FAQ ───────────────────────────────────────────────

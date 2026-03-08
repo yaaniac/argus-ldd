@@ -1,0 +1,9 @@
+{
+  "name": "argus-ldd",
+  "version": "1.0.0",
+  "description": "Línea de denuncias corporativa - Portal y Back Office",
+  "scripts": {
+    "inject-env": "node scripts/inject-supabase-env.js"
+  },
+  "private": true
+}

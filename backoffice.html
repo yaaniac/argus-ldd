@@ -7,7 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="client-config.js"></script>
+  <script src="supabase-env.js"></script>
+  <script src="supabase-client.js"></script>
 </head>
 <body>
 
@@ -161,9 +164,17 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           Nuevo caso
         </button>
-        <div class="bo-notif-btn" onclick="toggleNotifs()">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 015 5v3l2 2H2l2-2V7a5 5 0 015-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="currentColor" stroke-width="1.5"/></svg>
-          <span class="bo-notif-dot"></span>
+        <div class="bo-notif-wrap">
+          <div class="bo-notif-btn" onclick="toggleNotifs(event)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 015 5v3l2 2H2l2-2V7a5 5 0 015-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15a2 2 0 004 0" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span class="bo-notif-dot"></span>
+          </div>
+          <div id="boNotifPanel" class="bo-notif-panel">
+            <div class="bo-notif-panel-header">Notificaciones</div>
+            <div id="boNotifList" class="bo-notif-list">
+              <div class="bo-notif-empty" id="boNotifEmpty">No hay notificaciones nuevas.</div>
+            </div>
+          </div>
         </div>
         <div class="bo-topbar-avatar">MA</div>
       </div>
@@ -1352,6 +1363,47 @@ a { text-decoration: none; color: inherit; }
   border-radius: 50%;
   border: 1.5px solid var(--white);
 }
+.bo-notif-wrap { position: relative; }
+.bo-notif-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  max-height: 360px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.12);
+  z-index: 1000;
+  overflow: hidden;
+}
+.bo-notif-panel.open { display: block; }
+.bo-notif-panel-header {
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-700);
+  border-bottom: 1px solid var(--gray-100);
+  background: var(--gray-50);
+}
+.bo-notif-list { overflow-y: auto; max-height: 300px; }
+.bo-notif-empty {
+  padding: 24px 16px;
+  font-size: 13px;
+  color: var(--gray-500);
+  text-align: center;
+}
+.bo-notif-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 13px;
+  color: var(--gray-700);
+  cursor: pointer;
+}
+.bo-notif-item:hover { background: var(--gray-50); }
+.bo-notif-item strong { display: block; margin-bottom: 2px; color: var(--gray-900); }
+.bo-notif-item time { font-size: 11px; color: var(--gray-400); }
 .bo-topbar-avatar {
   width: 32px; height: 32px;
   background: var(--primary);
@@ -2248,20 +2300,57 @@ function showView(name) {
     if (onclick.indexOf("showView('" + name + "')") !== -1 || onclick.indexOf('"' + name + '"') !== -1) n.classList.add('active');
   });
 
-  if (name === 'casos') renderCasosTable();
+  if (name === 'casos') ensureCasosLoaded(function () { filterCasos(); });
 }
 
 // ── Generate cases table ──────────────────────────────────────
-// Casos: cargados y persistidos por tenant en localStorage
+// Casos: desde Supabase si hay backend, sino localStorage
 var CASOS_DATA = loadCasos();
+var CASOS_FROM_BACKEND = false;
+
+function mapSupabaseCasos(casos) {
+  if (!casos || !casos.length) return [];
+  var statusToEstado = { pending: 'new', active: 'investigating', closed: 'closed-ok' };
+  return casos.map(function (row) {
+    var d = row.created_at ? new Date(row.created_at) : new Date();
+    var fecha = (d.getDate() < 10 ? '0' : '') + d.getDate() + '/' + (d.getMonth() < 9 ? '0' : '') + (d.getMonth() + 1) + '/' + d.getFullYear();
+    return {
+      id: row.id,
+      tracking_code: row.tracking_code,
+      tipo: row.category || '—',
+      area: row.area || '—',
+      canal: 'Web',
+      riesgo: 'medium',
+      estado: statusToEstado[row.status] || 'new',
+      anon: row.anonymous ? 'Sí' : 'No',
+      inv: '—',
+      sla_s: 'ok',
+      sla: '—',
+      fecha: fecha
+    };
+  });
+}
+
+function ensureCasosLoaded(cb) {
+  if (!window.ArgusBackend || !ArgusBackend.isConfigured()) { if (cb) cb(); return; }
+  if (CASOS_FROM_BACKEND) { if (cb) cb(); return; }
+  ArgusBackend.listarCasosTenant(TENANT).then(function (r) {
+    if (r.ok && r.casos && r.casos.length >= 0) {
+      CASOS_DATA = mapSupabaseCasos(r.casos);
+      CASOS_FROM_BACKEND = true;
+    }
+    if (cb) cb();
+  }).catch(function () { if (cb) cb(); });
+}
 
 const riskLabels = { critical:'CRÍTICO', high:'ALTO', medium:'MEDIO', low:'BAJO' };
 
 function buildRow(c) {
-  return `<tr class="bo-table-row" onclick="goToCase('${c.id}')">
+  var displayId = c.tracking_code || c.id;
+  return `<tr class="bo-table-row" onclick="goToCase('${String(c.id).replace(/'/g, "\\'")}')">
     <td><input type="checkbox" class="bo-checkbox" onclick="event.stopPropagation()" /></td>
-    <td><code class="bo-code">${c.id}</code></td>
-    <td>${c.tipo}</td>
+    <td><code class="bo-code">${escHtml(displayId)}</code></td>
+    <td>${escHtml(c.tipo)}</td>
     <td>${c.area}</td>
     <td><span style="font-size:11px;color:var(--gray-500)">${c.canal}</span></td>
     <td><span class="risk-tag risk-${c.riesgo}">${riskLabels[c.riesgo]}</span></td>
@@ -2294,7 +2383,7 @@ function filterCasos() {
   var area   = (document.getElementById('filterArea') || {}).value;
   var tipo   = (document.getElementById('filterTipo') || {}).value;
   var result = CASOS_DATA.filter(function(c) {
-    var matchQ = !q || [c.id, c.tipo, c.area, c.canal, c.inv].join(' ').toLowerCase().includes(q);
+    var matchQ = !q || [c.id, c.tracking_code, c.tipo, c.area, c.canal, c.inv].filter(Boolean).join(' ').toLowerCase().includes(q);
     var matchE = !estado || c.estado === estado;
     var matchR = !riesgo || c.riesgo === riesgo;
     var matchA = !area   || c.area.toLowerCase().includes(area.toLowerCase());
@@ -3106,7 +3195,22 @@ function createCase() {
 }
 
 // ── Notifications ─────────────────────────────────────────────
-function toggleNotifs() { /* placeholder */ }
+function toggleNotifs(e) {
+  if (e) e.stopPropagation();
+  var panel = document.getElementById('boNotifPanel');
+  if (!panel) return;
+  var isOpen = panel.classList.toggle('open');
+  if (isOpen) {
+    setTimeout(function() {
+      document.addEventListener('click', function closeNotifsOnce(ev) {
+        var wrap = document.querySelector('.bo-notif-wrap');
+        if (wrap && wrap.contains(ev.target)) return;
+        panel.classList.remove('open');
+        document.removeEventListener('click', closeNotifsOnce);
+      });
+    }, 0);
+  }
+}
 
 // ── Canvas chart (simple bars) ────────────────────────────────
 window.addEventListener('load', () => {

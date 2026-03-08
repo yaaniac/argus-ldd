@@ -21,10 +21,18 @@
   var TENANT      = getTenant();
   var STORAGE_KEY = 'argus_config_' + TENANT;
 
+  /** Convierte slug del tenant en nombre para mostrar (ej. acme → Acme, banco-meridiano → Banco Meridiano) */
+  function tenantToDisplayName(slug) {
+    if (!slug || slug === 'default') return 'Mi Empresa';
+    return slug.split(/[-_]/).map(function (part) {
+      return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+    }).join(' ');
+  }
+
   /* ── Defaults ──────────────────────────────────────────────── */
   var DEFAULTS = {
     empresa: {
-      nombre:    'Mi Empresa',
+      nombre:    tenantToDisplayName(TENANT),
       slogan:    'Línea de denuncias confidencial',
       logoUrl:   '',
       email:     'denuncias@empresa.com',
@@ -91,7 +99,11 @@
     get: function () {
       try {
         var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        return deepMerge(DEFAULTS, saved);
+        var out = deepMerge(DEFAULTS, saved);
+        if (TENANT !== 'default' && out.empresa && out.empresa.nombre === 'Mi Empresa') {
+          out.empresa.nombre = tenantToDisplayName(TENANT);
+        }
+        return out;
       } catch (e) {
         return JSON.parse(JSON.stringify(DEFAULTS));
       }
