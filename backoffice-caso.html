@@ -962,7 +962,7 @@ function enviarMensaje() {
   var area = document.getElementById('chatArea');
   if (!input || !area) return;
   var text = (input.value || '').trim();
-  if (!text) return;
+  if (!text) { input.style.borderColor='#DC2626'; input.focus(); showToast('Escribí un mensaje antes de enviar', '⚠️'); setTimeout(function(){ input.style.borderColor=''; }, 2000); return; }
   var casoId = window._CASO_ID_BACKEND;
   var tenant = window.TENANT_CASO || 'default';
   if (window.ArgusBackend && ArgusBackend.isConfigured() && casoId) {
@@ -1098,22 +1098,50 @@ function showToast(msg, icon) {
 }
 
 function changeStatus(val) {
-  var badge = document.getElementById('caseStatusBadge');
-  var infoBadge = document.getElementById('caseInfoStatus');
   var labels = { new:'Nuevo', eval:'En evaluación', investigating:'Investigando', review:'En revisión', closed:'Cerrar caso' };
   var statusClass = { new:'status-new', eval:'status-new', investigating:'status-investigating', review:'status-review', closed:'status-closed-ok' };
-  if (val === 'closed') {
-    openCloseModal();
-    return;
-  }
-  if (badge) { badge.className = 'status-tag ' + (statusClass[val] || ''); badge.textContent = labels[val] || val; }
-  if (infoBadge) { infoBadge.className = 'status-tag ' + (statusClass[val] || ''); infoBadge.textContent = labels[val] || val; }
-  showToast('Estado actualizado a «' + (labels[val] || val) + '»', '🔄');
+  if (val === 'closed') { openCloseModal(); return; }
+  var label = labels[val] || val;
+  // Mostrar modal de confirmación antes de aplicar
+  _openConfirmModal(
+    '¿Cambiar estado del caso?',
+    'El estado pasará a <strong>' + label + '</strong>. Esta acción queda registrada en el log de auditoría.',
+    function() {
+      var badge     = document.getElementById('caseStatusBadge');
+      var infoBadge = document.getElementById('caseInfoStatus');
+      if (badge)     { badge.className = 'status-tag ' + (statusClass[val] || '');     badge.textContent = label; }
+      if (infoBadge) { infoBadge.className = 'status-tag ' + (statusClass[val] || ''); infoBadge.textContent = label; }
+      showToast('Estado actualizado a «' + label + '»', '🔄');
+      if (window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.actualizarEstadoCaso) {
+        ArgusBackend.actualizarEstadoCaso(window._CASO_ID_BACKEND, TENANT_CASO, val);
+      }
+    }
+  );
+}
 
-  // Persistir en Supabase (passthrough directo — el RPC ya acepta todos los estados)
-  if (window._CASO_ID_BACKEND && window.ArgusBackend && ArgusBackend.actualizarEstadoCaso) {
-    ArgusBackend.actualizarEstadoCaso(window._CASO_ID_BACKEND, TENANT_CASO, val);
+// Mini modal de confirmación reutilizable
+function _openConfirmModal(title, body, onConfirm) {
+  var ov = document.getElementById('confirmModal');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'confirmModal';
+    ov.className = 'bo-modal-overlay';
+    ov.style.cssText = 'display:none;';
+    ov.innerHTML = '<div class="bo-modal" style="max-width:400px" onclick="event.stopPropagation()">' +
+      '<div class="bo-modal-header"><h3 id="confirmModalTitle"></h3><button onclick="document.getElementById(\'confirmModal\').style.display=\'none\'" class="bo-modal-close">✕</button></div>' +
+      '<div class="bo-modal-body"><p id="confirmModalBody" style="font-size:14px;color:var(--gray-600);line-height:1.5"></p>' +
+      '<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">' +
+        '<button onclick="document.getElementById(\'confirmModal\').style.display=\'none\'" class="bo-btn bo-btn-ghost">Cancelar</button>' +
+        '<button id="confirmModalBtn" class="bo-btn bo-btn-primary">Confirmar</button>' +
+      '</div></div></div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e){ if(e.target===ov) ov.style.display='none'; });
   }
+  document.getElementById('confirmModalTitle').textContent = title;
+  document.getElementById('confirmModalBody').innerHTML = body;
+  var btn = document.getElementById('confirmModalBtn');
+  btn.onclick = function() { ov.style.display='none'; onConfirm(); };
+  ov.style.display = 'flex';
 }
 
 function openCloseModal() {
@@ -1387,7 +1415,10 @@ var SLA_OBJETIVO = 60; // días
 
 function _slaDaysCaso(createdAt) {
   if (!createdAt) return { elapsed: 0, left: SLA_OBJETIVO, pct: 0 };
-  var elapsed = Math.floor((Date.now() - new Date(createdAt).getTime()) / 86400000);
+  var now = new Date(), created = new Date(createdAt);
+  var nowDate     = new Date(now.getFullYear(),     now.getMonth(),     now.getDate());
+  var createdDate = new Date(created.getFullYear(), created.getMonth(), created.getDate());
+  var elapsed = Math.round((nowDate - createdDate) / 86400000);
   var left = SLA_OBJETIVO - elapsed;
   var pct  = Math.min(100, Math.round((elapsed / SLA_OBJETIVO) * 100));
   return { elapsed: elapsed, left: left, pct: pct };
@@ -1617,6 +1648,11 @@ function saveRiskEval() {
     var sel = document.getElementById(d.selectId);
     return { id: d.id, label: d.label, level: sel ? sel.value : '' };
   });
+  // BUG-009: requerir al menos una dimensión evaluada
+  if (!dims.some(function(d){ return d.level; })) {
+    showToast('Completá al menos una dimensión de riesgo antes de guardar', '⚠️');
+    return;
+  }
   var notas = (document.getElementById('reNotas') || {}).value || '';
   var data = { dims: dims, notas: notas, savedAt: new Date().toISOString() };
 

@@ -524,7 +524,7 @@
       <div class="rep-header">
         <div class="rep-header-left">
           <h1>Reportes y métricas</h1>
-          <p>Visión ejecutiva del programa de denuncias · Periodo activo: Enero–Febrero 2025</p>
+          <p id="repPeriodLabel">Visión ejecutiva del programa de denuncias</p>
         </div>
         <div class="rep-header-right">
           <div class="period-tabs">
@@ -681,23 +681,8 @@
 
           <div style="margin-top:24px;">
             <div class="rep-chart-title" style="margin-bottom:14px;">Canal de recepción</div>
-            <div class="hbar-list">
-              <div class="hbar-item">
-                <div class="hbar-meta"><span class="hbar-label">Web (portal)</span><span class="hbar-val">26</span></div>
-                <div class="hbar-track"><div class="hbar-fill" style="width:55%;background:#0097A7;"></div></div>
-              </div>
-              <div class="hbar-item">
-                <div class="hbar-meta"><span class="hbar-label">Email directo</span><span class="hbar-val">12</span></div>
-                <div class="hbar-track"><div class="hbar-fill" style="width:25.5%;background:#00ACC1;"></div></div>
-              </div>
-              <div class="hbar-item">
-                <div class="hbar-meta"><span class="hbar-label">WhatsApp</span><span class="hbar-val">7</span></div>
-                <div class="hbar-track"><div class="hbar-fill" style="width:14.9%;background:#25D366;"></div></div>
-              </div>
-              <div class="hbar-item">
-                <div class="hbar-meta"><span class="hbar-label">Teléfono</span><span class="hbar-val">2</span></div>
-                <div class="hbar-track"><div class="hbar-fill" style="width:4.3%;background:#6B7280;"></div></div>
-              </div>
+            <div class="hbar-list" id="canalRecepcionList">
+              <div style="color:var(--gray-400);font-size:13px">Cargando...</div>
             </div>
           </div>
         </div>
@@ -724,27 +709,8 @@
               <div class="rep-chart-sub">Tiempo promedio de cierre (días)</div>
             </div>
           </div>
-          <div class="hbar-list" style="margin-top:8px;">
-            <div class="hbar-item">
-              <div class="hbar-meta"><span class="hbar-label">M. Castillo</span><span class="hbar-val">14 días · 8 casos</span></div>
-              <div class="hbar-track"><div class="hbar-fill" style="width:78%;background:#0097A7;"></div></div>
-            </div>
-            <div class="hbar-item">
-              <div class="hbar-meta"><span class="hbar-label">R. Gómez</span><span class="hbar-val">18 días · 6 casos</span></div>
-              <div class="hbar-track"><div class="hbar-fill" style="width:62%;background:#0097A7;"></div></div>
-            </div>
-            <div class="hbar-item">
-              <div class="hbar-meta"><span class="hbar-label">L. Herrera</span><span class="hbar-val">22 días · 5 casos</span></div>
-              <div class="hbar-track"><div class="hbar-fill" style="width:50%;background:#D97706;"></div></div>
-            </div>
-            <div class="hbar-item">
-              <div class="hbar-meta"><span class="hbar-label">P. Sánchez</span><span class="hbar-val">31 días · 3 casos</span></div>
-              <div class="hbar-track"><div class="hbar-fill" style="width:35%;background:#EA580C;"></div></div>
-            </div>
-            <div class="hbar-item">
-              <div class="hbar-meta"><span class="hbar-label">C. Torres</span><span class="hbar-val">12 días · 2 casos</span></div>
-              <div class="hbar-track"><div class="hbar-fill" style="width:84%;background:#16A34A;"></div></div>
-            </div>
+          <div class="hbar-list" id="performanceInvestigadorList" style="margin-top:8px;">
+            <div style="color:var(--gray-400);font-size:13px">Cargando...</div>
           </div>
 
           <div style="margin-top:24px;padding-top:20px;border-top:1.5px solid var(--gray-100);">
@@ -1109,7 +1075,8 @@
     var cerrados = casos.filter(function(c){ return c.status === 'closed'; }).length;
     var vencidos = casos.filter(function(c){
       if (c.status === 'closed') return false;
-      var elapsed = Math.floor((Date.now() - new Date(c.created_at).getTime()) / 86400000);
+      var created = new Date(c.created_at), nowD = new Date();
+      var elapsed = Math.round((new Date(nowD.getFullYear(),nowD.getMonth(),nowD.getDate()) - new Date(created.getFullYear(),created.getMonth(),created.getDate())) / 86400000);
       return elapsed > SLA_OBJ;
     }).length;
     var anonimos = casos.filter(function(c){ return c.anonymous; }).length;
@@ -1121,7 +1088,9 @@
     var avgSla = 0;
     if (abiertos.length) {
       var sumDays = abiertos.reduce(function(acc, c) {
-        return acc + Math.floor((Date.now() - new Date(c.created_at).getTime()) / 86400000);
+        var created = new Date(c.created_at), nowD = new Date();
+        var elapsed = Math.round((new Date(nowD.getFullYear(),nowD.getMonth(),nowD.getDate()) - new Date(created.getFullYear(),created.getMonth(),created.getDate())) / 86400000);
+        return acc + elapsed;
       }, 0);
       avgSla = Math.round(sumDays / abiertos.length);
     }
@@ -1242,6 +1211,67 @@
       var currArr  = topAreas.map(function(a){ return areaCurr[a] || 0; });
       var prevArr  = topAreas.map(function(a){ return areaPrev[a] || 0; });
       drawAreas(topAreas, currArr, prevArr);
+    })();
+
+    // ── BUG-016: Período activo dinámico ──────────────────────
+    (function() {
+      var lbl = document.getElementById('repPeriodLabel');
+      if (!lbl) return;
+      var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      var primerMes = now.getMonth() === 0 ? 'Diciembre ' + (now.getFullYear() - 1) : meses[now.getMonth() - 1] + ' ' + now.getFullYear();
+      var mesFin    = meses[now.getMonth()] + ' ' + now.getFullYear();
+      lbl.textContent = 'Visión ejecutiva del programa de denuncias · Período activo: ' + primerMes + '–' + mesFin;
+    })();
+
+    // ── BUG-019: Canal de recepción real ─────────────────────
+    (function() {
+      var canalEl = document.getElementById('canalRecepcionList');
+      if (!canalEl) return;
+      var canalMap = { web:'Web (portal)', email:'Email directo', whatsapp:'WhatsApp', tel:'Teléfono', presencial:'Presencial', manual:'Ingreso manual' };
+      var canalColors = { web:'#0097A7', email:'#00ACC1', whatsapp:'#25D366', tel:'#6B7280', presencial:'#8B5CF6', manual:'#D97706' };
+      var cCount = {};
+      casos.forEach(function(c) { var k = (c.channel || 'web').toLowerCase(); cCount[k] = (cCount[k] || 0) + 1; });
+      var entries = Object.keys(cCount).sort(function(a,b){ return cCount[b] - cCount[a]; });
+      var maxC = entries.length ? cCount[entries[0]] : 1;
+      if (!entries.length) { canalEl.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Sin datos</p>'; return; }
+      canalEl.innerHTML = entries.map(function(k) {
+        var label = canalMap[k] || k;
+        var color = canalColors[k] || '#0097A7';
+        var pct = Math.round((cCount[k] / maxC) * 100);
+        return '<div class="hbar-item">' +
+          '<div class="hbar-meta"><span class="hbar-label">' + label + '</span><span class="hbar-val">' + cCount[k] + '</span></div>' +
+          '<div class="hbar-track"><div class="hbar-fill" style="width:' + pct + '%;background:' + color + ';"></div></div>' +
+        '</div>';
+      }).join('');
+    })();
+
+    // ── BUG-018: Performance por investigador real ────────────
+    (function() {
+      var invEl = document.getElementById('performanceInvestigadorList');
+      if (!invEl) return;
+      var invMap = {};
+      casos.forEach(function(c) {
+        var inv = c.assigned_to || 'Sin asignar';
+        if (!invMap[inv]) invMap[inv] = { count: 0, totalDays: 0, closed: 0 };
+        invMap[inv].count++;
+        var days = Math.round((Date.now() - new Date(c.created_at).getTime()) / 86400000);
+        invMap[inv].totalDays += days;
+        if (c.status === 'closed') invMap[inv].closed++;
+      });
+      var entries = Object.keys(invMap).filter(function(k){ return k !== 'Sin asignar' || invMap[k].count > 0; })
+        .sort(function(a,b){ return invMap[b].count - invMap[a].count; }).slice(0, 6);
+      if (!entries.length) { invEl.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Sin datos de investigadores</p>'; return; }
+      var maxCount = invMap[entries[0]].count;
+      invEl.innerHTML = entries.map(function(k) {
+        var d = invMap[k];
+        var avg = d.count ? Math.round(d.totalDays / d.count) : 0;
+        var pct = Math.round((d.count / maxCount) * 100);
+        var color = avg <= 15 ? '#16A34A' : avg <= 25 ? '#0097A7' : avg <= 40 ? '#D97706' : '#EA580C';
+        return '<div class="hbar-item">' +
+          '<div class="hbar-meta"><span class="hbar-label">' + k + '</span><span class="hbar-val">' + avg + ' días · ' + d.count + ' ' + (d.count === 1 ? 'caso' : 'casos') + '</span></div>' +
+          '<div class="hbar-track"><div class="hbar-fill" style="width:' + pct + '%;background:' + color + ';"></div></div>' +
+        '</div>';
+      }).join('');
     })();
   }
 

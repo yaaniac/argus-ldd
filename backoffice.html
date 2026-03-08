@@ -321,7 +321,7 @@
       <div class="bo-card" style="margin-top:0">
         <div class="bo-card-header">
           <h3>Casos recientes</h3>
-          <a href="#" onclick="showView('casos')" class="bo-link">Ver todos →</a>
+          <a href="javascript:void(0)" onclick="showView('casos')" class="bo-link">Ver todos →</a>
         </div>
 
         <div class="bo-table-wrap">
@@ -423,14 +423,8 @@
           </table>
         </div>
         <div class="bo-table-footer">
-          <span class="bo-table-info">Mostrando 1–10 de 24 casos activos</span>
-          <div class="bo-pagination">
-            <button class="bo-page-btn" disabled>←</button>
-            <button class="bo-page-btn active">1</button>
-            <button class="bo-page-btn">2</button>
-            <button class="bo-page-btn">3</button>
-            <button class="bo-page-btn">→</button>
-          </div>
+          <span class="bo-table-info" id="casosTableInfo">Mostrando 0 casos</span>
+          <div class="bo-pagination" id="boPagination"></div>
         </div>
       </div>
     </div><!-- /view-casos -->
@@ -881,7 +875,7 @@
         </div>
         <div class="bo-form-group bo-span2">
           <label>Descripción del hecho *</label>
-          <textarea class="bo-textarea" rows="5" placeholder="Describí los hechos, personas involucradas, período, evidencias disponibles..."></textarea>
+          <textarea class="bo-textarea" id="newCaseDesc" rows="5" placeholder="Describí los hechos, personas involucradas, período, evidencias disponibles..."></textarea>
         </div>
         <div class="bo-form-group">
           <label>Asignar investigador</label>
@@ -1085,9 +1079,11 @@ a { text-decoration: none; color: inherit; }
 .bo-main {
   margin-left: var(--sidebar-w);
   flex: 1;
+  min-width: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
   transition: margin-left .25s ease;
 }
 .bo-main.expanded { margin-left: var(--sidebar-collapsed); }
@@ -2121,7 +2117,10 @@ function _slaDaysLeft(createdAt) {
   if (!createdAt) return null;
   var created = new Date(createdAt);
   var now = new Date();
-  var elapsed = Math.floor((now - created) / 86400000);
+  // Comparar sólo fechas (medianoche a medianoche) para evitar el bug de "0 días" en el mismo día
+  var nowDate     = new Date(now.getFullYear(),     now.getMonth(),     now.getDate());
+  var createdDate = new Date(created.getFullYear(), created.getMonth(), created.getDate());
+  var elapsed = Math.round((nowDate - createdDate) / 86400000);
   return SLA_DAYS - elapsed;
 }
 function _slaStatus(daysLeft) {
@@ -2135,6 +2134,20 @@ function _fmtDateDash(iso) {
   var d = new Date(iso);
   return (d.getDate() < 10 ? '0' : '') + d.getDate() + '/' +
          (d.getMonth() < 9 ? '0' : '') + (d.getMonth() + 1) + '/' + d.getFullYear();
+}
+
+// Convierte slug "aml___lavado_de_dinero" → "AML / Lavado de dinero"
+function formatCategoria(raw) {
+  if (!raw || typeof raw !== 'string') return raw || '—';
+  if (/[\s\/áéíóúñüÁÉÍÓÚÑÜ]/.test(raw)) return raw; // ya legible
+  var parts = raw.split('___');
+  return parts.map(function(part) {
+    var words = part.split('_');
+    return words.map(function(w) {
+      if (!w) return '';
+      return (w.length <= 3) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    }).join(' ');
+  }).join(' / ');
 }
 
 function mapSupabaseCasos(casos) {
@@ -2152,7 +2165,7 @@ function mapSupabaseCasos(casos) {
     return {
       id: row.id,
       tracking_code: row.tracking_code,
-      tipo: row.category || '—',
+      tipo: formatCategoria(row.category) || '—',
       area: row.area || '—',
       canal: 'Web',
       riesgo: (row.risk_level && validRisks[row.risk_level]) ? row.risk_level : null,
@@ -2238,7 +2251,7 @@ function _renderDashboard(casos, raw) {
     avgSla = Math.round(totalDays / openCasos.length);
   }
 
-  _setKpi('kpiAbiertos',    abiertos,     abiertos + ' casos sin cerrar');
+  _setKpi('kpiAbiertos',    abiertos,     abiertos + (abiertos === 1 ? ' caso sin cerrar' : ' casos sin cerrar'));
   _setKpi('kpiInvestigando', investigando, investigando + ' en investigación activa');
   _setKpi('kpiVencidos',    vencidos,     vencidos ? 'Requieren atención inmediata' : 'Sin vencimientos');
   _setKpi('kpiCerradosMes', cerradosMes,  'Cerrados en ' + now.toLocaleString('es-AR',{month:'long'}));
@@ -2247,7 +2260,7 @@ function _renderDashboard(casos, raw) {
 
   // ── Subtitle en vista casos ──
   var sub = document.getElementById('casosPageSub');
-  if (sub) sub.textContent = abiertos + ' casos activos · ' + total + ' totales';
+  if (sub) sub.textContent = abiertos + (abiertos === 1 ? ' caso activo' : ' casos activos') + ' · ' + total + (total === 1 ? ' total' : ' totales');
 
   // ── Secciones ──
   _renderRiskBars(casos);
@@ -2523,17 +2536,51 @@ function buildRow(c) {
   </tr>`;
 }
 
+var _CASOS_PAGE     = 1;
+var _CASOS_PAGE_SIZE = 10;
+var _CASOS_FILTERED  = [];
+
 function renderCasosTable(data) {
   const tbody = document.getElementById('casosTableBody');
   if (!tbody) return;
-  var rows = (data || CASOS_DATA);
-  if (rows.length === 0) {
+  _CASOS_FILTERED = data !== undefined ? data : CASOS_DATA;
+  var total   = _CASOS_FILTERED.length;
+  var pages   = Math.max(1, Math.ceil(total / _CASOS_PAGE_SIZE));
+  _CASOS_PAGE = Math.min(_CASOS_PAGE, pages);
+  var start   = (_CASOS_PAGE - 1) * _CASOS_PAGE_SIZE;
+  var pageRows = _CASOS_FILTERED.slice(start, start + _CASOS_PAGE_SIZE);
+
+  if (total === 0) {
     tbody.innerHTML = '<tr><td colspan="12" style="padding:40px;text-align:center;color:var(--gray-500)">No se encontraron casos con los filtros seleccionados.</td></tr>';
   } else {
-    tbody.innerHTML = rows.map(buildRow).join('');
+    tbody.innerHTML = pageRows.map(buildRow).join('');
   }
-  var info = document.querySelector('.bo-table-info');
-  if (info) info.textContent = 'Mostrando ' + rows.length + ' de ' + CASOS_DATA.length + ' casos';
+
+  var info = document.getElementById('casosTableInfo');
+  if (info) {
+    var end = Math.min(start + _CASOS_PAGE_SIZE, total);
+    info.textContent = total === 0
+      ? 'Sin casos'
+      : 'Mostrando ' + (start + 1) + '–' + end + ' de ' + total + ' ' + (total === 1 ? 'caso' : 'casos');
+  }
+  _renderPagination(pages);
+}
+
+function _renderPagination(pages) {
+  var el = document.getElementById('boPagination');
+  if (!el) return;
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  var html = '<button class="bo-page-btn" ' + (_CASOS_PAGE === 1 ? 'disabled' : '') + ' onclick="_goPage(' + (_CASOS_PAGE - 1) + ')">←</button>';
+  for (var p = 1; p <= pages; p++) {
+    html += '<button class="bo-page-btn' + (p === _CASOS_PAGE ? ' active' : '') + '" onclick="_goPage(' + p + ')">' + p + '</button>';
+  }
+  html += '<button class="bo-page-btn" ' + (_CASOS_PAGE === pages ? 'disabled' : '') + ' onclick="_goPage(' + (_CASOS_PAGE + 1) + ')">→</button>';
+  el.innerHTML = html;
+}
+
+function _goPage(p) {
+  _CASOS_PAGE = p;
+  renderCasosTable(_CASOS_FILTERED);
 }
 
 function filterCasos() {
@@ -3309,14 +3356,23 @@ function showNewCase() {
 function closeModal(e) {
   if (e.target.id === 'newCaseModal') e.target.style.display = 'none';
 }
-function createCase() {
-  var tipo = document.getElementById('newCaseTipo');
-  var riesgo = document.getElementById('newCaseRiesgo');
-  var area = document.getElementById('newCaseArea');
-  var inv = document.getElementById('newCaseInv');
+function _fieldError(el, msg) {
+  if (el) { el.style.borderColor = '#DC2626'; el.focus(); }
+  showToast(msg, '⚠️');
+}
+function _fieldClear(el) { if (el) el.style.borderColor = ''; }
 
-  if (!tipo || tipo.value === '— Seleccioná —') { alert('Seleccioná el tipo de denuncia.'); return; }
-  if (!riesgo || riesgo.value === '— Evaluar —') { alert('Seleccioná el nivel de riesgo.'); return; }
+function createCase() {
+  var tipo  = document.getElementById('newCaseTipo');
+  var riesgo = document.getElementById('newCaseRiesgo');
+  var desc  = document.getElementById('newCaseDesc');
+  var area  = document.getElementById('newCaseArea');
+  var inv   = document.getElementById('newCaseInv');
+  [tipo, riesgo, desc].forEach(_fieldClear);
+
+  if (!tipo || tipo.value === '— Seleccioná —') { _fieldError(tipo, 'Seleccioná el tipo de denuncia'); return; }
+  if (!riesgo || riesgo.value === '— Evaluar —') { _fieldError(riesgo, 'Seleccioná el nivel de riesgo inicial'); return; }
+  if (!desc || !desc.value.trim()) { _fieldError(desc, 'La descripción del hecho es obligatoria'); return; }
 
   var riesgoMap = { 'Bajo':'low', 'Medio':'medium', 'Alto':'high', 'Crítico':'critical' };
   var riesgoCss = riesgoMap[riesgo.value] || 'medium';
