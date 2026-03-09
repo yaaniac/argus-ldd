@@ -14,7 +14,7 @@
   <!-- NAV -->
   <header class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">
+      <a href="/" class="logo">
         <span class="logo-icon">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <rect width="32" height="32" rx="8" fill="#5B4FDB"/>
@@ -26,25 +26,25 @@
         <span class="logo-text" style="font-size:14px">Argus<span class="logo-dot">.</span></span>
       </a>
       <nav class="nav-links">
-        <a href="index.html#beneficios">Beneficios</a>
-        <a href="index.html#canales">Canales</a>
-        <a href="index.html#como-funciona">Cómo funciona</a>
-        <a href="empresas.html" style="color:var(--primary)">Empresas</a>
-        <a href="contacto.html">Contacto</a>
+        <a href="/#beneficios">Beneficios</a>
+        <a href="/#canales">Canales</a>
+        <a href="/#como-funciona">Cómo funciona</a>
+        <a href="/empresas" style="color:var(--primary)">Empresas</a>
+        <a href="/contacto">Contacto</a>
       </nav>
       <div class="nav-cta">
-        <a href="contacto.html" class="btn btn-primary">Solicitar demo</a>
+        <a href="/contacto" class="btn btn-primary">Solicitar demo</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menú">
         <span></span><span></span><span></span>
       </button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="index.html#beneficios">Beneficios</a>
-      <a href="index.html#canales">Canales</a>
-      <a href="index.html#como-funciona">Cómo funciona</a>
-      <a href="empresas.html">Empresas</a>
-      <a href="contacto.html">Contacto</a>
+      <a href="/#beneficios">Beneficios</a>
+      <a href="/#canales">Canales</a>
+      <a href="/#como-funciona">Cómo funciona</a>
+      <a href="/empresas">Empresas</a>
+      <a href="/contacto">Contacto</a>
     </div>
   </header>
 
@@ -230,7 +230,7 @@
         <div style="font-size:48px;margin-bottom:16px">🔍</div>
         <h3 style="font-family:var(--font-heading);font-size:22px;color:var(--black);margin-bottom:8px">No encontramos esa empresa</h3>
         <p style="font-size:15px;color:var(--gray-500);margin-bottom:24px">Si tu empresa usa Argus y no la encontrás, contactanos.</p>
-        <a href="contacto.html" class="btn btn-primary">Contactar soporte</a>
+        <a href="/contacto" class="btn btn-primary">Contactar soporte</a>
       </div>
 
     </div>
@@ -268,7 +268,7 @@
     .filter-active:hover { background: var(--primary-700); border-color: var(--primary-700); color: var(--white); }
   </style>
 
-  <script src="main.js"></script>
+  <script src="/main.js"></script>
   <script>
     function goToForm(company) {
       window.location.href = 'formulario.html?empresa=' + encodeURIComponent(company);

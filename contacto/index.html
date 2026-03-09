@@ -8,14 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <script src="client-config.js"></script>
+  <script src="/client-config.js"></script>
 </head>
 <body>
 
   <!-- NAV -->
   <header class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">
+      <a href="/" class="logo">
         <span class="logo-icon">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <rect width="32" height="32" rx="8" fill="#0097A7"/>
@@ -27,26 +27,26 @@
         <span class="logo-text" style="font-size:14px">Argus<span class="logo-dot">.</span></span>
       </a>
       <nav class="nav-links">
-        <a href="index.html#beneficios">Beneficios</a>
-        <a href="index.html#canales">Canales</a>
-        <a href="index.html#como-funciona">Cómo funciona</a>
-        <a href="empresas.html">Empresas</a>
-        <a href="contacto.html" style="color:var(--primary)">Contacto</a>
+        <a href="/#beneficios">Beneficios</a>
+        <a href="/#canales">Canales</a>
+        <a href="/#como-funciona">Cómo funciona</a>
+        <a href="/empresas">Empresas</a>
+        <a href="/contacto" style="color:var(--primary)">Contacto</a>
       </nav>
       <div class="nav-cta">
-        <a href="empresas.html" class="btn btn-ghost">Ingresar denuncia</a>
-        <a href="contacto.html" class="btn btn-primary">Solicitar demo</a>
+        <a href="/empresas" class="btn btn-ghost">Ingresar denuncia</a>
+        <a href="/contacto" class="btn btn-primary">Solicitar demo</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menú">
         <span></span><span></span><span></span>
       </button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="index.html#beneficios">Beneficios</a>
-      <a href="index.html#canales">Canales</a>
-      <a href="index.html#como-funciona">Cómo funciona</a>
-      <a href="empresas.html">Empresas</a>
-      <a href="contacto.html">Contacto</a>
+      <a href="/#beneficios">Beneficios</a>
+      <a href="/#canales">Canales</a>
+      <a href="/#como-funciona">Cómo funciona</a>
+      <a href="/empresas">Empresas</a>
+      <a href="/contacto">Contacto</a>
     </div>
   </header>
 
@@ -328,7 +328,7 @@
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-brand">
-          <a href="index.html" class="logo">
+          <a href="/" class="logo">
             <span class="logo-icon">
               <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
                 <rect width="32" height="32" rx="8" fill="#0097A7"/>
@@ -348,24 +348,24 @@
         <div class="footer-links">
           <div class="footer-col">
             <h4>Plataforma</h4>
-            <a href="index.html#beneficios">Beneficios</a>
-            <a href="index.html#canales">Canales</a>
-            <a href="index.html#como-funciona">Cómo funciona</a>
-            <a href="empresas.html">Directorio de empresas</a>
+            <a href="/#beneficios">Beneficios</a>
+            <a href="/#canales">Canales</a>
+            <a href="/#como-funciona">Cómo funciona</a>
+            <a href="/empresas">Directorio de empresas</a>
           </div>
           <div class="footer-col">
             <h4>Empresa</h4>
-            <a href="contacto.html">Contacto</a>
+            <a href="/contacto">Contacto</a>
             <a href="#">Sobre Argus</a>
             <a href="#">Nuestro equipo</a>
             <a href="#">Blog de compliance</a>
           </div>
           <div class="footer-col">
             <h4>Legal</h4>
-            <a href="privacidad.html">Política de privacidad</a>
-            <a href="terminos.html">Términos de uso</a>
-            <a href="seguridad.html">Seguridad de datos</a>
-            <a href="terminos.html#canal">Términos del canal</a>
+            <a href="/privacidad">Política de privacidad</a>
+            <a href="/terminos">Términos de uso</a>
+            <a href="/seguridad">Seguridad de datos</a>
+            <a href="/terminos#canal">Términos del canal</a>
           </div>
           <div class="footer-col">
             <h4>Contacto</h4>
@@ -435,7 +435,7 @@
     .faq-answer.open { display: block; }
   </style>
 
-  <script src="main.js"></script>
+  <script src="/main.js"></script>
   <script>
     function toggleFaq(btn) {
       const answer = btn.nextElementSibling;
