@@ -45,30 +45,14 @@
 
     body { font-family: var(--font); background: var(--gray-50); color: var(--black); }
 
-    /* ── SIDEBAR ── */
+    /* ── SIDEBAR (idéntico a backoffice.html) ── */
     .bo-sidebar {
-      position: fixed; top: 0; left: 0; bottom: 0;
-      width: var(--sidebar-w); background: var(--gray-900);
-      display: flex; flex-direction: column;
-      transition: width .22s cubic-bezier(.4,0,.2,1);
-      z-index: 200; overflow: hidden;
+      width: var(--sidebar-w); min-height: 100vh; background: var(--gray-900);
+      display: flex; flex-direction: column; position: fixed;
+      top: 0; left: 0; bottom: 0; z-index: 200;
+      transition: width .25s ease; overflow: hidden;
     }
     .bo-sidebar.collapsed { width: var(--sidebar-collapsed); }
-    .bo-sidebar-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 16px 14px; border-bottom: 1px solid var(--gray-800);
-      flex-shrink: 0;
-    }
-    .bo-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
-    .bo-logo > div { min-width: 0; }
-    .bo-logo-name { font-size: 16px; font-weight: 800; color: var(--white); letter-spacing: -.03em; white-space: nowrap; }
-    .bo-logo-sub { font-size: 10px; font-weight: 500; color: var(--gray-500); text-transform: uppercase; letter-spacing: .06em; margin-top: 1px; white-space: nowrap; }
-    .bo-sidebar-toggle {
-      background: none; border: none; color: var(--gray-500); cursor: pointer;
-      padding: 6px; border-radius: 6px; flex-shrink: 0;
-      transition: background .15s, color .15s;
-    }
-    .bo-sidebar-toggle:hover { background: var(--gray-800); color: var(--white); }
     .bo-sidebar.collapsed .sidebar-icon-collapse { display: none !important; }
     .bo-sidebar.collapsed .sidebar-icon-expand { display: block !important; }
     .bo-sidebar:not(.collapsed) .sidebar-icon-expand { display: none !important; }
@@ -79,44 +63,56 @@
     .bo-sidebar.collapsed .bo-logo-sub { display: none; }
     .bo-sidebar.collapsed .bo-sidebar-user > div:not(:first-child) { display: none; }
     .bo-sidebar.collapsed .bo-nav-item { justify-content: center; padding: 9px 0; margin: 2px 6px; gap: 0; }
-
-    .bo-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
-    .bo-nav::-webkit-scrollbar { display: none; }
-    .bo-nav-section { padding: 0 8px 8px; }
+    .bo-sidebar.collapsed .bo-logo { justify-content: center; width: 100%; }
+    .bo-sidebar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 16px; border-bottom: 1px solid rgba(255,255,255,.06); gap: 10px;
+    }
+    .bo-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; white-space: nowrap; }
+    .bo-logo-name { font-size: 16px; font-weight: 800; color: var(--white); letter-spacing: -.03em; }
+    .bo-logo-sub { font-size: 10px; font-weight: 500; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .08em; }
+    .bo-sidebar-toggle {
+      background: rgba(255,255,255,.06); border: none; border-radius: 6px;
+      color: rgba(255,255,255,.4); width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; transition: background .2s;
+    }
+    .bo-sidebar-toggle:hover { background: rgba(255,255,255,.12); color: var(--white); }
+    .bo-nav { flex: 1; padding: 16px 0; overflow-y: auto; overflow-x: hidden; }
+    .bo-nav-section { margin-bottom: 8px; }
     .bo-nav-label {
-      display: block; font-size: 10px; font-weight: 600; color: var(--gray-600);
-      text-transform: uppercase; letter-spacing: .08em;
-      padding: 8px 8px 4px; white-space: nowrap;
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,.25);
+      text-transform: uppercase; letter-spacing: .1em;
+      padding: 8px 16px 4px; display: block; white-space: nowrap;
     }
     .bo-nav-item {
       display: flex; align-items: center; gap: 10px;
-      padding: 9px 10px; border-radius: 8px; margin-bottom: 1px;
-      color: var(--gray-400); text-decoration: none; font-size: 13.5px; font-weight: 500;
-      transition: background .15s, color .15s; position: relative; cursor: pointer;
+      padding: 9px 16px; border-radius: 8px; margin: 2px 8px;
+      font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.55);
+      cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
     }
-    .bo-nav-item:hover { background: var(--gray-800); color: var(--gray-200); }
+    .bo-nav-item:hover { background: rgba(255,255,255,.07); color: var(--white); }
     .bo-nav-item.active { background: var(--primary); color: var(--white); }
+    .bo-nav-item svg { flex-shrink: 0; }
     .bo-badge-count {
-      margin-left: auto; font-size: 11px; font-weight: 600;
-      background: var(--gray-800); color: var(--gray-400);
-      padding: 1px 6px; border-radius: 20px; white-space: nowrap;
+      margin-left: auto; background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.7); font-size: 11px; font-weight: 700;
+      padding: 2px 7px; border-radius: 100px;
     }
-    .bo-badge-warn { background: rgba(234,88,12,.2); color: #FB923C; }
-    .bo-badge-danger { background: rgba(220,38,38,.2); color: #F87171; }
-
+    .bo-badge-warn { background: rgba(234,88,12,.25); color: #FB923C; }
+    .bo-badge-danger { background: rgba(220,38,38,.25); color: #F87171; }
     .bo-sidebar-user {
       padding: 16px; border-top: 1px solid rgba(255,255,255,.06);
-      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-      white-space: nowrap;
+      display: flex; align-items: center; gap: 10px; white-space: nowrap;
     }
     .bo-user-avatar {
-      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-      background: var(--primary); display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700; color: var(--white);
+      width: 32px; height: 32px; background: var(--primary); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--white); flex-shrink: 0;
     }
-    .bo-user-info { min-width: 0; }
-    .bo-user-name { font-size: 13px; font-weight: 600; color: var(--gray-200); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .bo-user-role { font-size: 11px; color: var(--gray-500); white-space: nowrap; }
+    .bo-user-info { overflow: hidden; }
+    .bo-user-info strong { display: block; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bo-user-info span { display: block; font-size: 11px; color: rgba(255,255,255,.4); white-space: nowrap; }
 
     /* ── MAIN ── */
     .bo-main {

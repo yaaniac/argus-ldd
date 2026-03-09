@@ -2235,7 +2235,7 @@ function _renderDashboard(casos, raw) {
   if (filtroInv) {
     var uniqueInvs = [];
     casos.forEach(function(c){ if (c.inv && c.inv !== '—' && uniqueInvs.indexOf(c.inv) === -1) uniqueInvs.push(c.inv); });
-    filtroInv.innerHTML = '<option>Todos</option>' + uniqueInvs.map(function(n){ return '<option>' + n + '</option>'; }).join('');
+    filtroInv.innerHTML = '<option value="">Todos</option>' + uniqueInvs.map(function(n){ return '<option>' + n + '</option>'; }).join('');
   }
 
   // ── KPIs ──

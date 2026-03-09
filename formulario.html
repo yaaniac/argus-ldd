@@ -625,7 +625,7 @@
         </div>
         <div id="complementRef" style="display:none">
           <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">Código o referencia de la denuncia anterior (opcional)</label>
-          <input class="wizard-input" type="text" placeholder="Ej: ARG-2024-8821 o fecha aproximada..." />
+          <input class="wizard-input" type="text" id="complementRefInput" placeholder="Ej: ARG-2024-8821 o fecha aproximada..." />
         </div>
         <div class="wizard-footer">
           <button class="wizard-back" onclick="goToStep(0)">← Anterior</button>
@@ -716,7 +716,7 @@
           </button>
         </div>
         <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">Fecha aproximada (dd/mm/aaaa) — opcional</label>
-        <input class="wizard-input" type="text" placeholder="Ej: 15/03/2024 o marzo 2024" />
+        <input class="wizard-input" type="text" id="periodDateInput" placeholder="Ej: 15/03/2024 o marzo 2024" />
         <div class="wizard-footer">
           <button class="wizard-back" onclick="goToStep(4)">← Anterior</button>
           <button class="wizard-next" onclick="goToStep(6)">Siguiente →</button>
@@ -748,7 +748,7 @@
         </div>
         <div style="margin-top:8px">
           <label style="font-size:14px;font-weight:600;color:var(--gray-700);display:block;margin-bottom:8px">¿Cómo te enteraste? (opcional)</label>
-          <input class="wizard-input" type="text" placeholder="Ej: lo presencié, me lo contaron, encontré documentos..." />
+          <input class="wizard-input" type="text" id="howLearnedInput" placeholder="Ej: lo presencié, me lo contaron, encontré documentos..." />
         </div>
         <div class="wizard-footer">
           <button class="wizard-back" onclick="goToStep(5)">← Anterior</button>
@@ -1323,6 +1323,84 @@
     var contactEmail = anonymous ? null : (document.getElementById('contactEmail') && document.getElementById('contactEmail').value.trim()) || null;
     var contactPhone = anonymous ? null : (document.getElementById('contactPhone') && document.getElementById('contactPhone').value.trim()) || null;
 
+    // ── Recolectar TODOS los campos del wizard para metadata ──
+
+    // Step 1: Denuncia complementaria
+    var compEl = document.querySelector('#step-1 .freq-option.selected');
+    var complementaria = compEl ? (compEl.getAttribute('data-val') || null) : null;
+    var complementariaRef = (document.getElementById('complementRefInput') || {}).value || '';
+
+    // Step 5: Período
+    var periodoEl = document.querySelector('#step-5 .freq-option.selected');
+    var periodo = periodoEl ? (periodoEl.getAttribute('data-val') || null) : null;
+    var periodoFecha = (document.getElementById('periodDateInput') || {}).value || '';
+
+    // Step 6: Conocimiento de la dirección
+    var conocimientoEl = document.querySelector('#step-6 .freq-option.selected');
+    var conocimientoDireccion = conocimientoEl ? (conocimientoEl.getAttribute('data-val') || null) : null;
+    var comoSeEntero = (document.getElementById('howLearnedInput') || {}).value || '';
+
+    // Step 7: Personas involucradas
+    var involucrados = [];
+    document.querySelectorAll('#involvedList .involved-row').forEach(function(row) {
+      var inputs = row.querySelectorAll('input');
+      var nombre = inputs[0] ? inputs[0].value.trim() : '';
+      var relacion = inputs[1] ? inputs[1].value.trim() : '';
+      var cargo = inputs[2] ? inputs[2].value.trim() : '';
+      if (nombre || relacion || cargo) involucrados.push({ nombre: nombre, relacion: relacion, cargo: cargo });
+    });
+
+    // Step 8: Testigos
+    var testigos = [];
+    document.querySelectorAll('#witnessList .involved-row').forEach(function(row) {
+      var inputs = row.querySelectorAll('input');
+      var nombre = inputs[0] ? inputs[0].value.trim() : '';
+      var relacion = inputs[1] ? inputs[1].value.trim() : '';
+      var cargo = inputs[2] ? inputs[2].value.trim() : '';
+      if (nombre || relacion || cargo) testigos.push({ nombre: nombre, relacion: relacion, cargo: cargo });
+    });
+
+    // Step 9: Otras personas
+    var otrasPersonasEl = document.querySelector('#step-9 .freq-option.selected');
+    var hayOtrasPersonas = otrasPersonasEl ? (otrasPersonasEl.getAttribute('data-val') || null) : null;
+    var otrasPersonas = [];
+    if (hayOtrasPersonas === 'si') {
+      document.querySelectorAll('#otherPersonsList > div').forEach(function(row) {
+        var inputs = row.querySelectorAll('input');
+        var nombre = inputs[0] ? inputs[0].value.trim() : '';
+        var vinculacion = inputs[1] ? inputs[1].value.trim() : '';
+        if (nombre || vinculacion) otrasPersonas.push({ nombre: nombre, vinculacion: vinculacion });
+      });
+    }
+
+    // Campos extra configurables
+    var camposExtra = {};
+    document.querySelectorAll('#campos-extra-container input, #campos-extra-container textarea, #campos-extra-container select').forEach(function(el) {
+      var key = el.getAttribute('data-campo') || el.name || el.id || '';
+      if (key && el.value.trim()) camposExtra[key] = el.value.trim();
+    });
+
+    // Nombres legibles de categorías (para mostrar en backoffice)
+    var categoriasLabels = [];
+    catEls.forEach(function(el) {
+      var lbl = el.querySelector('.cat-label');
+      if (lbl) categoriasLabels.push(lbl.textContent.trim());
+    });
+
+    var metadata = {};
+    if (complementaria) metadata.complementaria = complementaria;
+    if (complementariaRef) metadata.complementaria_ref = complementariaRef;
+    if (periodo) metadata.periodo = periodo;
+    if (periodoFecha) metadata.periodo_fecha = periodoFecha;
+    if (conocimientoDireccion) metadata.conocimiento_direccion = conocimientoDireccion;
+    if (comoSeEntero) metadata.como_se_entero = comoSeEntero;
+    if (involucrados.length) metadata.involucrados = involucrados;
+    if (testigos.length) metadata.testigos = testigos;
+    if (hayOtrasPersonas) metadata.hay_otras_personas = hayOtrasPersonas;
+    if (otrasPersonas.length) metadata.otras_personas = otrasPersonas;
+    if (Object.keys(camposExtra).length) metadata.campos_extra = camposExtra;
+    if (categoriasLabels.length) metadata.categorias_labels = categoriasLabels;
+
     var payload = {
       tenant_slug: tenantSlug,
       category: categories[0] || null,
@@ -1333,7 +1411,7 @@
       contact_name: contactName,
       contact_email: contactEmail,
       contact_phone: contactPhone,
-      metadata: {}
+      metadata: metadata
     };
 
     function showSuccess(code) {
@@ -1396,7 +1474,7 @@
     var cats = (window.ArgusConfig ? ArgusConfig.get().categorias : null) || [];
     grid.innerHTML = '';
     cats.forEach(function(cat, i) {
-      var slug = cat.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      var slug = cat.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g,'_').replace(/^_|_$/g,'');
       var icon = CAT_ICONS[i % CAT_ICONS.length];
       var btn = document.createElement('button');
       btn.className = 'cat-option';
